@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Business
 {
-    public class PersonBusiness:IPersonBusiness
+    public class PersonBusiness : IPersonBusiness
     {
+        public async Task<bool> Create()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

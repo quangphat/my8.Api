@@ -1,4 +1,4 @@
-﻿using my8.Api.IBusiness;
+using my8.Api.IBusiness;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace my8.Api.Business
             pageRepositoryM = pageRepoM;
             pageRepositoryN = pageRepoN;
         }
-        public async Task<bool> CreatePage()
+        public async Task<bool> Create()
         {
             throw new NotImplementedException();
         }
