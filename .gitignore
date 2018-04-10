@@ -1,0 +1,8 @@
+/.vs
+/my8.Api/obj
+/my8.Api/bin
+/XUnitTest/obj
+/XUnitTest/bin
+/XUnitTest.Libs/obj
+/XUnitTest.Libs/bin
+/my8.Api.sln
