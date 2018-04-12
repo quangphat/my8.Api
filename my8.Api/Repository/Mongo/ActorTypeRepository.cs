@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using my8.Api.Infrastructures;
 using my8.Api.Interfaces.Mongo;
-using my8.Api.Models.Mongo;
+using my8.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

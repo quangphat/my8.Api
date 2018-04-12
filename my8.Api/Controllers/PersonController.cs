@@ -4,55 +4,50 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoM = my8.Api.Models.Mongo;
+using MongoM = my8.Api.Models;
 using MongoI = my8.Api.Interfaces.Mongo;
-using NeoM = my8.Api.Models.Neo4j;
 using NeoI = my8.Api.Interfaces.Neo4j;
+using Model = my8.Api.Models;
+using my8.Api.IBusiness;
+using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
     public class PersonController : Controller
     {
-        MongoI.IPersonRepository personRepositoryM;
-        NeoI.IPersonRepository personRepositoryN;
-        public PersonController(MongoI.IPersonRepository personRepoM,NeoI.IPersonRepository personRepoN)
+        IPersonBusiness m_PersonBusiness;
+        public PersonController(IPersonBusiness personBusiness)
         {
-            personRepositoryM = personRepoM;
-            personRepositoryN = personRepoN;
+            m_PersonBusiness = personBusiness;
         }
-        //Mongo
         [HttpPost]
-        [Route("api/m-person/create-person")]
-        public async Task CreatePersonMongo([FromBody] MongoM.Person model)
+        [Route("api/person/create")]
+        public async Task<IActionResult> CreatePersonMongo([FromBody] Model.Person model)
         {
-            await personRepositoryM.Create(model);
+            Model.Person person =  await m_PersonBusiness.Create(model);
+            return Json(person);
         }
         [HttpGet]
-        [Route("api/m-person/{id}")]
-        public async Task<IActionResult> GetPersonById(string id)
+        [Route("api/person/{id}")]
+        public async Task<IActionResult> GetById(string id)
         {
-            MongoM.Person Person = await personRepositoryM.Get(id);
-            return Json(Person);
+            Model.Person person = await m_PersonBusiness.Get(id);
+            return Json(person);
+        }
+        [HttpGet]
+        [Route("api/person/GetPersonSql/{id}")]
+        public async Task<IActionResult> GetInSqlById(string id)
+        {
+            Person person = await m_PersonBusiness.GetSql(id);
+            return Json(person);
         }
         [HttpPut]
-        [Route("api/m-person/update")]
-        public async Task UpdatePerson([FromBody] MongoM.Person person)
+        [Route("api/person/update")]
+        public async Task<IActionResult> UpdatePerson([FromBody] Model.Person person)
         {
-            await personRepositoryM.Update(person);
-        }
-        //Neo4j
-        [HttpPost]
-        [Route("api/n-person/interactiontofriend")]
-        public async Task CreatePersonNeo([FromBody] List<NeoM.Person> people)
-        {
-            if(people!=null)
-            {
-                NeoM.Person current = people[0];
-                NeoM.Person friend = people[1];
-                await personRepositoryN.InteractionToFriend(current, friend);
-            }
-            
+            bool rs = await m_PersonBusiness.Update(person);
+            return Json(rs);
         }
     }
 }

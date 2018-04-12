@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using my8.Api.Infrastructures;
 using my8.Api.Interfaces.Mongo;
-using my8.Api.Models.Mongo;
+using my8.Api.Models;
 using my8.Api.Repository.Mongo;
 using System;
 using System.Collections.Generic;

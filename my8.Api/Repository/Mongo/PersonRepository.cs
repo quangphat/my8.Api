@@ -2,11 +2,13 @@
 using MongoDB.Driver;
 using my8.Api.Infrastructures;
 using my8.Api.Interfaces.Mongo;
-using my8.Api.Models.Mongo;
+using my8.Api.Models;
+using my8.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+//using Model = my8.Api.Models;
 
 namespace my8.Api.Repository.Mongo
 {
@@ -19,16 +21,16 @@ namespace my8.Api.Repository.Mongo
         {
             collection = _db.GetCollection<Person>("Person");
         }
-        public async Task<bool> Create(Person Person)
+        public async Task<string> Create(Person Person)
         {
             try
             {
                 await collection.InsertOneAsync(Person);
-                return true;
+                return Person.Id;
             }
             catch
             {
-                return false;
+                return string.Empty;
             }
         }
 

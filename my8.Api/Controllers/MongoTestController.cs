@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using my8.Api.Interfaces.Mongo;
-using my8.Api.Models.Mongo;
+using my8.Api.Models;
 using my8.Api.my8Enum;
 
 namespace my8.Api.Controllers

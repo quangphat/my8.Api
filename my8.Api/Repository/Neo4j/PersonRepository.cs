@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using my8.Api.Infrastructures;
 using my8.Api.Interfaces.Neo4j;
-using my8.Api.Models.Neo4j;
+using Model = my8.Api.Models;
 using Neo4jClient;
+using my8.Api.Models;
 
 namespace my8.Api.Repository.Neo4j
 {
@@ -16,38 +17,49 @@ namespace my8.Api.Repository.Neo4j
         {
         }
 
-        public async Task AddFriend(Person sendBy, Person sendTo)
+        public async Task<bool> AddFriend(Person sendBy, Person sendTo)
         {
-            await client.Cypher
-                .Match("(u1:Person{id:" + sendBy.id +"})", "(u2:Person{id:" + sendTo.id +"})")
-                .Merge("(u1)-[r:friend{sendby:" + sendBy.id +",sendDate:'"+DateTime.Today.ToString("yyyy-MM-dd") +"'}]->(u2)")
+            try
+            {
+                await client.Cypher
+                .Match("(u1:Person{Id:" + sendBy.Id + "})", "(u2:Person{Id:" + sendTo.Id + "})")
+                .Merge("(u1)-[r:Friend{Sendby:" + sendBy.Id + ",SendDate:'" + DateTime.Today.ToString("yyyy-MM-dd") + "'}]->(u2)")
                 .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch { return false; }
         }
 
-        public async Task CreatePerson(Person user)
+        public async Task<bool> Create(Person user)
         {
-            await client.Cypher.Create("(e:Person {item})")
+            try
+            {
+                await client.Cypher.Create("(e:Person {item})")
                     .WithParam("item", user)
                     .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch { return false; }
+            
         }
 
         public async Task<IEnumerable<Person>> FindCommonFriend(Person user1, Person user2)
         {
             IEnumerable<Person> results = await client.Cypher
                 .OptionalMatch("(u1)-[:friend]-(common)-[:friend]-(u2)")
-                .Where((Person u1) => u1.id == user1.id)
-                .AndWhere((Person u2) => u2.id == user2.id)
+                .Where((Person u1) => u1.Id == user1.Id)
+                .AndWhere((Person u2) => u2.Id == user2.Id)
                 .Return<Person>("common")
                 .ResultsAsync;
             return results;
         }
 
-        public async Task<IEnumerable<PersonAllin>> GetFriends(int Id)
+        public async Task<IEnumerable<PersonAllin>> GetFriends(string Id)
         {
             var allFriend = await client.Cypher
-                .Match("(user:Person{id:" + Id + "})-[:friend]-(u:Person)")
+                .Match("(user:Person{Id:" + Id + "})-[:friend]-(u:Person)")
                 .OptionalMatch("(user)-[:friend]-(common:Person)-[:friend]-(u)")
-                .Where("u.id<>1")
+                .Where($"u.Id<>{Id}")
                 .Return((u, common) => new PersonAllin
                 {
                     Person = u.As<Person>(),
@@ -61,7 +73,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<PersonAllin>> GetTopFriendInteractive(Person currentPerson, int top)
         {
             IEnumerable<PersonAllin> lstPerson = await client.Cypher
-                .Match("(u1:Person{id:" + currentPerson.id + "})-[f:friend]-(friend:Person)")
+                .Match("(u1:Person{Id:" + currentPerson.Id + "})-[f:friend]-(friend:Person)")
                 .Return((friend, f) => new PersonAllin
                 {
                     Person = friend.As<Person>(),
@@ -74,10 +86,10 @@ namespace my8.Api.Repository.Neo4j
         }
 
 
-        public async Task<IEnumerable<PersonAllin>> FindPersons(Person currentUSer,string searchStr)
+        public async Task<IEnumerable<PersonAllin>> FindPersons(Person currentUSer,string searchStr,int skip,int limit)
         {
             IEnumerable<PersonAllin> users = await client.Cypher
-                .Match("(u1:Person{id:" + currentUSer.id + "})", "(other: Person)")
+                .Match("(u1:Person{Id:" + currentUSer.Id + "})", "(other: Person)")
                 .Where($"Lower(other.DisplayName) contains '{searchStr}'")
                 .OptionalMatch("(u1)-[r:friend]-(common:Person)-[:friend]-(other)")
                 .Return((other, common) => new PersonAllin
@@ -85,14 +97,17 @@ namespace my8.Api.Repository.Neo4j
                     Person = other.As<Person>(),
                     CommonFriend = (int)common.Count()
                 })
+                .OrderBy("other.Rate")
+                .Skip(skip)
+                .Limit(limit)
                 .ResultsAsync;
             return users;
         }
 
-        public async Task<IEnumerable<Page>> GetFollowedPage(Person user)
+        public async Task<IEnumerable<Page>> GetFollowingPage(Person user)
         {
-            IEnumerable<Page> pages = await client.Cypher
-                .OptionalMatch("(u:Person{id:" + user.id + "})-[:Follow]-(p:Page)")
+            IEnumerable< Page> pages = await client.Cypher
+                .OptionalMatch("(u:Person{Id:" + user.Id + "})-[:Follow]-(p:Page)")
                 .Return(p => p.As<Page>())
                 .ResultsAsync;
             return pages;
@@ -101,7 +116,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<Club>> GetJoinedClub(Person user)
         {
             IEnumerable<Club> teams = await client.Cypher
-                .OptionalMatch("(u:Person{id:" + user.id + "})-[:Join]-(t:Club)")
+                .OptionalMatch("(u:Person{Id:" + user.Id + "})-[:Join]-(t:Club)")
                 .Return(t => t.As<Club>())
                 .ResultsAsync;
             return teams;
@@ -110,7 +125,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task UnFriend(Person currentPerson, Person friend)
         {
             await client.Cypher
-                .Match("(u1:Person{id:" + currentPerson.id + "})-[r:friend]-(u2:Person{id:" + friend.id + "})")
+                .Match("(u1:Person{Id:" + currentPerson.Id + "})-[r:friend]-(u2:Person{Id:" + friend.Id + "})")
                 .Delete("r")
                 .ExecuteWithoutResultsAsync();
         }
@@ -120,7 +135,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match("(u:Person{id:" + currentPerson.id + "})", "(p:Page{id:" + page.Id + "})")
+                .Match("(u:Person{Id:" + currentPerson.Id + "})", "(p:Page{Id:" + page.Id + "})")
                 .Create("(u)-[:Follow]->(p)")
                 .ExecuteWithoutResultsAsync();
                 return true;
@@ -136,7 +151,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match("(u:Person{id:" + currentPerson.id + "})-[r:Follow]-(p:Page{id:" + page.Id + "})")
+                .Match("(u:Person{Id:" + currentPerson.Id + "})-[r:Follow]-(p:Page{Id:" + page.Id + "})")
                 .Delete("r")
                 .ExecuteWithoutResultsAsync();
                 return true;
@@ -149,7 +164,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match("(u:Person{id:" + currentPerson.id + "})", "(p:Club{id:" + team.Id + "})")
+                .Match("(u:Person{Id:" + currentPerson.Id + "})", "(p:Club{Id:" + team.Id + "})")
                 .Create("(u)-[:Join]->(p)")
                 .ExecuteWithoutResultsAsync();
                 return true;
@@ -162,7 +177,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match("(u:Person{id:" + currentPerson.id + "})-[r:Join]-(p:Club{id:" + team.Id + "})")
+                .Match("(u:Person{Id:" + currentPerson.Id + "})-[r:Join]-(p:Club{Id:" + team.Id + "})")
                 .Delete("r")
                 .ExecuteWithoutResultsAsync();
                 return true;
@@ -173,7 +188,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<PersonAllin> FindParticularPerson(Person currentPerson, Person findingPerson)
         {
             IEnumerable<PersonAllin> users = await client.Cypher
-                .Match("(u1:Person{id:" + currentPerson.id + "})", "(u2:Person{id:" + findingPerson.id + "})")
+                .Match("(u1:Person{Id:" + currentPerson.Id + "})", "(u2:Person{Id:" + findingPerson.Id + "})")
                 .OptionalMatch("(u1)-[r:friend]-(common:Person)-[:friend]-(u2)")
                 .Return((u2, common) => new PersonAllin
                 {
@@ -189,7 +204,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                   .Match("(u1:Person{id:" + currentPerson.id + "})", "(u2:Person{id:" + friend.id + "})")
+                   .Match("(u1:Person{Id:" + currentPerson.Id + "})", "(u2:Person{Id:" + friend.Id + "})")
                .OptionalMatch("(u1)-[r:friend]-(u2)")
                .Set("r.interactive = r.interactive+1").ExecuteWithoutResultsAsync();
                 return true;
@@ -202,9 +217,26 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                   .Match("(u1:Person{id:" + currentPerson.id + "})", "(p:Page{id:" + page.Id + "})")
+                   .Match("(u1:Person{Id:" + currentPerson.Id + "})", "(p:Page{Id:" + page.Id + "})")
                .OptionalMatch("(u1)-[r:Follow]-(p)")
                .Set("r.PPIp = r.PPIp+1").ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public async Task<bool> Update(Person person)
+        {
+            try
+            {
+                await client.Cypher
+                    .Match("(p:Person{Id:" + person.Id + "})")
+                    .Set($"p.DisplayName={person.DisplayName}")
+                    .Set($"p.WorkAs={person.WorkAs}")
+                    .Set($"p.Company={person.Company}")
+                    .Set($"p.Rate={person.Rate}")
+                    .Set($"p.Avatar={person.Avatar}")
+                    .ExecuteWithoutResultsAsync();
                 return true;
             }
             catch { return false; }

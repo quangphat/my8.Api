@@ -11,8 +11,10 @@ using Microsoft.Extensions.Options;
 using my8.Api.Infrastructures;
 using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
+using SqlI = my8.Api.Interfaces.Sql;
 using MongoR = my8.Api.Repository.Mongo;
 using NeoR = my8.Api.Repository.Neo4j;
+using SqlR = my8.Api.Repository.Sql;
 using Newtonsoft.Json.Serialization;
 using my8.Api.IBusiness;
 using my8.Api.Business;
@@ -47,13 +49,19 @@ namespace my8.Api
             services.AddSignalR();
             services.Configure<MongoConnection>(Configuration.GetSection("MongoConnection"));
             services.Configure<Neo4jConnection>(Configuration.GetSection("Neo4jConnection"));
+            services.Configure<SqlServerConnection>(Configuration.GetSection("SqlServerConnection"));
             //services.AddMvc();
             services.AddMvc().AddJsonOptions(opts =>
             {
                 opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+            MapConfig.Config(services);
+
             //Business
             services.AddScoped<IPageBusiness, PageBusiness>();
+			services.AddScoped<IPersonBusiness, PersonBusiness>();
+			services.AddScoped<ITeamBusiness, TeamBusiness>();
+			//<AppendBusinessDI>
 
             //Mongo
             services.AddSingleton<MongoI.IStatusPostRepository, MongoR.StatusPostRepository>();
@@ -67,13 +75,17 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IClubRepository, MongoR.ClubRepository>();
 			services.AddSingleton<MongoI.IActorTypeRepository, MongoR.ActorTypeRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
-            //AppendMongoDI
+            services.AddSingleton<MongoI.ITeamRepository, MongoR.TeamRepository>();
+			//AppendMongoDI
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();
             services.AddSingleton<NeoI.IPersonRepository, NeoR.PersonRepository>();
+			services.AddSingleton<NeoI.ITeamRepository, NeoR.TeamRepository>();
 			//AppendNeoDI
             //Sql
-            //AppendSqlDI
+            services.AddSingleton<SqlI.IPersonRepository, SqlR.PersonRepository>();
+			services.AddSingleton<SqlI.ITeamRepository, SqlR.TeamRepository>();
+			//AppendSqlDI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +103,7 @@ namespace my8.Api
                 routes.MapHub<ChatHub>("chat");
             });
             app.UseMvc();
+            
         }
     }
 }

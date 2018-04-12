@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson;
-using my8.Api.Models.Mongo;
+using my8.Api.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

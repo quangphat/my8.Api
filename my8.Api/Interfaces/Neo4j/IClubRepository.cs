@@ -1,5 +1,5 @@
 ﻿
-using my8.Api.Models.Neo4j;
+using my8.Api.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

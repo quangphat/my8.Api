@@ -1,5 +1,5 @@
 ﻿
-using my8.Api.Models.Mongo;
+using my8.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
