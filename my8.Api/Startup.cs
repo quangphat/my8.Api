@@ -60,6 +60,7 @@ namespace my8.Api
             //Business
             services.AddScoped<IPageBusiness, PageBusiness>();
 			services.AddScoped<IPersonBusiness, PersonBusiness>();
+			services.AddScoped<IClubBusiness, ClubBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
@@ -78,6 +79,7 @@ namespace my8.Api
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();
             services.AddSingleton<NeoI.IPersonRepository, NeoR.PersonRepository>();
+			services.AddSingleton<NeoI.IClubRepository, NeoR.ClubRepository>();
 			//AppendNeoDI
             //Sql
             services.AddSingleton<SqlI.IPersonRepository, SqlR.PersonRepository>();

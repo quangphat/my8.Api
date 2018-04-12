@@ -107,5 +107,22 @@ namespace my8.Api.Business
             return await m_personRepositoryN.InteractToPage(currentPersonId, pageId);
         }
 
+        public async Task<List<Club>> GetJoiningClubs(string personId)
+        {
+            IEnumerable<Club> lstClub = await m_personRepositoryN.GetJoiningClubs(personId);
+            return lstClub.ToList();
+        }
+        public async Task<bool> JoinClub(string currentPersonId, string clubId)
+        {
+            return await m_personRepositoryN.JoinClub(currentPersonId, clubId);
+        }
+        public async Task<bool> OutClub(string currentPersonId, string clubId)
+        {
+            return await m_personRepositoryN.OutClub(currentPersonId, clubId);
+        }
+        public async Task<bool> InteractToClub(string currentPersonId, string clubId)
+        {
+            return await m_personRepositoryN.InteractToClub(currentPersonId, clubId);
+        }
     }
 }

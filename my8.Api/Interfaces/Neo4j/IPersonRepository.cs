@@ -22,8 +22,9 @@ namespace my8.Api.Interfaces.Neo4j
         Task<bool> UnFollowPage(string currentPersonID, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);
 
-        Task<IEnumerable<Club>> GetJoinedClub(Person user);
-        Task<bool> JoinClub(Person currentPerson, Club team);
-        Task<bool> OutClub(Person currentPerson, Club team);
+        Task<IEnumerable<Club>> GetJoiningClubs(string userId);
+        Task<bool> JoinClub(string currentPersonId, string clubId);
+        Task<bool> OutClub(string currentPersonId, string teamId);
+        Task<bool> InteractToClub(string currentPersonId, string clubId);
     }
 }

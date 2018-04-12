@@ -30,7 +30,7 @@ namespace my8.Api.Repository.Mongo
 
         public async Task<Club> Get(string id)
         {
-            filter = Builders<Club>.Filter.Eq(p => p.Id, id);
+            filter = Builders<Club>.Filter.Eq(p => p.ClubId, id);
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
     }

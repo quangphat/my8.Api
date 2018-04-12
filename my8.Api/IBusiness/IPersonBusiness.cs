@@ -24,6 +24,10 @@ namespace my8.Api.IBusiness
         Task<bool> UnFollowPage(string currentPersonId, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);
         Task<List<Page>> GetFollowingPage(string userId);
-        //Task<IEnumerable<Club>> GetJoinedClub(Model.Person user);
+
+        Task<List<Club>> GetJoiningClubs(string personId);
+        Task<bool> JoinClub(string currentPersonId, string clubId);
+        Task<bool> OutClub(string currentPersonId, string clubId);
+        Task<bool> InteractToClub(string currentPersonId, string clubId);
     }
 }

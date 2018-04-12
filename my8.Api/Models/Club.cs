@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,9 @@ namespace my8.Api.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        [BsonElement("Id")]
+        [JsonProperty(PropertyName = "Id")]
+        public string ClubId { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }
         public double Rate { get; set; }
