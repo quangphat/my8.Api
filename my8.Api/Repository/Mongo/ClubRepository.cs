@@ -18,14 +18,14 @@ namespace my8.Api.Repository.Mongo
         {
             collection = _db.GetCollection<Club>("Club");
         }
-        public async Task<bool> Create(Club club)
+        public async Task<string> Create(Club club)
         {
             try
             {
                 await collection.InsertOneAsync(club);
-                return true;
+                return club.ClubId;
             }
-            catch { return false; }
+            catch { return string.Empty; }
         }
 
         public async Task<Club> Get(string id)

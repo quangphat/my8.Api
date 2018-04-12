@@ -9,6 +9,8 @@ namespace my8.Api.IBusiness
 {
     public interface IClubBusiness
     {
-        Task<bool> Create();
+        Task<Club> Create(Club club);
+        Task<Club> Get(string id);
     }
+
 }

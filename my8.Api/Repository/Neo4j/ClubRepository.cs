@@ -17,8 +17,8 @@ namespace my8.Api.Repository.Neo4j
         {
             try
             {
-                await client.Cypher.Create("(c:Club {ClubId:{ClubId},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Joins:{Joins},ClubIPoint:{ClubIPoint},Title:{Title}})")
-                    .WithParams(new { ClubId = club.ClubId, DisplayName = club.DisplayName, Avatar = club.Avatar, Rate = club.Rate, Joins = club.Joins, ClubIPoint = club.ClubIPoint, Title = club.Title })
+                await client.Cypher.Create("(c:Club {Id:{Id},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Joins:{Joins},ClubIPoint:{ClubIPoint},Title:{Title}})")
+                    .WithParams(new { Id = club.ClubId, DisplayName = club.DisplayName, Avatar = club.Avatar, Rate = club.Rate, Joins = club.Joins, ClubIPoint = club.ClubIPoint, Title = club.Title })
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -30,7 +30,10 @@ namespace my8.Api.Repository.Neo4j
 
         public async Task<Club> Get(string id)
         {
-            throw new NotImplementedException();
+            IEnumerable<Club> clubs = await client.Cypher.Match("(c:Club{Id:{id}})")
+                .WithParam("id", id)
+                .Return(c => c.As<Club>()).Limit(1).ResultsAsync;
+            return clubs.FirstOrDefault();
         }
         public async Task<int> CountMember(Club team)
         {

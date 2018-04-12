@@ -6,7 +6,7 @@ namespace my8.Api.Interfaces.Mongo
 {
     public interface IClubRepository
     {
-        Task<bool> Create(Club club);
+        Task<string> Create(Club club);
         Task<Club> Get(string id);
     }
 }
