@@ -2,8 +2,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 using XUnitTest.Libs;
-using MongoM = my8.Api.Models.Mongo;
 using my8.Api.my8Enum;
+using my8.Api.Models;
+
 namespace XUnitTest
 {
     public class TestActorType : IClassFixture<Server>
@@ -16,7 +17,7 @@ namespace XUnitTest
         [Fact]
         public async Task TestCreateActorType()
         {
-            MongoM.ActorType actorType = new MongoM.ActorType();
+            ActorType actorType = new ActorType();
             actorType.Name = "person";
             actorType.Value = (int)PostAuthorTypeEnum.Person;
             await server.Call(HttpMethod.Post, "/api/m-actortype-create",actorType, (rp) =>

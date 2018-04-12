@@ -1,5 +1,5 @@
-﻿using MongoM = my8.Api.Models.Mongo;
-using NeoM = my8.Api.Models.Neo4j;
+﻿
+using my8.Api.Models;
 using my8.Api.my8Enum;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,7 @@ namespace XUnitTest
         [Fact]
         public async Task Test_CreatePerson()
         {
-            MongoM.Person person = new MongoM.Person();
+            Person person = new Person();
             person.DisplayName = "Quang Phát";
             person.Rate = 9;
             person.WorkAs = "Developer";
@@ -41,7 +41,7 @@ namespace XUnitTest
         [Fact]
         public async Task Test_UpdatePerson()
         {
-            MongoM.Person person = new MongoM.Person();
+            Person person = new Person();
             person.Id = "5ac9be056272224af07b79d3";
             person.DisplayName = "Quang Phát";
             person.Rate = 10;
@@ -75,11 +75,11 @@ namespace XUnitTest
         [Fact]
         public async Task Test_PersonInteractionToFriend()
         {
-            List<NeoM.Person> people = new List<NeoM.Person>();
-            NeoM.Person current = new NeoM.Person();
-            current.id = 1;
-            NeoM.Person friend = new NeoM.Person();
-            friend.id = 2;
+            List<Person> people = new List<Person>();
+            Person current = new Person();
+            current.Id = "1";
+            Person friend = new Person();
+            friend.Id = "2";
             people.Add(current);
             people.Add(friend);
             await server.Call(HttpMethod.Post, "/api/n-person/interactiontofriend",people, (rp) =>

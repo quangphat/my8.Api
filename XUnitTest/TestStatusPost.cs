@@ -1,4 +1,5 @@
-﻿using MongoM = my8.Api.Models.Mongo;
+﻿
+using my8.Api.Models;
 using my8.Api.my8Enum;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace XUnitTest
         [Fact]
         public async Task Test_CreateStatusPost()
         {
-            MongoM.StatusPost post = new MongoM.StatusPost();
+            StatusPost post = new StatusPost();
             post.Comments = 4;
             post.Likes = 10;
             post.Shares = 1;
@@ -32,7 +33,7 @@ namespace XUnitTest
             post.Content = "Today is Sunday";
             post.EmploymentType = null;
             post.Seniority = null;
-            MongoM.Actor user = new MongoM.Actor();
+            Actor user = new Actor();
             user.DisplayName = "Quang Phát";
             user.ActorId = "5ac9be056272224af07b79d3";
             user.ActorTypeId = (int)PostAuthorTypeEnum.Person;
@@ -51,7 +52,7 @@ namespace XUnitTest
         [Fact]
         public async Task Test_GetStatusPostByActor()
         {
-            MongoM.Actor user = new MongoM.Actor();
+            Actor user = new Actor();
             user.DisplayName = "Quang Phát";
             user.ActorId = "5ac9be056272224af07b79d3";
             user.ActorTypeId = (int)PostAuthorTypeEnum.Person;
