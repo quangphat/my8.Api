@@ -26,7 +26,7 @@ namespace my8.Api.Repository.Mongo
             try
             {
                 await collection.InsertOneAsync(Person);
-                return Person.Id;
+                return Person.PersonId;
             }
             catch
             {
@@ -36,13 +36,13 @@ namespace my8.Api.Repository.Mongo
 
         public async Task<Person> Get(string id)
         {
-            filter = Builders<Person>.Filter.Eq(p => p.Id, id);
+            filter = Builders<Person>.Filter.Eq(p => p.PersonId, id);
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<bool> Update(Person person)
         {
-            filter = Builders<Person>.Filter.Eq(p => p.Id, person.Id);
+            filter = Builders<Person>.Filter.Eq(p => p.PersonId, person.PersonId);
             var update = Builders<Person>.Update
                             .Set(s => s.DisplayName, person.DisplayName)
                             .Set(p => p.Rate, person.Rate)

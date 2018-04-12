@@ -4,10 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoM = my8.Api.Models;
-using MongoI = my8.Api.Interfaces.Mongo;
-using NeoI = my8.Api.Interfaces.Neo4j;
-using Model = my8.Api.Models;
 using my8.Api.IBusiness;
 using my8.Api.Models;
 
@@ -23,16 +19,16 @@ namespace my8.Api.Controllers
         }
         [HttpPost]
         [Route("api/person/create")]
-        public async Task<IActionResult> CreatePersonMongo([FromBody] Model.Person model)
+        public async Task<IActionResult> Create([FromBody] Person model)
         {
-            Model.Person person =  await m_PersonBusiness.Create(model);
+            Person person =  await m_PersonBusiness.Create(model);
             return Json(person);
         }
         [HttpGet]
         [Route("api/person/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            Model.Person person = await m_PersonBusiness.Get(id);
+            Person person = await m_PersonBusiness.Get(id);
             return Json(person);
         }
         [HttpGet]
@@ -44,10 +40,74 @@ namespace my8.Api.Controllers
         }
         [HttpPut]
         [Route("api/person/update")]
-        public async Task<IActionResult> UpdatePerson([FromBody] Model.Person person)
+        public async Task<IActionResult> UpdatePerson([FromBody] Person person)
         {
             bool rs = await m_PersonBusiness.Update(person);
             return Json(rs);
+        }
+        [HttpGet]
+        [Route("api/person/search/{searchstr}/{skip}/{limit}/{currentPersonId}")]
+        public async Task<IActionResult> Search(string searchstr,int skip,int limit,string currentPersonId)
+        {
+            List<PersonAllin> lstPerson = await m_PersonBusiness.Search(currentPersonId, searchstr, skip, limit);
+            return Json(lstPerson);
+        }
+        [HttpGet]
+        [Route("api/person/get-followingpage/{id}")]
+        public async Task<IActionResult> GetFollowingPage(string id)
+        {
+            List<Page> lstPage = await m_PersonBusiness.GetFollowingPage(id);
+            return Json(lstPage);
+        }
+        [HttpPost]
+        [Route("api/person/followpage/{personId}/{pageId}")]
+        public async Task<IActionResult> FollowPage(string personId,string pageId)
+        {
+            bool result = await m_PersonBusiness.FollowPage(personId,pageId);
+            return Json(result);
+        }
+        [HttpPost]
+        [Route("api/person/unfollowpage/{personId}/{pageId}")]
+        public async Task<IActionResult> UnFollowPage(string personId, string pageId)
+        {
+            bool result = await m_PersonBusiness.UnFollowPage(personId, pageId);
+            return Json(result);
+        }
+        [HttpPost]
+        [Route("api/person/interacttopage/{personId}/{pageId}")]
+        public async Task<IActionResult> InteractToPage(string personId, string pageId)
+        {
+            bool result = await m_PersonBusiness.InteractToPage(personId, pageId);
+            return Json(result);
+        }
+
+        [HttpPost]
+        [Route("api/person/addfriend/{sendbyId}/{sendtoId}")]
+        public async Task<IActionResult> AddFriend(string sendbyId, string sendtoId)
+        {
+            bool result = await m_PersonBusiness.AddFriend(sendbyId, sendtoId);
+            return Json(result);
+        }
+        [HttpPost]
+        [Route("api/person/unfriend/{sendbyId}/{sendtoId}")]
+        public async Task<IActionResult> UnFriend(string sendbyId, string sendtoId)
+        {
+            bool result = await m_PersonBusiness.UnFriend(sendbyId, sendtoId);
+            return Json(result);
+        }
+        [HttpGet]
+        [Route("api/person/get-allfriend/{id}")]
+        public async Task<IActionResult> GetAllFriends(string id)
+        {
+            List<PersonAllin> lstFriend = await m_PersonBusiness.GetAllFriend(id);
+            return Json(lstFriend);
+        }
+        [HttpGet]
+        [Route("api/person/get-commonfriend/{id}/{friendId}")]
+        public async Task<IActionResult> GetAllFriends(string id,string friendId)
+        {
+            List<Person> lstFriend = await m_PersonBusiness.FindCommondFriend(id,friendId);
+            return Json(lstFriend);
         }
     }
 }

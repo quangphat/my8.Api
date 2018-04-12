@@ -23,7 +23,7 @@ namespace my8.Api.Repository.Sql
                 await connection.ExecuteAsync(insert, person);
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }

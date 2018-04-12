@@ -42,7 +42,7 @@ namespace XUnitTest
         public async Task Test_UpdatePerson()
         {
             Person person = new Person();
-            person.Id = "5ac9be056272224af07b79d3";
+            person.PersonId = "5ac9be056272224af07b79d3";
             person.DisplayName = "Quang Phát";
             person.Rate = 10;
             person.WorkAs = "Developer";
@@ -77,9 +77,9 @@ namespace XUnitTest
         {
             List<Person> people = new List<Person>();
             Person current = new Person();
-            current.Id = "1";
+            current.PersonId = "1";
             Person friend = new Person();
-            friend.Id = "2";
+            friend.PersonId = "2";
             people.Add(current);
             people.Add(friend);
             await server.Call(HttpMethod.Post, "/api/n-person/interactiontofriend",people, (rp) =>

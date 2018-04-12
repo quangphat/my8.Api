@@ -25,12 +25,12 @@ namespace my8.Api.Repository.Neo4j
         {
             try
             {
-                await client.Cypher.Create("(p:Page {item})")
-                    .WithParam("item", page)
+                await client.Cypher.Create("(p:Page {Id:{Id},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Url:{Url},Follows:{Follows},PageIPoint:{PageIPoint},Title:{Title}})")
+                    .WithParams(new { Id = page.Id, DisplayName = page.DisplayName, Avatar = page.Avatar, Rate = page.Rate, Url = page.Url, Follows = page.Follows, PageIPoint = page.PageIPoint, Title = page.Title })
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }

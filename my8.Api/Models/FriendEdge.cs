@@ -7,8 +7,9 @@ namespace my8.Api.Models
 {
     public class FriendEdge
     {
-        public int Id { get; set; }
-        
+        public string Sendby { get; set; }
+        public string SendDate { get; set; }
+        public int IPp { get; set; }//interaction point
     }
 }
 

@@ -8,7 +8,6 @@ using NeoI = my8.Api.Interfaces.Neo4j;
 using SqlI = my8.Api.Interfaces.Sql;
 using AutoMapper;
 using my8.Api.Models;
-using my8.Api.Models;
 
 namespace my8.Api.Business
 {
@@ -28,7 +27,7 @@ namespace my8.Api.Business
         {
             string rs1= await m_personRepositoryM.Create(person);
             if (string.IsNullOrWhiteSpace(rs1)) return null;
-            person.Id = rs1;
+            person.PersonId = rs1;
             bool rs2 = await m_personRepositoryN.Create(person);
             bool rs3 = await m_personRepositoryS.Create(person);
             if (rs2 && rs3)
@@ -48,9 +47,9 @@ namespace my8.Api.Business
             return person;
         }
 
-        public async Task<List<PersonAllin>> Search(Person current,string searchStr, int skip, int limit)
+        public async Task<List<PersonAllin>> Search(string currentPersonId,string searchStr, int skip, int limit)
         {
-            IEnumerable<PersonAllin> people = await m_personRepositoryN.FindPersons(current, searchStr, skip, limit);
+            IEnumerable<PersonAllin> people = await m_personRepositoryN.FindPersons(currentPersonId, searchStr, skip, limit);
             return people.ToList();
         }
         public async Task<bool> Update(Person person)
@@ -67,14 +66,18 @@ namespace my8.Api.Business
         {
             return await m_personRepositoryN.InteractionToFriend(current, friend);
         }
-        public async Task<List<Person>> FindCommondFriend(Person current, Person friend)
+        public async Task<List<Person>> FindCommondFriend(string currentId, string friendId)
         {
-            IEnumerable<Person> commons = await m_personRepositoryN.FindCommonFriend(current, friend);
+            IEnumerable<Person> commons = await m_personRepositoryN.FindCommonFriend(currentId, friendId);
             return commons.ToList();
         }
-        public async Task<bool> AddFriend(Person sendBy, Person sendTo)
+        public async Task<bool> AddFriend(string sendBy, string sendTo)
         {
             return await m_personRepositoryN.AddFriend(sendBy, sendTo);
+        }
+        public async Task<bool> UnFriend(string sendBy, string sendTo)
+        {
+            return await m_personRepositoryN.UnFriend(sendBy, sendTo);
         }
         public async Task<List<PersonAllin>> GetAllFriend(string personId)
         {
@@ -86,22 +89,22 @@ namespace my8.Api.Business
             IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetTopFriendInteractive(currentPerson, top);
             return friends.ToList();
         }
-        public async Task<List<Page>> GetFollowingPage(Person person)
+        public async Task<List<Page>> GetFollowingPage(string personId)
         {
-            IEnumerable<Page> pages = await m_personRepositoryN.GetFollowingPage(person);
+            IEnumerable<Page> pages = await m_personRepositoryN.GetFollowingPage(personId);
             return pages.ToList();
         }
-        public async Task<bool> FollowPage(Person currentPerson, Page page)
+        public async Task<bool> FollowPage(string currentPersonId, string pageId)
         {
-            return await m_personRepositoryN.FollowPage(currentPerson, page);
+            return await m_personRepositoryN.FollowPage(currentPersonId, pageId);
         }
-        public async Task<bool> UnFollowPage(Person currentPerson, Page page)
+        public async Task<bool> UnFollowPage(string currentPersonId, string pageId)
         {
-            return await m_personRepositoryN.UnFollowPage(currentPerson,page);
+            return await m_personRepositoryN.UnFollowPage(currentPersonId, pageId);
         }
-        public async Task<bool> InteractToPage(Person currentPerson, Page page)
+        public async Task<bool> InteractToPage(string currentPersonId, string pageId)
         {
-            return await m_personRepositoryN.InteractToPage(currentPerson, page);
+            return await m_personRepositoryN.InteractToPage(currentPersonId, pageId);
         }
 
     }
