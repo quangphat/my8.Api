@@ -49,7 +49,7 @@ namespace my8.Api.Business
 
         public async Task<List<PersonAllin>> Search(string currentPersonId,string searchStr, int skip, int limit)
         {
-            IEnumerable<PersonAllin> people = await m_personRepositoryN.FindPersons(currentPersonId, searchStr, skip, limit);
+            IEnumerable<PersonAllin> people = await m_personRepositoryN.Search(currentPersonId, searchStr, skip, limit);
             return people.ToList();
         }
         public async Task<bool> Update(Person person)

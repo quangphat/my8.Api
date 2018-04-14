@@ -10,7 +10,12 @@ namespace my8.Api.IBusiness
     public interface IClubBusiness
     {
         Task<Club> Create(Club club);
-        Task<Club> Get(string id);
+        Task<bool> Update(Club club);
+        Task<ClubAllin> Get(string id);
+        Task<List<PersonAllin>> GetMembers(string clubId);
+        Task<List<ClubAllin>> Search(string searchStr, int skip, int limit);
+        Task<bool> AddMember(string clubId, string personId);
+        Task<bool> KickOutMember(string clubId, string personId);
     }
 
 }

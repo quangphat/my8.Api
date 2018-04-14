@@ -16,17 +16,29 @@ namespace my8.Api.Repository.Neo4j
         public PersonRepository(IOptions<Neo4jConnection> settings):base(settings)
         {
         }
+        public async Task<bool> Create(Person user)
+        {
+            try
+            {
+                await client.Cypher.Create("(e:Person {Id:{Id},DisplayName:{DisplayName},WorkAs:{WorkAs},Company:{Company},Rate:{Rate},Avatar:{Avatar}})")
+                    .WithParams(new { Id = user.PersonId, DisplayName = user.DisplayName, WorkAs = user.WorkAs, Company = user.Company, Rate = user.Rate, Avatar = user.Avatar })
+                    .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch { return false; }
+
+        }
         public async Task<bool> Update(Person person)
         {
             try
             {
                 await client.Cypher
-                    .Match("(p:Person{Id:" + person.PersonId + "})")
-                    .Set($"p.DisplayName={person.DisplayName}")
-                    .Set($"p.WorkAs={person.WorkAs}")
-                    .Set($"p.Company={person.Company}")
+                    .Match("(p:Person{Id:'" + person.PersonId + "'})")
+                    .Set($"p.DisplayName='{person.DisplayName}'")
+                    .Set($"p.WorkAs='{person.WorkAs}'")
+                    .Set($"p.Company='{person.Company}'")
                     .Set($"p.Rate={person.Rate}")
-                    .Set($"p.Avatar={person.Avatar}")
+                    .Set($"p.Avatar='{person.Avatar}'")
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -57,18 +69,7 @@ namespace my8.Api.Repository.Neo4j
             }
             catch { return false; }
         }
-        public async Task<bool> Create(Person user)
-        {
-            try
-            {
-                await client.Cypher.Create("(e:Person {Id:{Id},DisplayName:{DisplayName},WorkAs:{WorkAs},Company:{Company},Rate:{Rate},Avatar:{Avatar}})")
-                    .WithParams(new { Id=user.PersonId,DisplayName=user.DisplayName,WorkAs=user.WorkAs,Company=user.Company,Rate=user.Rate,Avatar=user.Avatar})
-                    .ExecuteWithoutResultsAsync();
-                return true;
-            }
-            catch { return false; }
-            
-        }
+        
 
         public async Task<IEnumerable<Person>> FindCommonFriend(string p1Id, string friendId)
         {
@@ -113,16 +114,17 @@ namespace my8.Api.Repository.Neo4j
         }
 
 
-        public async Task<IEnumerable<PersonAllin>> FindPersons(string currentPersonId, string searchStr,int skip,int limit)
+        public async Task<IEnumerable<PersonAllin>> Search(string currentPersonId, string searchStr,int skip,int limit)
         {
             IEnumerable<PersonAllin> users = await client.Cypher
-                .Match("(u1:Person{Id:\"" + currentPersonId + "\"})", "(other: Person)")
-                .Where($"Lower(other.DisplayName) contains '{searchStr}' and other.Id<>'{currentPersonId}'")
-                .OptionalMatch("(u1)-[r:Friend]-(common:Person)-[:Friend]-(other)")
-                .Return((other, common) => new PersonAllin
+                .Match("(other: Person)")
+                .Where($"Lower(other.DisplayName) contains '{searchStr}' and other.Id<>'{currentPersonId}'  with count(other) as Total ")
+                .Match("(u1:Person{Id:'" + currentPersonId + "'}),(other:Person) where Lower(other.DisplayName) contains '" + searchStr +"' and other.Id<>'" +currentPersonId +"' optional match(u1)-[r:Friend]-(common:Person)-[:Friend]-(other) ")
+                .Return((other, common,Total) => new PersonAllin
                 {
                     Person = other.As<Person>(),
-                    CommonFriend = (int)common.Count()
+                    CommonFriend = (int)common.Count(),
+                    Total = Total.As<int>()
                 })
                 .OrderBy("other.Rate")
                 .Skip(skip)

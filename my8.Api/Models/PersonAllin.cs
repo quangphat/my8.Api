@@ -10,6 +10,8 @@ namespace my8.Api.Models
         public Person Person { get; set; }
         public FollowEdge FollowPage { get; set; }
         public FriendEdge Friend { get; set; }
+        public JoinEdge JoinClub { get; set; }
         public int CommonFriend { get; set; }
+        public int Total { get; set; }
     }
 }

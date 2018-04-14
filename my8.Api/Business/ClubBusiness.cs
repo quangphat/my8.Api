@@ -30,9 +30,35 @@ namespace my8.Api.Business
             }
             return null;
         }
-        public async Task<Club> Get(string id)
+        public async Task<bool> Update(Club club)
         {
-            return await m_ClubRepositoryN.Get(id);
+            bool result = await m_ClubRepositoryN.Update(club);
+            return result;
+        }
+        public async Task<ClubAllin> Get(string id)
+        {
+            ClubAllin club = await m_ClubRepositoryN.Get(id);
+            return club;
+        }
+        public async Task<List<ClubAllin>> Search(string searchStr, int skip, int limit)
+        {
+            IEnumerable<ClubAllin> lstClub = await m_ClubRepositoryN.Search(searchStr, skip, limit);
+            return lstClub.ToList();
+        }
+        public async Task<bool> KickOutMember(string clubId,string personId)
+        {
+            bool result = await m_ClubRepositoryN.KickOutMember(clubId, personId);
+            return result;
+        }
+        public async Task<bool> AddMember(string clubId, string personId)
+        {
+            bool result = await m_ClubRepositoryN.AddMember(clubId, personId);
+            return result;
+        }
+       public async Task<List<PersonAllin>> GetMembers(string clubId)
+        {
+            IEnumerable<PersonAllin> lstPerson = await m_ClubRepositoryN.GetMembers(clubId);
+            return lstPerson.ToList();
         }
     }
 }

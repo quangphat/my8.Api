@@ -14,7 +14,7 @@ namespace my8.Api.Interfaces.Neo4j
         Task<bool> UnFriend(string sendBy, string sentTo);
         Task<IEnumerable<PersonAllin>> GetTopFriendInteractive(Person currentUSer, int top);// most top interactive
         Task<PersonAllin> FindParticularPerson(Person currentPerson, Person findingPerson);
-        Task<IEnumerable<PersonAllin>> FindPersons(string currentPersonId, string searchStr,int skip,int limit);
+        Task<IEnumerable<PersonAllin>> Search(string currentPersonId, string searchStr,int skip,int limit);
         Task<bool> InteractionToFriend(Person currentPerson, Person friend);
 
         Task<IEnumerable<Page>> GetFollowingPage(string userId);

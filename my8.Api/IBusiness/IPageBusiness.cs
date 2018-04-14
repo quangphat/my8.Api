@@ -9,7 +9,8 @@ namespace my8.Api.IBusiness
     public interface IPageBusiness
     {
         Task<Page> Create(Page page);
-        Task<Page> Get(string id);
+        Task<bool> Update(Page page);
+        Task<PageAllin> Get(string id);
         Task<List<PersonAllin>> GetPeopleFollow(string pageId);
         Task<List<PageAllin>> Search(string searchStr, int skip, int limit);
     }

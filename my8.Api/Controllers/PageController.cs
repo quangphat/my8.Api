@@ -16,13 +16,9 @@ namespace my8.Api.Controllers
     [Produces("application/json")]
     public class PageController : Controller
     {
-        MongoI.IPageRepository pageRepositoryM;
-        NeoI.IPageRepository pageRepositoryN;
         IPageBusiness m_pageBusiness;
-        public PageController(IPageBusiness pageBusiness,MongoI.IPageRepository pageRepoM,NeoI.IPageRepository pageRepoN)
+        public PageController(IPageBusiness pageBusiness)
         {
-            pageRepositoryM = pageRepoM;
-            pageRepositoryN = pageRepoN;
             m_pageBusiness = pageBusiness;
         }
         [HttpPost]
@@ -37,11 +33,11 @@ namespace my8.Api.Controllers
         [Route("api/page/get/{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            Page page = await m_pageBusiness.Get(id);
+            PageAllin page = await m_pageBusiness.Get(id);
             return Json(page);
         }
         [HttpGet]
-        [Route("api/n/page/search/{searchStr}/{skip}/{limit}")]
+        [Route("api/page/search/{searchStr}/{skip}/{limit}")]
         public async Task<IActionResult> Search(string searchStr,int skip,int limit)
         {
             List<PageAllin> lstPage = await m_pageBusiness.Search(searchStr, skip, limit);

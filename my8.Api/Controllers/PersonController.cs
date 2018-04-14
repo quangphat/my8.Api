@@ -109,5 +109,12 @@ namespace my8.Api.Controllers
             List<Person> lstFriend = await m_PersonBusiness.FindCommondFriend(id,friendId);
             return Json(lstFriend);
         }
+        [HttpPost]
+        [Route("api/person/join-club/{id}/{clubId}")]
+        public async Task<IActionResult> JoinClub(string id,string clubId)
+        {
+            bool result = await m_PersonBusiness.JoinClub(id, clubId);
+            return Json(result);
+        }
     }
 }

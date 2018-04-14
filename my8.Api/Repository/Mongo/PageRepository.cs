@@ -25,16 +25,36 @@ namespace my8.Api.Repository.Mongo
             try
             {
                 await collection.InsertOneAsync(page);
-                return page.Id;
+                return page.PageId;
             }
             catch { return string.Empty; }
         }
-
+        public async Task<bool> Update(Page page)
+        {
+            filter = Builders<Page>.Filter.Eq(p => p.PageId, page.PageId);
+            var update = Builders<Page>.Update
+                            .Set(p => p.DisplayName, page.DisplayName)
+                            .Set(p => p.Rate, page.Rate)
+                            .Set(p => p.Title, page.Title)
+                            .Set(p => p.Avatar, page.Avatar)
+                            .Set(p => p.PageIPoint, page.PageIPoint);
+            try
+            {
+                await collection.UpdateOneAsync(filter, update);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<Page> Get(string id)
         {
-            filter = Builders<Page>.Filter.Eq(p => p.Id, id);
+            filter = Builders<Page>.Filter.Eq(p => p.PageId, id);
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
+
+        
     }
 }
 

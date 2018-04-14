@@ -18,7 +18,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher.Create("(c:Club {Id:{Id},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Joins:{Joins},ClubIPoint:{ClubIPoint},Title:{Title}})")
-                    .WithParams(new { Id = club.ClubId, DisplayName = club.DisplayName, Avatar = club.Avatar, Rate = club.Rate, Joins = club.Joins, ClubIPoint = club.ClubIPoint, Title = club.Title })
+                    .WithParams(new { Id = club.ClubId, club.DisplayName, club.Avatar, club.Rate, club.Joins, club.ClubIPoint, club.Title })
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -27,27 +27,94 @@ namespace my8.Api.Repository.Neo4j
                 return false;
             }
         }
-
-        public async Task<Club> Get(string id)
+        public async Task<bool> Update(Club club)
         {
-            IEnumerable<Club> clubs = await client.Cypher.Match("(c:Club{Id:{id}})")
+            try
+            {
+                await client.Cypher
+                    .Match("(c:Club{Id:'" + club.ClubId + "'})")
+                    .Set($"c.DisplayName='{club.DisplayName}'")
+                    .Set($"c.Rate={club.Rate}")
+                    .Set($"c.Avatar='{club.Avatar}'")
+                    .Set($"c.ClubIPoint={club.ClubIPoint}")
+                    .Set($"c.Title='{club.Title}'")
+                    .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch(Exception e)
+            { return false; }
+        }
+        public async Task<ClubAllin> Get(string id)
+        {
+            IEnumerable<ClubAllin> clubs = await client.Cypher.Match("(c:Club{Id:{id}})")
                 .WithParam("id", id)
-                .Return(c => c.As<Club>()).Limit(1).ResultsAsync;
+                .OptionalMatch("(c)-[j:Join]-(p:Person)")
+                .Return((c,j)=>new ClubAllin {
+                    Club = c.As<Club>(),
+                    Joins = (int)j.Count()
+                }).Limit(1).ResultsAsync;
             return clubs.FirstOrDefault();
         }
-        public async Task<int> CountMember(Club team)
+        public async Task<bool> AddMember(string clubId, string personId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await client.Cypher
+                .Match("(u:Person{Id:'" + personId + "'})", "(c:Club{Id:'" + clubId + "'})")
+                .Create("(u)-[:Join{PCIp:0}]->(c)")
+                .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch { return false; }
         }
-        public Task<IEnumerable<Person>> GetMembers(Club team)
+        public async Task<IEnumerable<PersonAllin>> GetMembers(string clubId)
         {
-            throw new NotImplementedException();
+            IEnumerable<PersonAllin> result = await client.Cypher
+                .Match("(c:Club{Id:{id}})")
+                .WithParams(new { id = clubId })
+                .OptionalMatch("(c)-[j:Join]-(u:Person)")
+                .With("u,j")
+                .Return((u, j) => new PersonAllin
+                {
+                    Person = u.As<Person>(),
+                    JoinClub = j.As<JoinEdge>()
+                }).ResultsAsync;
+            return result;
         }
 
-        public Task KickOutMember(Club team, Person user)
+        public async Task<bool> KickOutMember(string clubId, string personId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await client.Cypher.Match("(c:Club{Id:'" + clubId + "'}),(p:Person{Id:'" + personId + "'})")
+                    .OptionalMatch("(c)-[j:Join]-(p)")
+                    .Delete("j")
+                    .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch { return false; }
         }
+        public async Task<IEnumerable<ClubAllin>> Search(string searchStr, int skip, int limit)
+        {
+            IEnumerable<ClubAllin> clubs = await client.Cypher
+                .Match("(c:Club)")
+                .Where($"Lower(c.DisplayName) contains '{searchStr}'  with count(c) as Total ")
+                .Match($"(c:Page) where Lower(c.DisplayName) contains '{searchStr}'")
+                .OptionalMatch("(c)-[j:Join]-(u:Person)")
+                .Return((c, Total, j) => new ClubAllin
+                {
+                    Club = c.As<Club>(),
+                    Total = Total.As<int>(),
+                    Joins = (int)j.Count()
+                })
+                .OrderBy("c.ClubIPoint")
+                .Skip(skip)
+                .Limit(limit)
+                .ResultsAsync;
+            return clubs;
+        }
+
+        
     }
 }
 

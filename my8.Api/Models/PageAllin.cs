@@ -9,5 +9,6 @@ namespace my8.Api.Models
     {
         public Page Page { get; set; }
         public int Total { get; set; }//for paging
+        public int Follows { get; set; }
     }
 }

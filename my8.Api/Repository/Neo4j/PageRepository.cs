@@ -16,17 +16,13 @@ namespace my8.Api.Repository.Neo4j
         public PageRepository(IOptions<Neo4jConnection> setting):base(setting)
         {
         }
-        public Task<int> CountFollow(Page page)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<bool> Create(Page page)
         {
             try
             {
                 await client.Cypher.Create("(p:Page {Id:{Id},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Url:{Url},Follows:{Follows},PageIPoint:{PageIPoint},Title:{Title}})")
-                    .WithParams(new { Id = page.Id, DisplayName = page.DisplayName, Avatar = page.Avatar, Rate = page.Rate, Url = page.Url, Follows = page.Follows, PageIPoint = page.PageIPoint, Title = page.Title })
+                    .WithParams(new { Id = page.PageId, DisplayName = page.DisplayName, Avatar = page.Avatar, Rate = page.Rate, Url = page.Url, Follows = page.Follows, PageIPoint = page.PageIPoint, Title = page.Title })
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -35,15 +31,33 @@ namespace my8.Api.Repository.Neo4j
                 return false;
             }
         }
-
-        public async Task<Page> Get(string id)
+        public async Task<bool> Update(Page page)
         {
-            IEnumerable<Page> pages = await client.Cypher
-                .Match("(p:Page{Id:{id}})")
+            try
+            {
+                await client.Cypher
+                    .Match("(p:Page{Id:'" + page.PageId + "'})")
+                    .Set($"p.DisplayName='{page.DisplayName}'")
+                    .Set($"p.Rate={page.Rate}")
+                    .Set($"p.Avatar='{page.Avatar}'")
+                    .Set($"p.PageIPoint={page.PageIPoint}")
+                    .Set($"p.Title='{page.Title}'")
+                    .ExecuteWithoutResultsAsync();
+                return true;
+            }
+            catch (Exception e)
+            { return false; }
+        }
+        public async Task<PageAllin> Get(string id)
+        {
+            IEnumerable<PageAllin> pages = await client.Cypher.Match("(p:Page{Id:{id}})")
                 .WithParam("id", id)
-                .Return(p => p.As<Page>())
-                .Limit(1)
-                .ResultsAsync;
+                .OptionalMatch("(p)-[f:Follows]-(u:Person)")
+                .Return((p, f) => new PageAllin
+                {
+                    Page = p.As<Page>(),
+                    Follows = (int)f.Count()
+                }).Limit(1).ResultsAsync;
             return pages.FirstOrDefault();
         }
 
@@ -75,12 +89,15 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<PageAllin>> Search(string searchStr,int skip, int limit)
         {
             IEnumerable<PageAllin> pages = await client.Cypher
-                .Match("(p:Page) with count(p) as Total")
-                .Match("(p:Page) with p,Total")
+                .Match("(p:Page)")
+                .Where($"Lower(p.DisplayName) contains '{searchStr}'  with count(p) as Total ")
+                .Match("(p:Page)")
                 .Where($"Lower(p.DisplayName) contains '{searchStr}'")
-                .Return((p,Total)=>new PageAllin {
+                .OptionalMatch("(p)-[f:Follow]-(u:Person)")
+                .Return((p,Total,f)=>new PageAllin {
                     Page = p.As<Model.Page>(),
-                    Total = Total.As<int>()
+                    Total = Total.As<int>(),
+                    Follows = (int)f.Count()
                 })
                 .OrderBy("p.PageIPoint")
                 .Skip(skip)
