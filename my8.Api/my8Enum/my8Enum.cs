@@ -5,7 +5,12 @@ using System.Threading.Tasks;
 
 namespace my8.Api.my8Enum
 {
-    public enum PostAuthorTypeEnum
+    public enum PostTypeEnum
+    {
+        StatusPost=1,
+        JobPost=2
+    }
+    public enum ActorTypeEnum
     {
         Person=1,
         Page=2,

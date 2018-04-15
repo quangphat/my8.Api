@@ -1,22 +1,24 @@
-﻿using MongoDB.Bson;
 using my8.Api.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace my8.Api.Interfaces.Mongo
+
+namespace my8.Api.IBusiness
 {
-    public interface IStatusPostRepository
+    public interface IStatusPostBusiness
     {
+        Task<StatusPost> Post(StatusPost post);
         Task<List<StatusPost>> Gets(string[] id);
         Task<StatusPost> Get(string postId);
         Task<List<StatusPost>> GetByActor(Actor actor);
-        Task<string> Post(StatusPost post);
         Task<bool> UpdatePost(StatusPost post);
         Task<bool> UpdateLikes(StatusPost post);
         Task<bool> UpdateShares(StatusPost post);
         Task<bool> UpdateComments(StatusPost post);
         Task<bool> UpdateViews(StatusPost post);
-        Task<bool> Active(string postId,bool active);
+        Task<bool> Active(string postId, bool active);
         Task<bool> DeletePost(string postId);
     }
 }

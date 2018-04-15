@@ -36,7 +36,7 @@ namespace XUnitTest
             Actor user = new Actor();
             user.DisplayName = "Quang Phát";
             user.ActorId = "5ac9be056272224af07b79d3";
-            user.ActorTypeId = (int)PostAuthorTypeEnum.Person;
+            user.ActorTypeId = (int)ActorTypeEnum.Person;
             post.PostBy = user;
             await server.Call(HttpMethod.Post, "/api/m-statuspost/create", post, (rp) =>
             {
@@ -55,7 +55,7 @@ namespace XUnitTest
             Actor user = new Actor();
             user.DisplayName = "Quang Phát";
             user.ActorId = "5ac9be056272224af07b79d3";
-            user.ActorTypeId = (int)PostAuthorTypeEnum.Person;
+            user.ActorTypeId = (int)ActorTypeEnum.Person;
             await server.Call(HttpMethod.Post, "/api/m-statuspost/getbyactor", user, (rp) =>
             {
                 Assert.NotNull(rp);

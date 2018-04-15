@@ -53,7 +53,7 @@ namespace my8.Api
             //services.AddMvc();
             services.AddMvc().AddJsonOptions(opts =>
             {
-                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
             MapConfig.Config(services);
 
@@ -61,6 +61,8 @@ namespace my8.Api
             services.AddScoped<IPageBusiness, PageBusiness>();
 			services.AddScoped<IPersonBusiness, PersonBusiness>();
 			services.AddScoped<IClubBusiness, ClubBusiness>();
+			services.AddScoped<IStatusPostBusiness, StatusPostBusiness>();
+			services.AddScoped<IPostBroadcastPersonBusiness, PostBroadcastPersonBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
@@ -75,6 +77,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IClubRepository, MongoR.ClubRepository>();
 			services.AddSingleton<MongoI.IActorTypeRepository, MongoR.ActorTypeRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
+			services.AddSingleton<MongoI.IPostBroadcastPersonRepository, MongoR.PostBroadcastPersonRepository>();
 			//AppendMongoDI
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();

@@ -75,7 +75,7 @@ namespace my8.Api.Controllers
             post.PostTime = DateTime.UtcNow;
             post.PostBy = new Actor();
             post.PostBy.DisplayName = "mộng nhàn";
-            post.PostBy.ActorTypeId = (int)PostAuthorTypeEnum.Person;
+            post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
             post.Content = "Tuyển nhân viên kế toán";
             post.Applies = 2;
             post.Comments = 3;

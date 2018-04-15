@@ -21,21 +21,60 @@ namespace my8.Api.Repository.Mongo
         {
             collection = _db.GetCollection<StatusPost>("StatusPost");
         }
-
-        public async Task<StatusPost> GetByPostId(string id)
+        public async Task<string> Post(StatusPost post)
+        {
+            try
+            {
+                await collection.InsertOneAsync(post);
+                return post.Id;
+            }
+            catch { return string.Empty; }
+        }
+        public async Task<StatusPost> Get(string id)
         {
             var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, id);
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
-
+        public async Task<List<StatusPost>> Gets(string[] id)
+        {
+            string[] ids = new string[id.Length];
+            for (int i = 0; i < id.Length; i++)
+            {
+                string line = $"ObjectId('{id[i]}')";
+                ids[i] = line;
+            }
+            string temp = String.Join(",", ids);
+            List<StatusPost> statusPosts = await collection.Find("{ _id:{$in:[" + temp + "]}}").ToListAsync();
+            return statusPosts;
+        }
 
         public async Task<bool> UpdatePost(StatusPost post)
         {
             var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, post.Id);
             var update = Builders<StatusPost>.Update
                             .Set(s => s.Content, post.Content)
-                            .Set(p => p.EditedTime, DateTime.UtcNow)
-                            .Set(p => p.Images, post.Images);
+                            .Set(s => s.EditedTime, post.EditedTime)
+                            .Set(s => s.Likes, post.Likes)
+                            .Set(s => s.Comments, post.Comments)
+                            .Set(s => s.Shares, post.Shares)
+                            .Set(s => s.Views, post.Views)
+                            .Set(s => s.Images, post.Images)
+                            .Set(s => s.PersonTags, post.PersonTags)
+                            .Set(s => s.IsFindJob, post.IsFindJob)
+                            .Set(s => s.IsShareExperience, post.IsShareExperience)
+                            .Set(s => s.IsAds, post.IsAds)
+                            .Set(s => s.CareerTags, post.CareerTags)
+                            .Set(s => s.SkillTags, post.SkillTags)
+                            .Set(s => s.Locations, post.Locations)
+                            .Set(s => s.Country, post.Country)
+                            .Set(s => s.MinExperience, post.MinExperience)
+                            .Set(s => s.MaxExperience, post.MaxExperience)
+                            .Set(s => s.Degrees, post.Degrees)
+                            .Set(s => s.Active, post.Active)
+                            .Set(s => s.Privacy, post.Privacy)
+                            .Set(s => s.Seniority, post.Seniority)
+                            .Set(s => s.EmploymentType, post.EmploymentType);
+
             try
             {
                 await collection.UpdateOneAsync(filter, update);
@@ -50,7 +89,7 @@ namespace my8.Api.Repository.Mongo
         public async Task<bool> UpdateShares(StatusPost post)
         {
             var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, post.Id);
-                
+
             var update = Builders<StatusPost>.Update
                             .Set(s => s.Shares, post.Shares);
             try
@@ -79,7 +118,7 @@ namespace my8.Api.Repository.Mongo
                 return false;
             }
         }
-        public async Task<bool> UpdateComment(StatusPost post)
+        public async Task<bool> UpdateComments(StatusPost post)
         {
             var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, post.Id);
             var update = Builders<StatusPost>.Update
@@ -105,38 +144,16 @@ namespace my8.Api.Repository.Mongo
             catch { return false; }
         }
 
-        public async Task<bool> Post(StatusPost post)
-        {
-            try
-            {
-                await collection.InsertOneAsync(post);
-                return true;
-            }
-            catch { return false; }
-        }
 
-        public async Task<List<StatusPost>> Gets(string[] id)
-        {
-            string[] ids = new string[id.Length];
-            for (int i = 0; i < id.Length; i++)
-            {
-                string line = $"ObjectId('{id[i]}')";
-                ids[i] = line;
-            }
-            string temp = String.Join(",", ids);
-            List<StatusPost> statusPosts = await collection.Find("{ _id:{$in:[" + temp + "]}}").ToListAsync();
-            return statusPosts;
-        }
-
-        public async Task<List<StatusPost>> GetByAuthor(Actor actor)
+        public async Task<List<StatusPost>> GetByActor(Actor actor)
         {
             var filterBuilder = Builders<StatusPost>.Filter;
-            filter = filterBuilder.Eq(p => p.PostBy.ActorId, actor.ActorId) & filterBuilder.Eq(p=>p.PostBy.ActorTypeId,actor.ActorTypeId);
+            filter = filterBuilder.Eq(p => p.PostBy.ActorId, actor.ActorId) & filterBuilder.Eq(p => p.PostBy.ActorTypeId, actor.ActorTypeId);
             List<StatusPost> statusPosts = await collection.Find(filter).ToListAsync();
             return statusPosts;
         }
 
-        public async Task<bool> Active(string postId,bool active)
+        public async Task<bool> Active(string postId, bool active)
         {
             var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, postId);
             var update = Builders<StatusPost>.Update

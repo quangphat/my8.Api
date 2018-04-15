@@ -19,7 +19,7 @@ namespace XUnitTest
         {
             ActorType actorType = new ActorType();
             actorType.Name = "person";
-            actorType.Value = (int)PostAuthorTypeEnum.Person;
+            actorType.Value = (int)ActorTypeEnum.Person;
             await server.Call(HttpMethod.Post, "/api/m-actortype-create",actorType, (rp) =>
             {
                 Assert.NotNull(rp);

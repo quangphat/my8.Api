@@ -4,38 +4,47 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoM = my8.Api.Models;
-using MongoI = my8.Api.Interfaces.Mongo;
-using NeoI = my8.Api.Interfaces.Neo4j;
-using SqlI = my8.Api.Interfaces.Sql;
+using my8.Api.IBusiness;
+using my8.Api.Models;
+
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
     public class StatusPostController : Controller
     {
-        MongoI.IStatusPostRepository statuspostRepositoryM;
-        public StatusPostController(MongoI.IStatusPostRepository statuspostRepoM)
+        IStatusPostBusiness m_statusPostBusiness;
+        IPostBroadcastPersonBusiness m_PostBroadCastToPersonBusiness;
+        public StatusPostController(IStatusPostBusiness statusPostBusiness,IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
         {
-            statuspostRepositoryM = statuspostRepoM;
+            m_statusPostBusiness = statusPostBusiness;
+            m_PostBroadCastToPersonBusiness = postBroadcastPersonBusiness;
         }
         [HttpPost]
-        [Route("api/m-statuspost/create")]
-        public async Task CreatePost([FromBody] MongoM.StatusPost post)
+        [Route("api/statuspost/create")]
+        public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
-            await statuspostRepositoryM.Post(post);
+            StatusPost post = await m_statusPostBusiness.Post(model);
+            return Json(post);
+        }
+        [HttpGet]
+        [Route("api/statuspost/get/{postId}")]
+        public async Task<IActionResult> Get(string postId)
+        {
+            StatusPost post = await m_statusPostBusiness.Get(postId);
+            return Json(post);
         }
         [HttpPost]
-        [Route("api/m-statuspost/getbyactor")]
-        public async Task<IActionResult> GetByActor([FromBody] MongoM.Actor actor)
+        [Route("api/statuspost/getbyactor")]
+        public async Task<IActionResult> GetByActor([FromBody] Actor actor)
         {
-            List<MongoM.StatusPost> lstStatusPost =  await statuspostRepositoryM.GetByAuthor(actor);
+            List<StatusPost> lstStatusPost = await m_statusPostBusiness.GetByActor(actor);
             return Json(lstStatusPost);
         }
         [HttpPost]
-        [Route("api/m-statuspost/getmultiple-statuspost")]
+        [Route("api/statuspost/getmultiple-statuspost")]
         public async Task<IActionResult> Gets([FromBody] string[] ids)
         {
-            List<MongoM.StatusPost> lstStatusPost = await statuspostRepositoryM.Gets(ids);
+            List<StatusPost> lstStatusPost = await m_statusPostBusiness.Gets(ids);
             return Json(lstStatusPost);
         }
     }
