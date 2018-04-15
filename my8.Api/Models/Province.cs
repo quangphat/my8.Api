@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Models
 {
-    public class SeniorityLevel
+    public class Province
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

@@ -63,6 +63,13 @@ namespace my8.Api
 			services.AddScoped<IClubBusiness, ClubBusiness>();
 			services.AddScoped<IStatusPostBusiness, StatusPostBusiness>();
 			services.AddScoped<IPostBroadcastPersonBusiness, PostBroadcastPersonBusiness>();
+			services.AddScoped<IIndustryBusiness, IndustryBusiness>();
+			services.AddScoped<ISkillBusiness, SkillBusiness>();
+			services.AddScoped<ILocationBusiness, LocationBusiness>();
+			services.AddScoped<IProvinceBusiness, ProvinceBusiness>();
+			services.AddScoped<IDistrictBusiness, DistrictBusiness>();
+			services.AddScoped<IDegreeBusiness, DegreeBusiness>();
+			services.AddScoped<ISeniorityLevelBusiness, SeniorityLevelBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
@@ -78,6 +85,13 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IActorTypeRepository, MongoR.ActorTypeRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
 			services.AddSingleton<MongoI.IPostBroadcastPersonRepository, MongoR.PostBroadcastPersonRepository>();
+			services.AddSingleton<MongoI.IIndustryRepository, MongoR.IndustryRepository>();
+			services.AddSingleton<MongoI.ISkillRepository, MongoR.SkillRepository>();
+			services.AddSingleton<MongoI.ILocationRepository, MongoR.LocationRepository>();
+			services.AddSingleton<MongoI.IProvinceRepository, MongoR.ProvinceRepository>();
+			services.AddSingleton<MongoI.IDistrictRepository, MongoR.DistrictRepository>();
+			services.AddSingleton<MongoI.IDegreeRepository, MongoR.DegreeRepository>();
+			services.AddSingleton<MongoI.ISeniorityLevelRepository, MongoR.SeniorityLevelRepository>();
 			//AppendMongoDI
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();
