@@ -12,7 +12,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public DateTime PostTime { get; set; }
+        public string PostTime { get; set; }
         public string Content { get; set; }
         public Actor PostBy { get; set; }// có thể là người/trang post, người like, người comment,...
         public DateTime EditedTime { get; set; }

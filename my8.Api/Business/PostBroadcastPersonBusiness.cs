@@ -35,7 +35,7 @@ namespace my8.Api.Business
             bool result = await CreatePostBroadcastAsync(post);
             return result;
         }
-        private async Task<List<PostBroadcastPerson>> GetByPerson(string personId)
+        public async Task<List<PostBroadcastPerson>> GetByPerson(string personId)
         {
             return await m_PostbroadcastpersonRepositoryM.GetByPerson(personId);
         }
@@ -49,16 +49,19 @@ namespace my8.Api.Business
             if (actorType == (int)ActorTypeEnum.Person)
             {
                 people = await m_PersonRepository.GetFriends(actorId);
+                return people.ToList();
             }
             if (actorType == (int)ActorTypeEnum.Page)
             {
                 people = await m_PageRepository.GetPersonFollow(actorId);
+                return people.ToList();
             }
             if (actorType == (int)ActorTypeEnum.Club)
             {
                 people = await m_ClubRepository.GetMembers(actorId);
+                return people.ToList();
             }
-            return people.ToList();
+            return null;
         }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
         {
@@ -74,6 +77,7 @@ namespace my8.Api.Business
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.StatusPost;
+                        post.PostTime = post.PostTime;
                         m_PostbroadcastpersonRepositoryM.Create(postBroadcast);
                     });
                 }
@@ -98,6 +102,7 @@ namespace my8.Api.Business
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.JobPost;
+                        postBroadcast.PostTime = post.PostTime;
                         m_PostbroadcastpersonRepositoryM.Create(postBroadcast);
                     });
                 }
@@ -113,7 +118,5 @@ namespace my8.Api.Business
         {
             return await m_PostbroadcastpersonRepositoryM.HidePost(post);
         }
-
-        
     }
 }

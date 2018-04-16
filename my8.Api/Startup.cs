@@ -18,6 +18,7 @@ using SqlR = my8.Api.Repository.Sql;
 using Newtonsoft.Json.Serialization;
 using my8.Api.IBusiness;
 using my8.Api.Business;
+using my8.Api.SmartCenter;
 
 namespace my8.Api
 {
@@ -56,7 +57,8 @@ namespace my8.Api
                 opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
             MapConfig.Config(services);
-
+            //SmartCenter
+            services.AddScoped<ISmartCenter, SmartCenter.SmartCenter>();
             //Business
             services.AddScoped<IPageBusiness, PageBusiness>();
 			services.AddScoped<IPersonBusiness, PersonBusiness>();

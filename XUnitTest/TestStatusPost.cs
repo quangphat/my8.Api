@@ -26,7 +26,7 @@ namespace XUnitTest
             post.Likes = 10;
             post.Shares = 1;
             post.Views = 15;
-            post.PostTime = DateTime.UtcNow;
+            post.PostTime = DateTime.Today.ToShortDateString();
             post.Images = null;
             post.Active = true;
             post.Privacy = (int)PostPrivaryEnum.All;

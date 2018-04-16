@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
 using my8.Api.Models;
+using my8.Api.my8Enum;
 
 namespace my8.Api.Controllers
 {
@@ -23,8 +24,27 @@ namespace my8.Api.Controllers
         [Route("api/statuspost/create")]
         public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
-            StatusPost post = await m_statusPostBusiness.Post(model);
-            return Json(post);
+            StatusPost post = null;
+            for(int i=1000;i<1002;i++)
+            {
+                post = new StatusPost();
+                post.Active = true;
+                post.Comments = 10;
+                post.Content = $"The status post #{i}";
+                post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
+                post.PostBy = new Actor();
+                post.PostBy.ActorId = "5acedf96c86324070424f263";
+                post.PostBy.DisplayName = "Quang Phát";
+                post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
+                StatusPost created = await m_statusPostBusiness.Post(post);
+                if(created!=null)
+                {
+                    await m_PostBroadCastToPersonBusiness.BroadcastToPerson(created);
+                }
+            }
+
+            //StatusPost post = await m_statusPostBusiness.Post(model);
+            return Json(true);
         }
         [HttpGet]
         [Route("api/statuspost/get/{postId}")]

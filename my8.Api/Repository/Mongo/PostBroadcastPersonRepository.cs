@@ -42,7 +42,7 @@ namespace my8.Api.Repository.Mongo
         public async Task<List<PostBroadcastPerson>> GetByPerson(string personId,int skip,int limit)
         {
             filter = Builders<PostBroadcastPerson>.Filter.Eq(p => p.PersonId, personId);
-            List<PostBroadcastPerson> lstPost = await collection.Find(filter).Skip(skip).Limit(limit).ToListAsync();
+            List<PostBroadcastPerson> lstPost = await collection.Find(filter).Sort("{PostTime:1}").Skip(skip).Limit(limit).ToListAsync();
             return lstPost;
         }
 
