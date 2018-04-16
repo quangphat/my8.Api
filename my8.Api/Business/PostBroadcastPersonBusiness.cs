@@ -35,9 +35,13 @@ namespace my8.Api.Business
             bool result = await CreatePostBroadcastAsync(post);
             return result;
         }
-        public async Task<List<PostBroadcastPerson>> GetByPerson(string personId)
+        private async Task<List<PostBroadcastPerson>> GetByPerson(string personId)
         {
             return await m_PostbroadcastpersonRepositoryM.GetByPerson(personId);
+        }
+        public async Task<List<PostBroadcastPerson>> GetByPerson(string personId, int skip, int limit)
+        {
+            return await m_PostbroadcastpersonRepositoryM.GetByPerson(personId,skip,limit);
         }
         private async Task<List<PersonAllin>> GetPersonInvolve(int actorType,string actorId)
         {
@@ -70,7 +74,6 @@ namespace my8.Api.Business
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.StatusPost;
-                        postBroadcast.Hidden = false;
                         m_PostbroadcastpersonRepositoryM.Create(postBroadcast);
                     });
                 }
@@ -95,7 +98,6 @@ namespace my8.Api.Business
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.JobPost;
-                        postBroadcast.Hidden = false;
                         m_PostbroadcastpersonRepositoryM.Create(postBroadcast);
                     });
                 }
@@ -106,5 +108,12 @@ namespace my8.Api.Business
                 return false;
             }
         }
+
+        public async Task<bool> HidePost(PostBroadcastPerson post)
+        {
+            return await m_PostbroadcastpersonRepositoryM.HidePost(post);
+        }
+
+        
     }
 }

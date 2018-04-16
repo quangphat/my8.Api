@@ -8,6 +8,9 @@ namespace my8.Api.Interfaces.Mongo
     {
         Task<bool> Create(PostBroadcastPerson postbroadcastperson);
         Task<List<PostBroadcastPerson>> GetByPerson(string personId);
+        Task<List<PostBroadcastPerson>> GetByPerson(string personId,int skip,int limit);
+        Task<bool> HidePost(PostBroadcastPerson post);
+
     }
 }
 

@@ -20,6 +20,18 @@ namespace my8.Api.Models
         public PostTypeEnum PostType { get; set; }
         public string PostTime { get; set; }
         public int InteractivePoint { get; set; }
-        public bool Hidden { get; set; }
+    }
+    public class PostBroadcastPersonHidden
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string PersonId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string PostId { get; set; }
+        public PostTypeEnum PostType { get; set; }
+        public string PostTime { get; set; }
+        public int InteractivePoint { get; set; }
     }
 }

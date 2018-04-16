@@ -12,6 +12,5 @@ namespace my8.Api.Models
         public decimal MaxSalary { get; set; }
         public string Title { get; set; }
         public string EmailToReceiveApply { get; set; }//Gửi thông báo đến email khi có người apply
-        public string FacebookToReceiveApply { get; set; }
     }
 }

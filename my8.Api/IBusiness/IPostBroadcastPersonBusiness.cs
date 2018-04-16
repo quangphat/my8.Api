@@ -12,5 +12,7 @@ namespace my8.Api.IBusiness
         Task<bool> BroadcastToPerson(StatusPost post);
         Task<bool> BroadcastToPerson(JobPost post);
         Task<List<PostBroadcastPerson>> GetByPerson(string personId);
+        Task<List<PostBroadcastPerson>> GetByPerson(string personId,int skip,int limit);
+        Task<bool> HidePost(PostBroadcastPerson post);
     }
 }

@@ -21,13 +21,9 @@ namespace my8.Api.Infrastructures
             mapper.AllowNullCollections = true;
             mapper.CreateMap<ObjectId, string>().ConvertUsing(a => a.ToString());
             mapper.CreateMap<string, ObjectId>().ConvertUsing(a => ObjectId.Parse(a));
+            mapper.CreateMap<PostBroadcastPerson, PostBroadcastPersonHidden>();
+            mapper.CreateMap<PostBroadcastPersonHidden, PostBroadcastPerson>();
 			//<AppendNewHere>
-
-
-
-
-
-
         }
     }
 }

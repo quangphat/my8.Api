@@ -1,15 +1,18 @@
 using my8.Api.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace my8.Api.Interfaces.Mongo
+
+namespace my8.Api.IBusiness
 {
-    public interface IJobPostRepository
+    public interface IJobPostBusiness
     {
+        Task<JobPost> Post(JobPost post);
         Task<List<JobPost>> Gets(string[] id);
         Task<JobPost> Get(string postId);
         Task<List<JobPost>> GetByActor(Actor actor);
-        Task<string> Post(JobPost post);
         Task<bool> UpdatePost(JobPost post);
         Task<bool> UpdateLikes(JobPost post);
         Task<bool> UpdateShares(JobPost post);
@@ -19,4 +22,3 @@ namespace my8.Api.Interfaces.Mongo
         Task<bool> DeletePost(string postId);
     }
 }
-

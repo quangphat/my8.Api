@@ -70,6 +70,7 @@ namespace my8.Api
 			services.AddScoped<IDistrictBusiness, DistrictBusiness>();
 			services.AddScoped<IDegreeBusiness, DegreeBusiness>();
 			services.AddScoped<ISeniorityLevelBusiness, SeniorityLevelBusiness>();
+			services.AddScoped<IJobPostBusiness, JobPostBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
