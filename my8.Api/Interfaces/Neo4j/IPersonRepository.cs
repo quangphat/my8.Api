@@ -8,7 +8,7 @@ namespace my8.Api.Interfaces.Neo4j
     {
         Task<bool> Create(Person user);
         Task<bool> Update(Person person);
-        Task<IEnumerable<PersonAllin>> GetFriends(string Id);
+        Task<IEnumerable<PersonAllin>> GetFriends(string currentPersonId);
         Task<IEnumerable<Person>> FindCommonFriend(string p1, string friend);
         Task<bool> AddFriend(string sendBy, string sentTo);
         Task<bool> UnFriend(string sendBy, string sentTo);
