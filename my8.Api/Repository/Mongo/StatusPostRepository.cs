@@ -60,19 +60,8 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.Views, post.Views)
                             .Set(s => s.Images, post.Images)
                             .Set(s => s.PersonTags, post.PersonTags)
-                            .Set(s => s.IsFindJob, post.IsFindJob)
                             .Set(s => s.IsShareExperience, post.IsShareExperience)
-                            .Set(s => s.IsAds, post.IsAds)
-                            .Set(s => s.IndustryTags, post.IndustryTags)
-                            .Set(s => s.SkillTags, post.SkillTags)
-                            .Set(s => s.Locations, post.Locations)
-                            .Set(s => s.MinExperience, post.MinExperience)
-                            .Set(s => s.MaxExperience, post.MaxExperience)
-                            .Set(s => s.Degrees, post.Degrees)
-                            .Set(s => s.Active, post.Active)
-                            .Set(s => s.Privacy, post.Privacy)
-                            .Set(s => s.Seniority, post.Seniority)
-                            .Set(s => s.EmploymentType, post.EmploymentType);
+                            .Set(s => s.IsAds, post.IsAds);
 
             try
             {
@@ -154,15 +143,16 @@ namespace my8.Api.Repository.Mongo
 
         public async Task<bool> Active(string postId, bool active)
         {
-            var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, postId);
-            var update = Builders<StatusPost>.Update
-                            .Set(s => s.Active, active);
-            try
-            {
-                await collection.UpdateOneAsync(filter, update);
-                return true;
-            }
-            catch { return false; }
+            //var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, postId);
+            //var update = Builders<StatusPost>.Update
+            //                .Set(s => s.Active, active);
+            //try
+            //{
+            //    await collection.UpdateOneAsync(filter, update);
+            //    return true;
+            //}
+            //catch { return false; }
+            return false;
         }
 
         public async Task<bool> DeletePost(string postId)

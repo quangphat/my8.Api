@@ -28,11 +28,8 @@ namespace XUnitTest
             post.Views = 15;
             post.PostTime = DateTime.Today.ToShortDateString();
             post.Images = null;
-            post.Active = true;
             post.Privacy = (int)PostPrivaryEnum.All;
             post.Content = "Today is Sunday";
-            post.EmploymentType = null;
-            post.Seniority = null;
             Actor user = new Actor();
             user.DisplayName = "Quang Phát";
             user.ActorId = "5ac9be056272224af07b79d3";

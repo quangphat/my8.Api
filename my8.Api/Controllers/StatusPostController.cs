@@ -28,7 +28,6 @@ namespace my8.Api.Controllers
             for(int i=1002;i<1102;i++)
             {
                 post = new StatusPost();
-                post.Active = true;
                 post.Comments = 10;
                 post.Content = $"The status post #{i}";
                 post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");

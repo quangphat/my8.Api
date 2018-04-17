@@ -22,19 +22,13 @@ namespace my8.Api.Models
         public int Views { get; set; }
         public string[] Images { get; set; }
         public List<ShortPerson> PersonTags { get; set; }
-        public bool IsFindJob { get; set; }//Gắn thẻ là tìm việc
+        
         public bool IsShareExperience { get; set; }//Gắn thẻ là bài đăng chia sẻ kiến thức
         public bool IsAds { get; set; }//bài đăng quảng cáo.
-        public List<Industry> IndustryTags { get; set; }//Lĩnh vực công việc
-        public List<Skill> SkillTags { get; set; }
-        public List<Location> Locations { get; set; }
+        
 
-        public int MinExperience { get; set; }
-        public int MaxExperience { get; set; }
-        public List<Degree> Degrees { get; set; }
-        public bool Active { get; set; }
+        
         public int Privacy { get; set; }
-        public SeniorityLevel Seniority { get; set; }
-        public EmploymentType EmploymentType { get; set; }
+        
     }
 }
