@@ -42,7 +42,7 @@ namespace my8.Api.Repository.Mongo
                 ids[i] = line;
             }
             string temp = String.Join(",", ids);
-            List<JobPost> posts = await collection.Find("{ _id:{$in:[" + temp + "]}}").ToListAsync();
+            List<JobPost> posts = await collection.Find($@"{{ _id:{{$in:[{temp}]}}}}").ToListAsync();
             return posts;
         }
 

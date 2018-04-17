@@ -64,7 +64,7 @@ namespace my8.Api.Repository.Mongo
         }
         public async Task<List<SeniorityLevel>> Search(string searchStr)
         {
-            return await collection.Find("{'$or':[{'Name':/" + searchStr + "/i}]}").ToListAsync();
+            return await collection.Find($@"{{'$or':[{{'Name':/{searchStr}/i}}]}}").ToListAsync();
         }
 
         public async Task<List<SeniorityLevel>> Gets()
