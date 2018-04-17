@@ -87,7 +87,7 @@ namespace my8.Api.Repository.Mongo
 
         public async Task<List<Industry>> Search(string searchStr)
         {
-            return await collection.Find("{'$or':[{'Code':/" + searchStr + "/i},{'Display':/" + searchStr + "/i}]}").ToListAsync();
+            return await collection.Find($@"{{'KeySearchs':{{ '$in':[/{searchStr}/i]}}}}").ToListAsync();
         }
     }
 }

@@ -64,7 +64,7 @@ namespace my8.Api.Repository.Mongo
         }
         public async Task<List<District>> Search(string searchStr)
         {
-            return null;
+            return await collection.Find($@"{{'KeySearchs':{{ '$in':[/{searchStr}/i]}}}}").ToListAsync();
         }
     }
 }

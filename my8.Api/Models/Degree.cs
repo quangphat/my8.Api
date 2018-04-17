@@ -13,6 +13,7 @@ namespace my8.Api.Models
         public string Id { get; set; }
 		public int Value { get; set; }
         public string Name { get; set; }
+        public string[] KeySearch { get; set; }
     }
 }
 

@@ -70,7 +70,7 @@ namespace my8.Api.Repository.Mongo
         }
         public async Task<List<Location>> Search(string searchStr)
         {
-            return await collection.Find("{'$or':[{'Country.Name':/" + searchStr + "/i},{'Province.Name':/" + searchStr + "/i},{'District.Name':/" + searchStr + "/i},{'Street':/" + searchStr + "/i}]}").ToListAsync();
+            return await collection.Find($@"{{'KeySearchs':{{ '$in':[/{searchStr}/i]}}}}").ToListAsync();
         }
     }
 }
