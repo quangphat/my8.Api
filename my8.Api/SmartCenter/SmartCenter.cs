@@ -8,6 +8,7 @@ using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
 using my8.Api.my8Enum;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.SmartCenter
 {
@@ -16,18 +17,21 @@ namespace my8.Api.SmartCenter
         private const int MAX_LIMIT = 100;
 
         MongoI.IPostBroadcastPersonRepository m_PostbroadcastPersonRepositoryM;
-        NeoI.IPersonRepository m_PersonRepository;
-        NeoI.IPageRepository m_PageRepository;
-        NeoI.IClubRepository m_ClubRepository;
+        MongoI.IPersonRepository m_PersonRepositoryM;
+        NeoI.IPersonRepository m_PersonRepositoryN;
+        NeoI.IPageRepository m_PageRepositoryN;
+        NeoI.IClubRepository m_ClubRepositoryN;
         public SmartCenter(MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository
-            ,NeoI.IPersonRepository personRepository
-            ,NeoI.IPageRepository pageRepository
-            ,NeoI.IClubRepository clubRepository)
+            ,NeoI.IPersonRepository personRepositoryN
+            ,NeoI.IPageRepository pageRepositoryN
+            ,NeoI.IClubRepository clubRepositoryN
+            ,MongoI.IPersonRepository personRepositoryM)
         {
             m_PostbroadcastPersonRepositoryM = postBroadcastPersonRepository;
-            m_PersonRepository = personRepository;
-            m_PageRepository = pageRepository;
-            m_ClubRepository = clubRepository;
+            m_PersonRepositoryN = personRepositoryN;
+            m_PageRepositoryN = pageRepositoryN;
+            m_ClubRepositoryN = clubRepositoryN;
+            m_PersonRepositoryM = personRepositoryM;
         }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
         {
@@ -44,7 +48,7 @@ namespace my8.Api.SmartCenter
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.StatusPost;
-                        post.PostTime = post.PostTime;
+                        postBroadcast.KeyTime = post.PostTime;
                         m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
                     }));
                 }
@@ -58,8 +62,58 @@ namespace my8.Api.SmartCenter
         }
         private async Task<bool> CreatePostBroadcastAsync(JobPost jobPost)
         {
+            string[] allPersonId = null;
+            List<Task> tasks = new List<Task>();
+            Task<HashSet<string>> lstPersonByActor = GetPersonIdInvolve(jobPost.PostBy);
+            tasks.Add(lstPersonByActor);
+            //must satisfy 
+            Task<HashSet<string>> lstPersonByIndustry = GetPersonIndustry(jobPost.IndustryTags);
+            tasks.Add(lstPersonByIndustry);
+            //must satisfy 
+            Task<HashSet<string>> lstPersonBySkill = GetPersonSkill(jobPost.SkillTags);
+            tasks.Add(lstPersonBySkill);
+            //optional
+            //Task<HashSet<string>> lstPersonByLocation = GetPersonLocation(jobPost.Locations);
+            //tasks.Add(lstPersonByLocation);
+            //optional
+            //Task<HashSet<string>> lstPersonByDegree = GetPersonDegree(jobPost.Degrees);
+            //tasks.Add(lstPersonByDegree);
+            //must satisfy 
+            Task<HashSet<string>> lstPersonByExperience = GetPersonExperience(jobPost.MinExperience, jobPost.MaxExperience);
+            tasks.Add(lstPersonByExperience);
+            await Task.WhenAll(tasks);
+            List<HashSet<string>> hashSetsMustSatisfy = new List<HashSet<string>>();
+            await Task.Run(()=> {
+                //must satisfy 
+                hashSetsMustSatisfy.Add(lstPersonByIndustry.Result);
+                hashSetsMustSatisfy.Add(lstPersonBySkill.Result);
+                hashSetsMustSatisfy.Add(lstPersonByExperience.Result);
+                string[] allPersonSatisfyJob = Utils.IntersectOrUnion(hashSetsMustSatisfy);
+
+                string[] allPersonByPost = lstPersonByActor.Result.ToArray();
+
+                //hashSetsMustSatisfy.Add(lstPersonByLocation.Result);
+                //hashSetsMustSatisfy.Add(lstPersonByDegree.Result);
+
+                allPersonId = allPersonSatisfyJob.Union(allPersonByPost).ToArray();
+            });
+            
             try
             {
+                List<Task> lastTasks = new List<Task>();
+                for (int i = 0; i < allPersonId.Length-1; i++)
+                {
+                    tasks.Add(Task.Run(() =>
+                    {
+                        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
+                        postBroadcast.PostId = jobPost.Id;
+                        postBroadcast.PersonId = allPersonId[i];
+                        postBroadcast.PostType = PostTypeEnum.JobPost;
+                        postBroadcast.KeyTime = jobPost.PostTime;
+                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
+                    }));
+                }
+                await Task.WhenAll(lastTasks);
                 return true;
             }
             catch
@@ -73,40 +127,70 @@ namespace my8.Api.SmartCenter
             IEnumerable<PersonAllin> people = null;
             if (actorType == (int)ActorTypeEnum.Person)
             {
-                people = await m_PersonRepository.GetFriends(actor.ActorId);
+                people = await m_PersonRepositoryN.GetFriends(actor.ActorId);
                 return people.ToList();
             }
             if (actorType == (int)ActorTypeEnum.Page)
             {
-                people = await m_PageRepository.GetPersonFollow(actor.ActorId);
+                people = await m_PageRepositoryN.GetPersonFollow(actor.ActorId);
                 return people.ToList();
             }
             if (actorType == (int)ActorTypeEnum.Club)
             {
-                people = await m_ClubRepository.GetMembers(actor.ActorId);
+                people = await m_ClubRepositoryN.GetMembers(actor.ActorId);
                 return people.ToList();
             }
             return null;
         }
-        private async Task<string[]> GetPersonIndustry(List<Industry> industries)
+        private async Task<HashSet<string>> GetPersonIdInvolve(Actor actor)
         {
-
+            int actorType = actor.ActorTypeId;
+            IEnumerable<PersonAllin> people = null;
+            if (actorType == (int)ActorTypeEnum.Person)
+            {
+                people = await m_PersonRepositoryN.GetFriends(actor.ActorId);
+                return people.Select(p=>p.Person.PersonId).ToHashSet();
+            }
+            if (actorType == (int)ActorTypeEnum.Page)
+            {
+                people = await m_PageRepositoryN.GetPersonFollow(actor.ActorId);
+                return people.Select(p => p.Person.PersonId).ToHashSet();
+            }
+            if (actorType == (int)ActorTypeEnum.Club)
+            {
+                people = await m_ClubRepositoryN.GetMembers(actor.ActorId);
+                return people.Select(p => p.Person.PersonId).ToHashSet();
+            }
             return null;
         }
-        private async Task<string[]> GetPersonSkill(List<Skill> skills)
+        private async Task<HashSet<string>> GetPersonIndustry(List<Industry> industries)
         {
-
-            return null;
+            string[] keySearch = industries.Select(p => p.Code).ToArray();
+            List<Person> people = await m_PersonRepositoryM.SearchByIndustries(keySearch);
+            return people.Select(p => p.PersonId).ToHashSet();
         }
-        private async Task<string[]> GetPersonLocation(List<Location> locations)
+        private async Task<HashSet<string>> GetPersonSkill(List<Skill> skills)
         {
-
-            return null;
+            string[] keySearch = skills.Select(p => p.Code).ToArray();
+            List<Person> people = await m_PersonRepositoryM.SearchBySkills(keySearch);
+            return people.Select(p => p.PersonId).ToHashSet();
         }
-        private async Task<string[]> GetPersonDegree(List<Degree> degrees)
+        private async Task<HashSet<string>> GetPersonLocation(List<Location> locations)
         {
-
-            return null;
+            string[] keySearch = locations.Select(p => p.Id).ToArray();
+            List<Person> people = await m_PersonRepositoryM.SearchByLocations(keySearch);
+            return people.Select(p => p.PersonId).ToHashSet();
+        }
+        private async Task<HashSet<string>> GetPersonDegree(List<Degree> degrees)
+        {
+            string[] keySearch = degrees.Select(p => p.Value.ToString()).ToArray();
+            List<Person> people = await m_PersonRepositoryM.SearchByDegrees(keySearch);
+            return people.Select(p => p.PersonId).ToHashSet();
+        }
+        private async Task<HashSet<string>> GetPersonExperience(int minYear,int maxYear)
+        {
+            List<Person> people = await m_PersonRepositoryM.SearchByExperience(minYear,maxYear);
+            return people.Select(p => p.PersonId).ToHashSet();
         }
         private async Task<string[]> GetPersonSeniority(List<SeniorityLevel> seniorityLevels)
         {

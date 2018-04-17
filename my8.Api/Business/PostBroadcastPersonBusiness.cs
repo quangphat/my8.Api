@@ -105,7 +105,7 @@ namespace my8.Api.Business
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.JobPost;
-                        postBroadcast.PostTime = post.PostTime;
+                        postBroadcast.KeyTime = post.PostTime;
                         m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
                     }));
                 }

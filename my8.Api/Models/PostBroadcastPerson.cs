@@ -18,7 +18,7 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
-        public string PostTime { get; set; }
+        public string KeyTime { get; set; }
         public int InteractivePoint { get; set; }
     }
     public class PostBroadcastPersonHidden

@@ -14,7 +14,8 @@ namespace my8.Api.Interfaces.Mongo
         Task<List<Person>> SearchBySkills(string[] keySearchs);
         Task<List<Person>> SearchByLocations(string[] keySearchs);
         Task<List<Person>> SearchByDegrees(string[] keySearchs);
-        Task<List<Person>> SearchBySeniorities(string[] keySearchs);
-        Task<List<Person>> SearchByEmploymentType(string keySearchs);
+        Task<List<Person>> SearchByExperience(int min,int max);
+        //Task<List<Person>> SearchBySeniorities(string[] keySearchs);
+        //Task<List<ShortPerson>> SearchByEmploymentType(string keySearchs);
     }
 }

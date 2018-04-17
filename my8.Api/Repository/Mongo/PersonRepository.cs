@@ -15,7 +15,6 @@ namespace my8.Api.Repository.Mongo
     public class PersonRepository : MongoRepositoryBase, IPersonRepository
     {
         IMongoCollection<Person> collection;
-
         FilterDefinition<Person> filter = FilterDefinition<Person>.Empty;
         public PersonRepository(IOptions<MongoConnection> mongoConnection) : base(mongoConnection)
         {
@@ -38,6 +37,45 @@ namespace my8.Api.Repository.Mongo
         {
             filter = Builders<Person>.Filter.Eq(p => p.PersonId, id);
             return await collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Person>> SearchByDegrees(string[] keySearchs)
+        {
+            string formated = Utils.ArrStrToMongoSearch(keySearchs);
+            return await collection.Find($@"{{'DegreesId':{{ '$in':[{formated}]}}}}").ToListAsync();
+        }
+
+        public async Task<List<Person>> SearchByExperience(int min, int max)
+        {
+            return await collection.Find($@"{{'$or':[{{'Experience':{{'$gte':{min}}}}},{{'Experience':{{'$lte':{max}}}}}]}}").ToListAsync();
+        }
+
+        //public async Task<List<ShortPerson>> SearchByEmploymentType(string keySearchs)
+        //{
+        //    return await shortPersonCollection.Find($@"{{'KeySearchs':{{ '$in':[{keySearchs}]}}}}").ToListAsync();
+        //}
+
+        public async Task<List<Person>> SearchByIndustries(string[] keySearchs)
+        {
+            string formated = Utils.ArrStrToMongoSearch(keySearchs);
+            return await collection.Find($@"{{'IndustriesCode':{{ '$in':[{formated}]}}}}").ToListAsync();
+        }
+
+        public async Task<List<Person>> SearchByLocations(string[] keySearchs)
+        {
+            string formated = Utils.ArrStrToMongoSearch(keySearchs);
+            return await collection.Find($@"{{'LocationId':{{ '$in':[{formated}]}}}}").ToListAsync();
+        }
+
+        //public Task<List<Person>> SearchBySeniorities(string[] keySearchs)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<List<Person>> SearchBySkills(string[] keySearchs)
+        {
+            string formated = Utils.ArrStrToMongoSearch(keySearchs);
+            return await collection.Find($@"{{'SkillsCode':{{ '$in':[{formated}]}}}}").ToListAsync();
         }
 
         public async Task<bool> Update(Person person)

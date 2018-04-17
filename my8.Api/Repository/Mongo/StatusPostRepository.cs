@@ -37,13 +37,7 @@ namespace my8.Api.Repository.Mongo
         }
         public async Task<List<StatusPost>> Gets(string[] id)
         {
-            string[] ids = new string[id.Length];
-            for (int i = 0; i < id.Length; i++)
-            {
-                string line = $"ObjectId('{id[i]}')";
-                ids[i] = line;
-            }
-            string temp = String.Join(",", ids);
+            string temp = Utils.ArrStrIdToMongoDbId(id);
             List<StatusPost> statusPosts = await collection.Find($@"{{ _id:{{$in:[{temp}]}}}}").ToListAsync();
             return statusPosts;
         }
