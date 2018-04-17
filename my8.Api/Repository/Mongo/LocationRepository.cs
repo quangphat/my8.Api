@@ -46,9 +46,8 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.Province, location.Province)
                             .Set(s => s.District, location.District)
                             .Set(s => s.Street, location.Street)
+                            .Set(s=>s.KeySearchs,location.KeySearchs)
                             .Set(s => s.Display, location.Display);
-
-
             try
             {
                 await collection.UpdateOneAsync(filter, update);

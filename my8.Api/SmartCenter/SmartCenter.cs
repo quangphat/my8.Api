@@ -16,9 +16,9 @@ namespace my8.Api.SmartCenter
         IPostBroadcastPersonBusiness m_PostBroadcastPersonBusiness;
         string[] postBroadcastJobsIds = null;
         string[] postBroadcastStatusIds = null;
-        public SmartCenter(IStatusPostBusiness statuspostBusiness,IJobPostBusiness jobPostBusiness,IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
+        public SmartCenter(IStatusPostBusiness statusPostBusiness,IJobPostBusiness jobPostBusiness,IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
         {
-            m_StatusPostBusiness = statuspostBusiness;
+            m_StatusPostBusiness = statusPostBusiness;
             m_JobPostBusiness = jobPostBusiness;
             m_PostBroadcastPersonBusiness = postBroadcastPersonBusiness;
         }
@@ -31,22 +31,6 @@ namespace my8.Api.SmartCenter
             List<PostBroadcastPerson> postBroadcasts = await m_PostBroadcastPersonBusiness.GetByPerson(personId, skip, MAX_LIMIT);
             List<PostBroadcastPerson> postBroadcastJobs = postBroadcasts.Where(p => p.PostType == my8Enum.PostTypeEnum.JobPost).ToList();
             List<PostBroadcastPerson> postBroadcastStatus = postBroadcasts.Where(p => p.PostType == my8Enum.PostTypeEnum.StatusPost).ToList();
-            //if (postBroadcasts != null)
-            //{
-            //    postBroadcastJobsIds = postBroadcastJobs.Select(p => p.PostId).ToArray();
-            //    if (postBroadcastJobsIds == null)
-            //    {
-            //        postBroadcastJobsIds = new string[] { };
-            //    }
-            //}
-            //if (postBroadcastStatus != null)
-            //{
-            //    postBroadcastStatusIds = postBroadcastStatus.Select(p => p.PostId).ToArray();
-            //    if (postBroadcastStatusIds == null)
-            //    {
-            //        postBroadcastStatusIds = new string[] { };
-            //    }
-            //}
             Task tt1 = GetJobPostIdArray(postBroadcastJobs);
             Task tt2 = GetStatusPostIdArray(postBroadcastStatus);
             await Task.WhenAll(tt1, tt2);

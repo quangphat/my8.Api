@@ -13,13 +13,13 @@ namespace my8.Api.Business
 {
     public class PostBroadcastPersonBusiness : IPostBroadcastPersonBusiness
     {
-        MongoI.IPostBroadcastPersonRepository m_PostbroadcastpersonRepositoryM;
+        MongoI.IPostBroadcastPersonRepository m_PostbroadcastPersonRepositoryM;
         NeoI.IPersonRepository  m_PersonRepository;
         NeoI.IPageRepository m_PageRepository;
         NeoI.IClubRepository m_ClubRepository;
         public PostBroadcastPersonBusiness(MongoI.IPostBroadcastPersonRepository postbroadcastpersonRepoM, NeoI.IPersonRepository personRepository,NeoI.IPageRepository pageRepository,NeoI.IClubRepository clubRepository)
         {
-            m_PostbroadcastpersonRepositoryM = postbroadcastpersonRepoM;
+            m_PostbroadcastPersonRepositoryM = postbroadcastpersonRepoM;
             m_PersonRepository = personRepository;
             m_PageRepository = pageRepository;
             m_ClubRepository = clubRepository;
@@ -37,11 +37,11 @@ namespace my8.Api.Business
         }
         public async Task<List<PostBroadcastPerson>> GetByPerson(string personId)
         {
-            return await m_PostbroadcastpersonRepositoryM.GetByPerson(personId);
+            return await m_PostbroadcastPersonRepositoryM.GetByPerson(personId);
         }
         public async Task<List<PostBroadcastPerson>> GetByPerson(string personId, int skip, int limit)
         {
-            return await m_PostbroadcastpersonRepositoryM.GetByPerson(personId,skip,limit);
+            return await m_PostbroadcastPersonRepositoryM.GetByPerson(personId,skip,limit);
         }
         private async Task<List<PersonAllin>> GetPersonInvolve(int actorType,string actorId)
         {
@@ -69,18 +69,20 @@ namespace my8.Api.Business
             {
                 List<PersonAllin> people = await GetPersonInvolve(post.PostBy.ActorTypeId, post.PostBy.ActorId);
                 if (people == null || people.Count==0) return false;
-                for (int i = 0; i < people.Count; i++)
+                List<Task> tasks = new List<Task>();
+                for (int i = 0; i < people.Count - 1; i++)
                 {
-                    await Task.Run(() =>
+                    tasks.Add(Task.Run(() =>
                     {
                         PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.StatusPost;
                         post.PostTime = post.PostTime;
-                        m_PostbroadcastpersonRepositoryM.Create(postBroadcast);
-                    });
+                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
+                    }));
                 }
+                await Task.WhenAll(tasks);
                 return true;
             }
             catch
@@ -94,18 +96,20 @@ namespace my8.Api.Business
             {
                 List<PersonAllin> people = await GetPersonInvolve(post.PostBy.ActorTypeId, post.PostBy.ActorId);
                 if (people == null) return false;
-                for (int i = 0; i < people.Count; i++)
+                List<Task> tasks = new List<Task>();
+                for (int i = 0; i < people.Count-1; i++)
                 {
-                    await Task.Run(() =>
+                    tasks.Add(Task.Run(() =>
                     {
                         PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                         postBroadcast.PostId = post.Id;
                         postBroadcast.PersonId = people[i].Person.PersonId;
                         postBroadcast.PostType = PostTypeEnum.JobPost;
                         postBroadcast.PostTime = post.PostTime;
-                        m_PostbroadcastpersonRepositoryM.Create(postBroadcast);
-                    });
+                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
+                    }));
                 }
+                await Task.WhenAll(tasks);
                 return true;
             }
             catch
@@ -116,7 +120,7 @@ namespace my8.Api.Business
 
         public async Task<bool> HidePost(PostBroadcastPerson post)
         {
-            return await m_PostbroadcastpersonRepositoryM.HidePost(post);
+            return await m_PostbroadcastPersonRepositoryM.HidePost(post);
         }
     }
 }

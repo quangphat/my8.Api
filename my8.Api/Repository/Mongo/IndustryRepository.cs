@@ -61,6 +61,7 @@ namespace my8.Api.Repository.Mongo
             var update = Builders<Industry>.Update
                             .Set(s => s.Id, industry.Id)
                             .Set(s => s.Code, industry.Code)
+                            .Set(s => s.KeySearchs, industry.KeySearchs)
                             .Set(s => s.Display, industry.Display);
 
             try

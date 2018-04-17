@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +21,10 @@ namespace my8.Api.Controllers
         [Route("api/skill/create")]
         public async Task<IActionResult> Create([FromBody] Skill model)
         {
+            model = new Skill();
+            model.Code = "hanoi";
+            model.Display = "Hà Nội";
+            model.KeySearchs = new string[] { "hanoi", "ha noi" };
             Skill skill= await m_SkillBusiness.Create(model);
             return Json(skill);
         }

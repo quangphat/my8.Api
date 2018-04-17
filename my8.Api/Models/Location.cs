@@ -14,7 +14,7 @@ namespace my8.Api.Models
         public District District { get; set; }
         public string Street { get; set; }
         public string Display { get; set; }
-        
+        public string[] KeySearchs { get; set; }
     }
 }
 

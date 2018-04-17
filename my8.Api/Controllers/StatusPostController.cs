@@ -25,7 +25,7 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
             StatusPost post = null;
-            for(int i=1000;i<1002;i++)
+            for(int i=1002;i<1102;i++)
             {
                 post = new StatusPost();
                 post.Active = true;
