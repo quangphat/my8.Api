@@ -82,7 +82,7 @@ namespace my8.Api.Repository.Mongo
         public async Task<List<Skill>> Search(string searchStr)
         {
             //db.Skill.find({"KeySearchs":{"$in":[/oi/i]}})
-            return await collection.Find("{'$or':[{'Code':/" + searchStr + "/i},{'Display':/" + searchStr + "/i}]}").ToListAsync();
+            return await collection.Find($@"{{'$or':[{{'Code':/{searchStr}/i}},{{'Display':/{searchStr}/i}}]}}").ToListAsync();
         }
     }
 }

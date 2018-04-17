@@ -44,7 +44,7 @@ namespace my8.Api.Repository.Mongo
                 ids[i] = line;
             }
             string temp = String.Join(",", ids);
-            List<StatusPost> statusPosts = await collection.Find("{ _id:{$in:[" + temp + "]}}").ToListAsync();
+            List<StatusPost> statusPosts = await collection.Find($@"{{ _id:{{$in:[{temp}]}}}}").ToListAsync();
             return statusPosts;
         }
 
