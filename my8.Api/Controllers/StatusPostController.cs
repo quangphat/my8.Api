@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace my8.Api.Controllers
     {
         IStatusPostBusiness m_statusPostBusiness;
         IPostBroadcastPersonBusiness m_PostBroadCastToPersonBusiness;
-        public StatusPostController(IStatusPostBusiness statusPostBusiness,IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
+        public StatusPostController(IStatusPostBusiness statusPostBusiness, IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
         {
             m_statusPostBusiness = statusPostBusiness;
             m_PostBroadCastToPersonBusiness = postBroadcastPersonBusiness;
@@ -25,25 +25,19 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
             StatusPost post = null;
-            for(int i=1002;i<1102;i++)
-            {
-                post = new StatusPost();
-                post.Comments = 10;
-                post.Content = $"The status post #{i}";
-                post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
-                post.PostBy = new Actor();
-                post.PostBy.ActorId = "5acedf96c86324070424f263";
-                post.PostBy.DisplayName = "Quang Ph�t";
-                post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
-                StatusPost created = await m_statusPostBusiness.Post(post);
-                if(created!=null)
-                {
-                    await m_PostBroadCastToPersonBusiness.BroadcastToPerson(created);
-                }
-            }
+
+            post = new StatusPost();
+            post.Comments = 10;
+            post.Content = $"The status post #1";
+            post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
+            post.PostBy = new Actor();
+            post.PostBy.ActorId = "5ad6c5298895ac2a78afd1ac";
+            post.PostBy.DisplayName = "Linh Diệu";
+            post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
+            StatusPost created = await m_statusPostBusiness.Post(post);
 
             //StatusPost post = await m_statusPostBusiness.Post(model);
-            return Json(true);
+            return Json(created);
         }
         [HttpGet]
         [Route("api/statuspost/get/{postId}")]

@@ -26,7 +26,8 @@ namespace my8.Api.Repository.Mongo
                 await collection.InsertOneAsync(post);
                 return post.Id;
             }
-            catch { return string.Empty; }
+            catch (Exception e)
+            { return string.Empty; }
         }
         public async Task<JobPost> Get(string id)
         {
@@ -35,13 +36,7 @@ namespace my8.Api.Repository.Mongo
         }
         public async Task<List<JobPost>> Gets(string[] id)
         {
-            string[] ids = new string[id.Length];
-            for (int i = 0; i < id.Length; i++)
-            {
-                string line = $"ObjectId('{id[i]}')";
-                ids[i] = line;
-            }
-            string temp = String.Join(",", ids);
+            string temp = Utils.ArrStrIdToMongoDbId(id);
             List<JobPost> posts = await collection.Find($@"{{ _id:{{$in:[{temp}]}}}}").ToListAsync();
             return posts;
         }

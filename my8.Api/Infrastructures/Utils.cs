@@ -9,12 +9,14 @@ namespace my8.Api.Infrastructures
     {
         public static string ArrStrToMongoSearch(string[] searchs)
         {
-            string temp = searchs.Aggregate("", (a, b) => a + "/" + b + "/i,");
+            string temp = searchs.Aggregate("", (a, b) => a + $"/{b}/i,");
+            if (string.IsNullOrWhiteSpace(temp)) return string.Empty;
             return temp.Remove(temp.LastIndexOf(','));
         }
         public static string ArrStrIdToMongoDbId(string[] Ids)
         {
             string temp = Ids.Aggregate("", (a, b) => a + $"ObjectId('{b}'),");
+            if (string.IsNullOrWhiteSpace(temp)) return string.Empty;
             return temp.Remove(temp.LastIndexOf(','));
         }
         public static string[] IntersectOrUnion(List<HashSet<string>> lstHashSet)

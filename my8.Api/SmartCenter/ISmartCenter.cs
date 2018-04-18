@@ -8,6 +8,8 @@ namespace my8.Api.SmartCenter
 {
     public interface ISmartCenter
     {
-        Task<List<PostAllType>> Gets(string personId,int skip);
+        Task<bool> BroadcastToPerson(StatusPost post);
+        Task<bool> BroadcastToPerson(JobPost post);
+        Task<List<PostAllType>> GetPosts(string personId, int skip);
     }
 }

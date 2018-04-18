@@ -25,6 +25,9 @@ namespace my8.Api.Business
 
         public async Task<Person> Create(Person person)
         {
+            person.DegreesValue = person.Degrees != null ? person.Degrees.Select(p => p.Value.ToString()).ToArray():null;
+            person.IndustriesCode = person.IndustryTags != null ? person.IndustryTags.Select(p => p.Code).ToArray() : null;
+            person.SkillsCode = person.SkillTags != null ? person.SkillTags.Select(p => p.Code).ToArray() : null;
             string rs1= await m_personRepositoryM.Create(person);
             if (string.IsNullOrWhiteSpace(rs1)) return null;
             person.PersonId = rs1;

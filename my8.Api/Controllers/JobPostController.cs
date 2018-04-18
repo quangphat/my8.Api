@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,27 +25,20 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> CreatePost([FromBody] JobPost model)
         {
             JobPost post = null;
-            bool result = false;
-            for (int i = 0; i < 200; i++)
-            {
-                post = new JobPost();
-                post.Active = true;
-                post.Comments = 10;
-                post.Content = $"The job post #{i}";
-                post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
-                post.PostBy = new Actor();
-                post.PostBy.ActorId = "5acedf96c86324070424f263";
-                post.PostBy.DisplayName = "Quang Ph�t";
-                post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
-                JobPost created = await m_JobPostBusiness.Post(post);
-                if (created != null)
-                {
-                   result = await m_PostBroadCastToPersonBusiness.BroadcastToPerson(created);
-                }
-            }
-
-            //JobPost post = await m_JobPostBusiness.Post(model);
-            return Json(result);
+            //bool result = false;
+            //model.Active = true;
+            //model.PostBy = new Actor() { ActorId = "5ad6c5298895ac2a78afd1ac", DisplayName = "Linh Diệu", ActorTypeId = (int)ActorTypeEnum.Person };
+            //model.Title = "Tuyển dụng lập trình viên .net";
+            //model.Content = "Wayne enterprise cần tuyển .net lương 10k USD/tháng";
+            //model.IndustryTags = new List<Industry>()
+            //{
+            //    new Industry(){Code="it-software", Display="IT-Phần mềm" }
+            //};
+            //model.SkillTags = new List<Skill>() {
+            //    new Skill(){Code=".net", Display=".Net" }
+            //};
+            post = await m_JobPostBusiness.Post(model);
+            return Json(post);
         }
         [HttpGet]
         [Route("api/JobPost/get/{postId}")]

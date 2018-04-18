@@ -21,17 +21,34 @@ namespace my8.Api.SmartCenter
         NeoI.IPersonRepository m_PersonRepositoryN;
         NeoI.IPageRepository m_PageRepositoryN;
         NeoI.IClubRepository m_ClubRepositoryN;
+        MongoI.IStatusPostRepository m_StatusPostRepository;
+        MongoI.IJobPostRepository m_JobPostRepository;
         public SmartCenter(MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository
             ,NeoI.IPersonRepository personRepositoryN
             ,NeoI.IPageRepository pageRepositoryN
             ,NeoI.IClubRepository clubRepositoryN
-            ,MongoI.IPersonRepository personRepositoryM)
+            ,MongoI.IPersonRepository personRepositoryM
+            ,MongoI.IStatusPostRepository statusPostRepository
+            ,MongoI.IJobPostRepository jobPostRepository)
         {
             m_PostbroadcastPersonRepositoryM = postBroadcastPersonRepository;
             m_PersonRepositoryN = personRepositoryN;
             m_PageRepositoryN = pageRepositoryN;
             m_ClubRepositoryN = clubRepositoryN;
             m_PersonRepositoryM = personRepositoryM;
+            m_StatusPostRepository = statusPostRepository;
+            m_JobPostRepository = jobPostRepository;
+        }
+        public async Task<bool> BroadcastToPerson(StatusPost post)
+        {
+            bool result = await CreatePostBroadcastAsync(post);
+            return result;
+        }
+
+        public async Task<bool> BroadcastToPerson(JobPost post)
+        {
+            bool result = await CreatePostBroadcastAsync(post);
+            return result;
         }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
         {
@@ -40,15 +57,15 @@ namespace my8.Api.SmartCenter
                 List<PersonAllin> people = await GetPersonInvolve(post.PostBy);
                 if (people == null || people.Count == 0) return false;
                 List<Task> tasks = new List<Task>();
-                for (int i = 0; i < people.Count - 1; i++)
+                for (int i = 0; i < people.Count; i++)
                 {
+                    PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
+                    postBroadcast.PostId = post.Id;
+                    postBroadcast.PersonId = people[i].Person.PersonId;
+                    postBroadcast.PostType = PostTypeEnum.StatusPost;
+                    postBroadcast.KeyTime = post.PostTime;
                     tasks.Add(Task.Run(() =>
                     {
-                        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
-                        postBroadcast.PostId = post.Id;
-                        postBroadcast.PersonId = people[i].Person.PersonId;
-                        postBroadcast.PostType = PostTypeEnum.StatusPost;
-                        postBroadcast.KeyTime = post.PostTime;
                         m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
                     }));
                 }
@@ -101,15 +118,15 @@ namespace my8.Api.SmartCenter
             try
             {
                 List<Task> lastTasks = new List<Task>();
-                for (int i = 0; i < allPersonId.Length-1; i++)
+                for (int i=0;i<allPersonId.Length;i++)
                 {
-                    tasks.Add(Task.Run(() =>
+                    PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
+                    postBroadcast.PostId = jobPost.Id;
+                    postBroadcast.PersonId = allPersonId[i];
+                    postBroadcast.PostType = PostTypeEnum.JobPost;
+                    postBroadcast.KeyTime = jobPost.PostTime;
+                    lastTasks.Add(Task.Run(() =>
                     {
-                        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
-                        postBroadcast.PostId = jobPost.Id;
-                        postBroadcast.PersonId = allPersonId[i];
-                        postBroadcast.PostType = PostTypeEnum.JobPost;
-                        postBroadcast.KeyTime = jobPost.PostTime;
                         m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
                     }));
                 }
@@ -171,6 +188,7 @@ namespace my8.Api.SmartCenter
         }
         private async Task<HashSet<string>> GetPersonSkill(List<Skill> skills)
         {
+            if (skills == null) return new HashSet<string>();
             string[] keySearch = skills.Select(p => p.Code).ToArray();
             List<Person> people = await m_PersonRepositoryM.SearchBySkills(keySearch);
             return people.Select(p => p.PersonId).ToHashSet();
@@ -202,17 +220,32 @@ namespace my8.Api.SmartCenter
 
             return null;
         }
-        public async Task<List<PostAllType>> Gets(string personId,int skip)
+        public async Task<List<PostAllType>> GetPosts(string personId,int skip)
         {
-            return null;
+            List<PostBroadcastPerson> postBroadcastPersons = await m_PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, MAX_LIMIT);
+            string[] josbIds = await GetJobPostIdArray(postBroadcastPersons);
+            string[] statusIds = await GetStatusPostIdArray(postBroadcastPersons);
+            Task<List<JobPost>> jobPostsTask = m_JobPostRepository.Gets(josbIds);
+            Task<List<StatusPost>> statusPostsTask = m_StatusPostRepository.Gets(statusIds);
+            await Task.WhenAll(jobPostsTask, statusPostsTask);
+            List<PostAllType> postAllTypes = Mapper.Map<List<PostAllType>>(jobPostsTask.Result);
+            postAllTypes.Concat(Mapper.Map<List<PostAllType>>(statusPostsTask.Result));
+            return postAllTypes;
         }
-        private async Task GetJobPostIdArray(List<PostBroadcastPerson> lstJobPostBroadCast)
+        private async Task<string[]> GetJobPostIdArray(List<PostBroadcastPerson> lstJobPostBroadCast)
         {
+            string[] ids = new string[] { };
+            if (lstJobPostBroadCast == null) return ids;
+            await Task.Run(() => { ids= lstJobPostBroadCast.Where(p => p.PostType == PostTypeEnum.JobPost).Select(p => p.PostId).ToArray(); });
+            return ids; 
+        }
+        private async Task<string[]> GetStatusPostIdArray(List<PostBroadcastPerson> lstStatusPostBroadCast)
+        {
+            string[] ids = new string[] { };
+            if (lstStatusPostBroadCast == null) return ids;
+            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostTypeEnum.StatusPost).Select(p => p.PostId).ToArray(); });
+            return ids;
+        }
 
-        }
-        private async Task GetStatusPostIdArray(List<PostBroadcastPerson> lstStatusPostBroadCast)
-        {
-
-        }
     }
 }

@@ -21,6 +21,15 @@ namespace my8.Api.Controllers
         [Route("api/person/create")]
         public async Task<IActionResult> Create([FromBody] Person model)
         {
+            model = new Person();
+            model.DisplayName = "Lind Diệu";
+            model.WorkAs = "HR";
+            model.Rate = 7;
+
+            model.Experience = 2;
+            model.IndustryTags = new List<Industry>() {
+                new Industry(){ Code="hr",Display="HR" }
+            };
             Person person =  await m_PersonBusiness.Create(model);
             return Json(person);
         }
