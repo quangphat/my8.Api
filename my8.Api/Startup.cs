@@ -19,7 +19,7 @@ using Newtonsoft.Json.Serialization;
 using my8.Api.IBusiness;
 using my8.Api.Business;
 using my8.Api.SmartCenter;
-
+using Microsoft.AspNetCore.SignalR;
 namespace my8.Api
 {
     public class Startup
@@ -35,7 +35,6 @@ namespace my8.Api
         }
 
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -57,6 +56,7 @@ namespace my8.Api
                 opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
             MapConfig.Config(services);
+            services.AddScoped<NotificationHub>();
             //SmartCenter
             services.AddScoped<ISmartCenter, SmartCenter.SmartCenter>();
             //Business
@@ -113,12 +113,13 @@ namespace my8.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseMiddleware<HandShakeAuthorizeMiddleware>();
+            //app.UseMiddleware<HandShakeAuthorizeMiddleware>();
             app.UseCors("CorsPolicy");
 
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("chat");
+                routes.MapHub<NotificationHub>("notification");
             });
             app.UseMvc();
             

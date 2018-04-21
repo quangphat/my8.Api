@@ -11,5 +11,6 @@ namespace my8.Api.SmartCenter
         Task<bool> BroadcastToPerson(StatusPost post);
         Task<bool> BroadcastToPerson(JobPost post);
         Task<List<PostAllType>> GetPosts(string personId, int skip);
+        Task<List<PostAllType>> InjectGrayMatter(List<PostBroadcastPerson> postBroadcasts, List<PostAllType> postAllTypes);
     }
 }

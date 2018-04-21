@@ -22,7 +22,7 @@ namespace my8.Api.Controllers
         [Route("api/PostAllType/get/{personId}/{skip}")]
         public async Task<IActionResult> Gets(string personId,int skip)
         {
-            List<PostAllType> lstPost = await m_SmartCenter.Gets(personId, skip);
+            List<PostAllType> lstPost = await m_SmartCenter.GetPosts(personId, skip);
             return Json(lstPost);
         }
 		//[HttpPost]

@@ -182,6 +182,7 @@ namespace my8.Api.SmartCenter
         }
         private async Task<HashSet<string>> GetPersonIndustry(List<Industry> industries)
         {
+            if (industries == null) return new HashSet<string>();
             string[] keySearch = industries.Select(p => p.Code).ToArray();
             List<Person> people = await m_PersonRepositoryM.SearchByIndustries(keySearch);
             return people.Select(p => p.PersonId).ToHashSet();
@@ -195,12 +196,14 @@ namespace my8.Api.SmartCenter
         }
         private async Task<HashSet<string>> GetPersonLocation(List<Location> locations)
         {
+            if (locations == null) return new HashSet<string>();
             string[] keySearch = locations.Select(p => p.Id).ToArray();
             List<Person> people = await m_PersonRepositoryM.SearchByLocations(keySearch);
             return people.Select(p => p.PersonId).ToHashSet();
         }
         private async Task<HashSet<string>> GetPersonDegree(List<Degree> degrees)
         {
+            if (degrees == null) return new HashSet<string>();
             string[] keySearch = degrees.Select(p => p.Value.ToString()).ToArray();
             List<Person> people = await m_PersonRepositoryM.SearchByDegrees(keySearch);
             return people.Select(p => p.PersonId).ToHashSet();
@@ -247,5 +250,9 @@ namespace my8.Api.SmartCenter
             return ids;
         }
 
+        public Task<List<PostAllType>> InjectGrayMatter(List<PostBroadcastPerson> postBroadcasts, List<PostAllType> postAllTypes)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
