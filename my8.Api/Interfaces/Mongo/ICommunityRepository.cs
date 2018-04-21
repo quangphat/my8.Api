@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Interfaces.Mongo
 {
-    public interface IClubRepository
+    public interface ICommunityRepository
     {
-        Task<string> Create(Club club);
-        Task<Club> Get(string id);
+        Task<string> Create(Community Community);
+        Task<Community> Get(string id);
     }
 }
 

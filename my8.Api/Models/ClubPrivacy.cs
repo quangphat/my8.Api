@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Models
 {
-    public class ClubPrivacy
+    public class CommunityPrivacy
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

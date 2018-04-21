@@ -7,6 +7,11 @@ namespace my8.Api.Models
 {
     public class JobPost : StatusPost
     {
+        public JobPost() { }
+        public JobPost(string id)
+        {
+            this.Id = id;
+        }
         public bool IsFindJob { get; set; }//Gắn thẻ là tìm việc
         public int Applies { get; set; } //Số lượng apply
         public decimal MinSalary { get; set; } //Mức lương tối thiểu.

@@ -22,9 +22,9 @@ namespace my8.Api.Interfaces.Neo4j
         Task<bool> UnFollowPage(string currentPersonID, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);
 
-        Task<IEnumerable<Club>> GetJoiningClubs(string userId);
-        Task<bool> JoinClub(string currentPersonId, string clubId);
-        Task<bool> OutClub(string currentPersonId, string teamId);
-        Task<bool> InteractToClub(string currentPersonId, string clubId);
+        Task<IEnumerable<Community>> GetJoiningCommunitys(string userId);
+        Task<bool> JoinCommunity(string currentPersonId, string CommunityId);
+        Task<bool> OutCommunity(string currentPersonId, string teamId);
+        Task<bool> InteractToCommunity(string currentPersonId, string CommunityId);
     }
 }

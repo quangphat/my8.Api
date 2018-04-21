@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Models
 {
-    public class ClubAllin
+    public class CommunityAllin
     {
-        public Club Club {get;set;}
+        public Community Community {get;set;}
         public int Joins { get; set; }
         public int Total { get; set; }
     }

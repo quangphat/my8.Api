@@ -119,10 +119,10 @@ namespace my8.Api.Controllers
             return Json(lstFriend);
         }
         [HttpPost]
-        [Route("api/person/join-club/{id}/{clubId}")]
-        public async Task<IActionResult> JoinClub(string id,string clubId)
+        [Route("api/person/join-Community/{id}/{CommunityId}")]
+        public async Task<IActionResult> JoinCommunity(string id,string CommunityId)
         {
-            bool result = await m_PersonBusiness.JoinClub(id, clubId);
+            bool result = await m_PersonBusiness.JoinCommunity(id, CommunityId);
             return Json(result);
         }
     }

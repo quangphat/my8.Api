@@ -25,9 +25,9 @@ namespace my8.Api.IBusiness
         Task<bool> InteractToPage(string currentPersonId, string pageId);
         Task<List<Page>> GetFollowingPage(string userId);
 
-        Task<List<Club>> GetJoiningClubs(string personId);
-        Task<bool> JoinClub(string currentPersonId, string clubId);
-        Task<bool> OutClub(string currentPersonId, string clubId);
-        Task<bool> InteractToClub(string currentPersonId, string clubId);
+        Task<List<Community>> GetJoiningCommunitys(string personId);
+        Task<bool> JoinCommunity(string currentPersonId, string CommunityId);
+        Task<bool> OutCommunity(string currentPersonId, string CommunityId);
+        Task<bool> InteractToCommunity(string currentPersonId, string CommunityId);
     }
 }

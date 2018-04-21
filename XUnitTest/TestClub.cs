@@ -6,10 +6,10 @@ using XUnitTest.Libs;
 
 namespace XUnitTest
 {
-    public class TestClub : IClassFixture<Server>
+    public class TestCommunity : IClassFixture<Server>
     {
         private readonly Server server;
-        public TestClub(Server _server)
+        public TestCommunity(Server _server)
         {
             server = _server;
         }

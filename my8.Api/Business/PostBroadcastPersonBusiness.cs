@@ -16,13 +16,13 @@ namespace my8.Api.Business
         MongoI.IPostBroadcastPersonRepository m_PostbroadcastPersonRepositoryM;
         NeoI.IPersonRepository  m_PersonRepository;
         NeoI.IPageRepository m_PageRepository;
-        NeoI.IClubRepository m_ClubRepository;
-        public PostBroadcastPersonBusiness(MongoI.IPostBroadcastPersonRepository postbroadcastpersonRepoM, NeoI.IPersonRepository personRepository,NeoI.IPageRepository pageRepository,NeoI.IClubRepository clubRepository)
+        NeoI.ICommunityRepository m_CommunityRepository;
+        public PostBroadcastPersonBusiness(MongoI.IPostBroadcastPersonRepository postbroadcastpersonRepoM, NeoI.IPersonRepository personRepository,NeoI.IPageRepository pageRepository,NeoI.ICommunityRepository CommunityRepository)
         {
             m_PostbroadcastPersonRepositoryM = postbroadcastpersonRepoM;
             m_PersonRepository = personRepository;
             m_PageRepository = pageRepository;
-            m_ClubRepository = clubRepository;
+            m_CommunityRepository = CommunityRepository;
         }
         public async Task<bool> BroadcastToPerson(StatusPost post)
         {
@@ -56,9 +56,9 @@ namespace my8.Api.Business
                 people = await m_PageRepository.GetPersonFollow(actorId);
                 return people.ToList();
             }
-            if (actorType == (int)ActorTypeEnum.Club)
+            if (actorType == (int)ActorTypeEnum.Community)
             {
-                people = await m_ClubRepository.GetMembers(actorId);
+                people = await m_CommunityRepository.GetMembers(actorId);
                 return people.ToList();
             }
             return null;

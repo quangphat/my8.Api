@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Neo4j
 {
-    public class ClubRepository:Neo4jRepositoryBase,IClubRepository
+    public class CommunityRepository:Neo4jRepositoryBase,ICommunityRepository
     {
-        public ClubRepository(IOptions<Neo4jConnection> setting) : base(setting) { }
+        public CommunityRepository(IOptions<Neo4jConnection> setting) : base(setting) { }
 
-        public async Task<bool> Create(Club club)
+        public async Task<bool> Create(Community Community)
         {
             try
             {
-                await client.Cypher.Create("(c:Club {Id:{Id},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Joins:{Joins},ClubIPoint:{ClubIPoint},Title:{Title}})")
-                    .WithParams(new { Id = club.ClubId, club.DisplayName, club.Avatar, club.Rate, club.Joins, club.ClubIPoint, club.Title })
+                await client.Cypher.Create("(c:Community {Id:{Id},DisplayName:{DisplayName},Avatar:{Avatar},Rate:{Rate},Joins:{Joins},CommunityIPoint:{CommunityIPoint},Title:{Title}})")
+                    .WithParams(new { Id = Community.CommunityId, Community.DisplayName, Community.Avatar, Community.Rate, Community.Joins, Community.CommunityIPoint, Community.Title })
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -27,66 +27,66 @@ namespace my8.Api.Repository.Neo4j
                 return false;
             }
         }
-        public async Task<bool> Update(Club club)
+        public async Task<bool> Update(Community Community)
         {
             try
             {
                 await client.Cypher
-                    .Match("(c:Club{Id:'" + club.ClubId + "'})")
-                    .Set($"c.DisplayName='{club.DisplayName}'")
-                    .Set($"c.Rate={club.Rate}")
-                    .Set($"c.Avatar='{club.Avatar}'")
-                    .Set($"c.ClubIPoint={club.ClubIPoint}")
-                    .Set($"c.Title='{club.Title}'")
+                    .Match("(c:Community{Id:'" + Community.CommunityId + "'})")
+                    .Set($"c.DisplayName='{Community.DisplayName}'")
+                    .Set($"c.Rate={Community.Rate}")
+                    .Set($"c.Avatar='{Community.Avatar}'")
+                    .Set($"c.CommunityIPoint={Community.CommunityIPoint}")
+                    .Set($"c.Title='{Community.Title}'")
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
             catch(Exception e)
             { return false; }
         }
-        public async Task<ClubAllin> Get(string id)
+        public async Task<CommunityAllin> Get(string id)
         {
-            IEnumerable<ClubAllin> clubs = await client.Cypher.Match("(c:Club{Id:{id}})")
+            IEnumerable<CommunityAllin> Communitys = await client.Cypher.Match("(c:Community{Id:{id}})")
                 .WithParam("id", id)
                 .OptionalMatch("(c)-[j:Join]-(p:Person)")
-                .Return((c,j)=>new ClubAllin {
-                    Club = c.As<Club>(),
+                .Return((c,j)=>new CommunityAllin {
+                    Community = c.As<Community>(),
                     Joins = (int)j.Count()
                 }).Limit(1).ResultsAsync;
-            return clubs.FirstOrDefault();
+            return Communitys.FirstOrDefault();
         }
-        public async Task<bool> AddMember(string clubId, string personId)
+        public async Task<bool> AddMember(string CommunityId, string personId)
         {
             try
             {
                 await client.Cypher
-                .Match("(u:Person{Id:'" + personId + "'})", "(c:Club{Id:'" + clubId + "'})")
+                .Match("(u:Person{Id:'" + personId + "'})", "(c:Community{Id:'" + CommunityId + "'})")
                 .Create("(u)-[:Join{PCIp:0}]->(c)")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
             catch { return false; }
         }
-        public async Task<IEnumerable<PersonAllin>> GetMembers(string clubId)
+        public async Task<IEnumerable<PersonAllin>> GetMembers(string CommunityId)
         {
             IEnumerable<PersonAllin> result = await client.Cypher
-                .Match("(c:Club{Id:{id}})")
-                .WithParams(new { id = clubId })
+                .Match("(c:Community{Id:{id}})")
+                .WithParams(new { id = CommunityId })
                 .OptionalMatch("(c)-[j:Join]-(u:Person)")
                 .With("u,j")
                 .Return((u, j) => new PersonAllin
                 {
                     Person = u.As<Person>(),
-                    JoinClub = j.As<JoinEdge>()
+                    JoinCommunity = j.As<JoinEdge>()
                 }).ResultsAsync;
             return result;
         }
 
-        public async Task<bool> KickOutMember(string clubId, string personId)
+        public async Task<bool> KickOutMember(string CommunityId, string personId)
         {
             try
             {
-                await client.Cypher.Match("(c:Club{Id:'" + clubId + "'}),(p:Person{Id:'" + personId + "'})")
+                await client.Cypher.Match("(c:Community{Id:'" + CommunityId + "'}),(p:Person{Id:'" + personId + "'})")
                     .OptionalMatch("(c)-[j:Join]-(p)")
                     .Delete("j")
                     .ExecuteWithoutResultsAsync();
@@ -94,24 +94,24 @@ namespace my8.Api.Repository.Neo4j
             }
             catch { return false; }
         }
-        public async Task<IEnumerable<ClubAllin>> Search(string searchStr, int skip, int limit)
+        public async Task<IEnumerable<CommunityAllin>> Search(string searchStr, int skip, int limit)
         {
-            IEnumerable<ClubAllin> clubs = await client.Cypher
-                .Match("(c:Club)")
+            IEnumerable<CommunityAllin> Communitys = await client.Cypher
+                .Match("(c:Community)")
                 .Where($"Lower(c.DisplayName) contains '{searchStr}'  with count(c) as Total ")
                 .Match($"(c:Page) where Lower(c.DisplayName) contains '{searchStr}'")
                 .OptionalMatch("(c)-[j:Join]-(u:Person)")
-                .Return((c, Total, j) => new ClubAllin
+                .Return((c, Total, j) => new CommunityAllin
                 {
-                    Club = c.As<Club>(),
+                    Community = c.As<Community>(),
                     Total = Total.As<int>(),
                     Joins = (int)j.Count()
                 })
-                .OrderBy("c.ClubIPoint")
+                .OrderBy("c.CommunityIPoint")
                 .Skip(skip)
                 .Limit(limit)
                 .ResultsAsync;
-            return clubs;
+            return Communitys;
         }
 
         

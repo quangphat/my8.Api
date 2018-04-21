@@ -207,22 +207,22 @@ namespace my8.Api.Repository.Neo4j
             }
             catch { return false; }
         }
-        public async Task<IEnumerable<Club>> GetJoiningClubs(string userId)
+        public async Task<IEnumerable<Community>> GetJoiningCommunitys(string userId)
         {
-            IEnumerable<Club> teams = await client.Cypher
-                .OptionalMatch("(u:Person{Id:'" +userId + "'})-[:Join]-(t:Club)")
-                .Return(t => t.As<Club>())
+            IEnumerable<Community> teams = await client.Cypher
+                .OptionalMatch("(u:Person{Id:'" +userId + "'})-[:Join]-(t:Community)")
+                .Return(t => t.As<Community>())
                 .ResultsAsync;
             return teams;
         }
 
 
-        public async Task<bool> JoinClub(string currentPersonID, string clubId)
+        public async Task<bool> JoinCommunity(string currentPersonID, string CommunityId)
         {
             try
             {
                 await client.Cypher
-                .Match("(u:Person{Id:'" + currentPersonID + "'})", "(c:Club{Id:'" + clubId + "'})")
+                .Match("(u:Person{Id:'" + currentPersonID + "'})", "(c:Community{Id:'" + CommunityId + "'})")
                 .Create("(u)-[:Join{PCIp:0}]->(c)")
                 .ExecuteWithoutResultsAsync();
                 return true;
@@ -230,24 +230,24 @@ namespace my8.Api.Repository.Neo4j
             catch { return false; }
         }
 
-        public async Task<bool> OutClub(string currentPersonId, string clubId)
+        public async Task<bool> OutCommunity(string currentPersonId, string CommunityId)
         {
             try
             {
                 await client.Cypher
-                .Match("(u:Person{Id:'" + currentPersonId + "'})-[r:Join]-(p:Club{Id:'" + clubId + "'})")
+                .Match("(u:Person{Id:'" + currentPersonId + "'})-[r:Join]-(p:Community{Id:'" + CommunityId + "'})")
                 .Delete("r")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
             catch { return false; }
         }
-        public async Task<bool> InteractToClub(string currentPersonId, string clubId)
+        public async Task<bool> InteractToCommunity(string currentPersonId, string CommunityId)
         {
             try
             {
                 await client.Cypher
-                   .Match("(u1:Person{Id:'" + currentPersonId + "'})", "(c:Club{Id:'" + clubId + "'})")
+                   .Match("(u1:Person{Id:'" + currentPersonId + "'})", "(c:Community{Id:'" + CommunityId + "'})")
                .OptionalMatch("(u1)-[r:Join]-(c)")
                .Set("r.PCIp = r.PCIp+1").ExecuteWithoutResultsAsync();
                 return true;

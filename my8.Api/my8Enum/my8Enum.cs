@@ -14,14 +14,14 @@ namespace my8.Api.my8Enum
     {
         Person=1,
         Page=2,
-        Club=3
+        Community=3
     };
     public enum PostPrivaryEnum
     {
         All=1,
         Friend=2
     }
-    public enum ClubPrivaryEnum
+    public enum CommunityPrivaryEnum
     {
         All = 1,
         Member = 2

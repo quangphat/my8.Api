@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Models
 {
-    public class Club
+    public class Community
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("Id")]
         [JsonProperty(PropertyName = "Id")]
-        public string ClubId { get; set; }
+        public string CommunityId { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }
         public double Rate { get; set; }
-        public ClubPrivacy Privacy { get; set; }
+        public CommunityPrivacy Privacy { get; set; }
         public int Joins { get; set; }
-        public int ClubIPoint { get; set; } //Club interaction point
+        public int CommunityIPoint { get; set; } //Community interaction point
         public string Title { get; set; }
     }
 }

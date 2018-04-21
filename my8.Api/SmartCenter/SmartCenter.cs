@@ -20,13 +20,13 @@ namespace my8.Api.SmartCenter
         MongoI.IPersonRepository m_PersonRepositoryM;
         NeoI.IPersonRepository m_PersonRepositoryN;
         NeoI.IPageRepository m_PageRepositoryN;
-        NeoI.IClubRepository m_ClubRepositoryN;
+        NeoI.ICommunityRepository m_CommunityRepositoryN;
         MongoI.IStatusPostRepository m_StatusPostRepository;
         MongoI.IJobPostRepository m_JobPostRepository;
         public SmartCenter(MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository
             ,NeoI.IPersonRepository personRepositoryN
             ,NeoI.IPageRepository pageRepositoryN
-            ,NeoI.IClubRepository clubRepositoryN
+            ,NeoI.ICommunityRepository CommunityRepositoryN
             ,MongoI.IPersonRepository personRepositoryM
             ,MongoI.IStatusPostRepository statusPostRepository
             ,MongoI.IJobPostRepository jobPostRepository)
@@ -34,7 +34,7 @@ namespace my8.Api.SmartCenter
             m_PostbroadcastPersonRepositoryM = postBroadcastPersonRepository;
             m_PersonRepositoryN = personRepositoryN;
             m_PageRepositoryN = pageRepositoryN;
-            m_ClubRepositoryN = clubRepositoryN;
+            m_CommunityRepositoryN = CommunityRepositoryN;
             m_PersonRepositoryM = personRepositoryM;
             m_StatusPostRepository = statusPostRepository;
             m_JobPostRepository = jobPostRepository;
@@ -152,9 +152,9 @@ namespace my8.Api.SmartCenter
                 people = await m_PageRepositoryN.GetPersonFollow(actor.ActorId);
                 return people.ToList();
             }
-            if (actorType == (int)ActorTypeEnum.Club)
+            if (actorType == (int)ActorTypeEnum.Community)
             {
-                people = await m_ClubRepositoryN.GetMembers(actor.ActorId);
+                people = await m_CommunityRepositoryN.GetMembers(actor.ActorId);
                 return people.ToList();
             }
             return null;
@@ -173,9 +173,9 @@ namespace my8.Api.SmartCenter
                 people = await m_PageRepositoryN.GetPersonFollow(actor.ActorId);
                 return people.Select(p => p.Person.PersonId).ToHashSet();
             }
-            if (actorType == (int)ActorTypeEnum.Club)
+            if (actorType == (int)ActorTypeEnum.Community)
             {
-                people = await m_ClubRepositoryN.GetMembers(actor.ActorId);
+                people = await m_CommunityRepositoryN.GetMembers(actor.ActorId);
                 return people.Select(p => p.Person.PersonId).ToHashSet();
             }
             return null;

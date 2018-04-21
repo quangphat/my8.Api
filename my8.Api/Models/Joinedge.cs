@@ -8,6 +8,6 @@ namespace my8.Api.Models
     public class JoinEdge
     {
         public string FollowTime { get; set; }
-        public int PCIp { get; set; }//Person to Club interaction point
+        public int PCIp { get; set; }//Person to Community interaction point
     }
 }

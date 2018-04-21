@@ -9,6 +9,12 @@ namespace my8.Api.Models
 {
     public class StatusPost
     {
+        public StatusPost() { }
+        public StatusPost(string id)
+        {
+            this.Id = id;
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

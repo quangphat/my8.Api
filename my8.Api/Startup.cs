@@ -62,7 +62,7 @@ namespace my8.Api
             //Business
             services.AddScoped<IPageBusiness, PageBusiness>();
 			services.AddScoped<IPersonBusiness, PersonBusiness>();
-			services.AddScoped<IClubBusiness, ClubBusiness>();
+			services.AddScoped<ICommunityBusiness, CommunityBusiness>();
 			services.AddScoped<IStatusPostBusiness, StatusPostBusiness>();
 			services.AddScoped<IPostBroadcastPersonBusiness, PostBroadcastPersonBusiness>();
 			services.AddScoped<IIndustryBusiness, IndustryBusiness>();
@@ -86,7 +86,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IJobPostRepository, MongoR.JobPostRepository>();
 			services.AddSingleton<MongoI.IUniversityRepository, MongoR.UniversityRepository>();
 			services.AddSingleton<MongoI.IDeletedPostRepository, MongoR.DeletedPostRepository>();
-			services.AddSingleton<MongoI.IClubRepository, MongoR.ClubRepository>();
+			services.AddSingleton<MongoI.ICommunityRepository, MongoR.CommunityRepository>();
 			services.AddSingleton<MongoI.IActorTypeRepository, MongoR.ActorTypeRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
 			services.AddSingleton<MongoI.IPostBroadcastPersonRepository, MongoR.PostBroadcastPersonRepository>();
@@ -102,7 +102,7 @@ namespace my8.Api
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();
             services.AddSingleton<NeoI.IPersonRepository, NeoR.PersonRepository>();
-			services.AddSingleton<NeoI.IClubRepository, NeoR.ClubRepository>();
+			services.AddSingleton<NeoI.ICommunityRepository, NeoR.CommunityRepository>();
 			//AppendNeoDI
             //Sql
             services.AddSingleton<SqlI.IPersonRepository, SqlR.PersonRepository>();
