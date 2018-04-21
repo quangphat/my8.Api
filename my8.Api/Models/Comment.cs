@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using my8.Api.my8Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,8 @@ namespace my8.Api.Models
         public DateTime EditedTime { get; set; }
         public int Likes { get; set; }
         public int Replies { get; set; } //Lượt trả lời
-        public ObjectId PostId { get; set; }
+        public string PostId { get; set; }
+        public PostTypeEnum PostType { get; set; }
         public string Content { get; set; }
     }
 }

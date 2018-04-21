@@ -24,17 +24,17 @@ namespace my8.Api.Controllers
         [Route("api/statuspost/create")]
         public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
-            StatusPost post = null;
+            //StatusPost post = null;
 
-            post = new StatusPost();
-            post.Comments = 10;
-            post.Content = $"The status post #1";
-            post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
-            post.PostBy = new Actor();
-            post.PostBy.ActorId = "5ad6c5298895ac2a78afd1ac";
-            post.PostBy.DisplayName = "Linh Diệu";
-            post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
-            StatusPost created = await m_statusPostBusiness.Post(post);
+            //post = new StatusPost();
+            //post.Comments = 10;
+            //post.Content = $"The status post #1";
+            //post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
+            //post.PostBy = new Actor();
+            //post.PostBy.ActorId = "5ad6c5298895ac2a78afd1ac";
+            //post.PostBy.DisplayName = "Linh Diệu";
+            //post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
+            StatusPost created = await m_statusPostBusiness.Post(model);
 
             //StatusPost post = await m_statusPostBusiness.Post(model);
             return Json(created);

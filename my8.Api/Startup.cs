@@ -73,6 +73,8 @@ namespace my8.Api
 			services.AddScoped<IDegreeBusiness, DegreeBusiness>();
 			services.AddScoped<ISeniorityLevelBusiness, SeniorityLevelBusiness>();
 			services.AddScoped<IJobPostBusiness, JobPostBusiness>();
+			services.AddScoped<ICommentBusiness, CommentBusiness>();
+			services.AddScoped<IReplyCommentBusiness, ReplyCommentBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
@@ -95,6 +97,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IDistrictRepository, MongoR.DistrictRepository>();
 			services.AddSingleton<MongoI.IDegreeRepository, MongoR.DegreeRepository>();
 			services.AddSingleton<MongoI.ISeniorityLevelRepository, MongoR.SeniorityLevelRepository>();
+			services.AddSingleton<MongoI.IReplyCommentRepository, MongoR.ReplyCommentRepository>();
 			//AppendMongoDI
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();

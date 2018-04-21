@@ -7,6 +7,7 @@ namespace my8.Api.Infrastructures
 {
     public static class Utils
     {
+        public const int LIMIT_ROW = 10;
         public static string ArrStrToMongoSearch(string[] searchs)
         {
             string temp = searchs.Aggregate("", (a, b) => a + $"/{b}/i,");

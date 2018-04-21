@@ -9,9 +9,11 @@ namespace my8.Api.Interfaces.Mongo
 {
     public interface ICommentRepository
     {
-        Task<IEnumerable<Comment>> GetAll(StatusPost post);
-        Task PostComment(Comment comment);
-        Task DeleteComment(Comment comment);
-        Task<Comment> EditComment(Comment comment);
+        Task<string> Create(Comment comment);
+        Task<Comment> Get(string commentId);
+        Task<List<Comment>> GetByPost(StatusPost post,int skip,int limit);
+        Task<List<Comment>> GetByPost(JobPost post, int skip, int limit);
+        Task<bool> Delete(string commentId);
+        Task<bool> Update(Comment comment);
     }
 }
