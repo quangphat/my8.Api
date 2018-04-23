@@ -204,8 +204,7 @@ namespace my8.Api.SmartCenter
         private async Task<HashSet<string>> GetPersonDegree(List<Degree> degrees)
         {
             if (degrees == null) return new HashSet<string>();
-            string[] keySearch = degrees.Select(p => p.Value.ToString()).ToArray();
-            List<Person> people = await m_PersonRepositoryM.SearchByDegrees(keySearch);
+            List<Person> people = await m_PersonRepositoryM.SearchByDegrees(new string[] { });
             return people.Select(p => p.PersonId).ToHashSet();
         }
         private async Task<HashSet<string>> GetPersonExperience(int minYear,int maxYear)

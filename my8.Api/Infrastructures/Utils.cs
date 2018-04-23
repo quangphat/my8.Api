@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace my8.Api.Infrastructures
@@ -39,6 +41,21 @@ namespace my8.Api.Infrastructures
                 }
             }
             return hashset.ToArray();
+        }
+        public static string FormatCode(this string code)
+        {
+            if (string.IsNullOrWhiteSpace(code)) return string.Empty;
+            string temp = code.TrimStart().Trim().TrimEnd().ToLower();
+            return temp;
+        }
+        public static string HmacSha256ToBase64(string originalData, string secretKey)
+        {
+            var hashed = string.Empty;
+
+            using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
+                hashed = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(originalData)));
+
+            return hashed;
         }
     }
 }

@@ -15,7 +15,6 @@ namespace my8.Api.Models
         [BsonElement("Id")]
         [JsonProperty(PropertyName = "Id")]
         public string Id { get; set; }
-		public int Value { get; set; }
         public string Name { get; set; }
     }
 }

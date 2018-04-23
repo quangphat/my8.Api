@@ -8,7 +8,8 @@ namespace my8.Api.my8Enum
     public enum PostTypeEnum
     {
         StatusPost=1,
-        JobPost=2
+        JobPost=2,
+        ExperiencePost=3
     }
     public enum ActorTypeEnum
     {

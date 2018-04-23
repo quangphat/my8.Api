@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using my8.Api.my8Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,14 +28,11 @@ namespace my8.Api.Models
         public int Shares { get; set; }
         public int Views { get; set; }
         public string[] Images { get; set; }
-        public List<Person> PersonTags { get; set; }
-        
+        public List<Person> PersonTags { get; set; }   
         public bool IsShareExperience { get; set; }//Gắn thẻ là bài đăng chia sẻ kiến thức
         public bool IsAds { get; set; }//bài đăng quảng cáo.
-        
-
-        
         public int Privacy { get; set; }
-        
+        [BsonIgnore]
+        public int PostType { get; } = 1;
     }
 }

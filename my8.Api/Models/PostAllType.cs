@@ -43,6 +43,6 @@ namespace my8.Api.Models
         public decimal MaxSalary { get; set; }
         public string Title { get; set; }
         public string EmailToReceiveApply { get; set; }
-        public PostTypeEnum PostType { get; set; }
+        public int PostType { get; set; }
     }
 }

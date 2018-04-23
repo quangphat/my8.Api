@@ -42,7 +42,6 @@ namespace my8.Api.Repository.Mongo
             var filter = Builders<Degree>.Filter.Eq(p => p.Id, degree.Id);
             var update = Builders<Degree>.Update
                             .Set(s => s.Id, degree.Id)
-                            .Set(s=>s.Value,degree.Value)
                             .Set(s=>s.Name,degree.Name);
             try
             {

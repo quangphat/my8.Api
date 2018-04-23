@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using MongoI = my8.Api.Interfaces.Mongo;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
     public class IndustryBusiness : IIndustryBusiness
@@ -17,7 +19,7 @@ namespace my8.Api.Business
         }
         public async Task<Industry> Create(Industry industry)
         {
-            industry.Code = industry.Code.ToLower().Trim();
+            industry.Code = industry.Code.FormatCode();
             string id = await m_IndustryRepositoryM.Create(industry);
             industry.Id = id;
             return industry;

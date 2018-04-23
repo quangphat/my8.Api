@@ -59,6 +59,7 @@ namespace my8.Api
             services.AddScoped<NotificationHub>();
             //SmartCenter
             services.AddScoped<ISmartCenter, SmartCenter.SmartCenter>();
+            services.AddScoped<IClientAuthorizeBusiness, ClientAuthorizeBusiness>();
             //Business
             services.AddScoped<IPageBusiness, PageBusiness>();
 			services.AddScoped<IPersonBusiness, PersonBusiness>();
@@ -106,6 +107,7 @@ namespace my8.Api
 			//AppendNeoDI
             //Sql
             services.AddSingleton<SqlI.IPersonRepository, SqlR.PersonRepository>();
+            services.AddSingleton<SqlI.IClientAuthorizeRepository, SqlR.ClientAuthorizeRepository>();
 			//AppendSqlDI
         }
 
@@ -115,8 +117,13 @@ namespace my8.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
-            //app.UseMiddleware<HandShakeAuthorizeMiddleware>();
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
             app.UseCors("CorsPolicy");
 
             app.UseSignalR(routes =>
@@ -124,6 +131,9 @@ namespace my8.Api
                 routes.MapHub<ChatHub>("chat");
                 routes.MapHub<NotificationHub>("notification");
             });
+            app.UseStaticFiles();
+            app.UseMiddleware<ClientAuthorizeMiddleware>();
+            app.UseMiddleware<HandShakeAuthorizeMiddleware>();
             app.UseMvc();
             
         }
