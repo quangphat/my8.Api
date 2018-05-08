@@ -28,12 +28,12 @@ namespace XUnitTest
             post.Views = 15;
             post.PostTime = DateTime.Today.ToShortDateString();
             post.Images = null;
-            post.Privacy = (int)PostPrivaryEnum.All;
+            post.Privacy = (int)PostPrivacyEnum.All;
             post.Content = "Today is Sunday";
-            Actor user = new Actor();
+            ShortPerson user = new ShortPerson();
             user.DisplayName = "Quang Phát";
-            user.ActorId = "5ac9be056272224af07b79d3";
-            user.ActorTypeId = (int)ActorTypeEnum.Person;
+            user.AuthorId = "5ac9be056272224af07b79d3";
+            user.AuthorTypeId = (int)AuthorTypeEnum.Person;
             post.PostBy = user;
             await server.Call(HttpMethod.Post, "/api/m-statuspost/create", post, (rp) =>
             {
@@ -47,13 +47,13 @@ namespace XUnitTest
             });
         }
         [Fact]
-        public async Task Test_GetStatusPostByActor()
+        public async Task Test_GetStatusPostByAuthor()
         {
-            Actor user = new Actor();
+            ShortPerson user = new ShortPerson();
             user.DisplayName = "Quang Phát";
-            user.ActorId = "5ac9be056272224af07b79d3";
-            user.ActorTypeId = (int)ActorTypeEnum.Person;
-            await server.Call(HttpMethod.Post, "/api/m-statuspost/getbyactor", user, (rp) =>
+            user.AuthorId = "5ac9be056272224af07b79d3";
+            user.AuthorTypeId = (int)AuthorTypeEnum.Person;
+            await server.Call(HttpMethod.Post, "/api/m-statuspost/getbyauthor", user, (rp) =>
             {
                 Assert.NotNull(rp);
                 Assert.NotNull(rp.Content);

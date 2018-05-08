@@ -7,20 +7,20 @@ using my8.Api.Models;
 
 namespace XUnitTest
 {
-    public class TestActorType : IClassFixture<Server>
+    public class TestAuthorType : IClassFixture<Server>
     {
         private readonly Server server;
-        public TestActorType(Server _server)
+        public TestAuthorType(Server _server)
         {
             server = _server;
         }
         [Fact]
-        public async Task TestCreateActorType()
+        public async Task TestCreateAuthorType()
         {
-            ActorType actorType = new ActorType();
-            actorType.Name = "person";
-            actorType.Value = (int)ActorTypeEnum.Person;
-            await server.Call(HttpMethod.Post, "/api/m-actortype-create",actorType, (rp) =>
+            AuthorType authorType = new AuthorType();
+            authorType.Name = "person";
+            authorType.Value = (int)AuthorTypeEnum.Person;
+            await server.Call(HttpMethod.Post, "/api/m-authortype-create",authorType, (rp) =>
             {
                 Assert.NotNull(rp);
                 Assert.NotNull(rp.Content);
@@ -32,9 +32,9 @@ namespace XUnitTest
             });
         }
         [Fact]
-        public async Task TestGetActorType()
+        public async Task TestGetAuthorType()
         {
-            await server.Call(HttpMethod.Get, "/api/m-actortype-create", (rp) =>
+            await server.Call(HttpMethod.Get, "/api/m-authortype-create", (rp) =>
             {
                 Assert.NotNull(rp);
                 Assert.NotNull(rp.Content);
@@ -46,9 +46,9 @@ namespace XUnitTest
             });
         }
         [Fact]
-        public async Task TestUpdateActorType()
+        public async Task TestUpdateAuthorType()
         {
-            await server.Call(HttpMethod.Put, "/api/m-actortype-create", (rp) =>
+            await server.Call(HttpMethod.Put, "/api/m-authortype-create", (rp) =>
             {
                 Assert.NotNull(rp);
                 Assert.NotNull(rp.Content);
@@ -60,9 +60,9 @@ namespace XUnitTest
             });
         }
         [Fact]
-        public async Task TestDeleteActorType()
+        public async Task TestDeleteAuthorType()
         {
-            await server.Call(HttpMethod.Delete, "/api/m-actortype-create", (rp) =>
+            await server.Call(HttpMethod.Delete, "/api/m-authortype-create", (rp) =>
             {
                 Assert.NotNull(rp);
                 Assert.NotNull(rp.Content);

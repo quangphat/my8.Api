@@ -1,0 +1,23 @@
+{
+  "name": "my8.Api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quangphat/my8.Api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quangphat/my8.Api/issues"
+  },
+  "homepage": "https://github.com/quangphat/my8.Api#readme",
+  "dependencies": {
+    "@aspnet/signalr": "^1.0.0-preview2-final"
+  }
+}
