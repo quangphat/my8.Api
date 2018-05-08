@@ -43,22 +43,22 @@ namespace my8.Api.Business
         {
             return await m_PostbroadcastPersonRepositoryM.GetByPerson(personId,skip,limit);
         }
-        private async Task<List<PersonAllin>> GetPersonInvolve(int actorType,string actorId)
+        private async Task<List<PersonAllin>> GetPersonInvolve(int authorType,string authorId)
         {
             IEnumerable<PersonAllin> people = null;
-            if (actorType == (int)ActorTypeEnum.Person)
+            if (authorType == (int)AuthorTypeEnum.Person)
             {
-                people = await m_PersonRepository.GetFriends(actorId);
+                people = await m_PersonRepository.GetFriends(authorId);
                 return people.ToList();
             }
-            if (actorType == (int)ActorTypeEnum.Page)
+            if (authorType == (int)AuthorTypeEnum.Page)
             {
-                people = await m_PageRepository.GetPersonFollow(actorId);
+                people = await m_PageRepository.GetPersonFollow(authorId);
                 return people.ToList();
             }
-            if (actorType == (int)ActorTypeEnum.Community)
+            if (authorType == (int)AuthorTypeEnum.Community)
             {
-                people = await m_CommunityRepository.GetMembers(actorId);
+                people = await m_CommunityRepository.GetMembers(authorId);
                 return people.ToList();
             }
             return null;
@@ -67,7 +67,7 @@ namespace my8.Api.Business
         {
             try
             {
-                List<PersonAllin> people = await GetPersonInvolve(post.PostBy.ActorTypeId, post.PostBy.ActorId);
+                List<PersonAllin> people = await GetPersonInvolve(post.PostBy.AuthorTypeId, post.PostBy.AuthorId);
                 if (people == null || people.Count==0) return false;
                 List<Task> tasks = new List<Task>();
                 for (int i = 0; i < people.Count - 1; i++)
@@ -94,7 +94,7 @@ namespace my8.Api.Business
         {
             try
             {
-                List<PersonAllin> people = await GetPersonInvolve(post.PostBy.ActorTypeId, post.PostBy.ActorId);
+                List<PersonAllin> people = await GetPersonInvolve(post.PostBy.AuthorTypeId, post.PostBy.AuthorId);
                 if (people == null) return false;
                 List<Task> tasks = new List<Task>();
                 for (int i = 0; i < people.Count-1; i++)

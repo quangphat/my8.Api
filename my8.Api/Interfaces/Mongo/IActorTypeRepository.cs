@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Interfaces.Mongo
 {
-    public interface IActorTypeRepository
+    public interface IAuthorTypeRepository
     {
-        Task<bool> Create(ActorType actortype);
-        Task<ActorType> Get(string id);
+        Task<bool> Create(AuthorType authortype);
+        Task<AuthorType> Get(string id);
     }
 }
 

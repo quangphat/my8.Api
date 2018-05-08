@@ -35,6 +35,13 @@ namespace my8.Api.Repository.Sql
             IEnumerable<Person> persons = await connection.QueryAsync<Person>(select);
             return persons.FirstOrDefault();
         }
+
+        public async Task<Person> Login(string email, string password)
+        {
+            IEnumerable<Person> persons = await connection.QueryAsync<Person>($"select top 1 * from Person where Email = '{email}' and Password = '{password}'");
+            return persons.FirstOrDefault();
+        }
+
         public async Task<IEnumerable<Person>> Search(string searchStr,int skip, int limit)
         {
             IEnumerable<Person> persons = await connection.QueryAsync<Person>("LookForPerson", new { @searchStr = searchStr, @skip = skip, @limit = limit }, commandType: System.Data.CommandType.StoredProcedure);

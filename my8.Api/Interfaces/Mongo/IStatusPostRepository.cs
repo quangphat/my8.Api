@@ -9,7 +9,7 @@ namespace my8.Api.Interfaces.Mongo
     {
         Task<List<StatusPost>> Gets(string[] id);
         Task<StatusPost> Get(string postId);
-        Task<List<StatusPost>> GetByActor(Actor actor);
+        Task<List<StatusPost>> GetByAuthor(ShortPerson author);
         Task<string> Post(StatusPost post);
         Task<bool> UpdatePost(StatusPost post);
         Task<bool> UpdateLikes(StatusPost post);

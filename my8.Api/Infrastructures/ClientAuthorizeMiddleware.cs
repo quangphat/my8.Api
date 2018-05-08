@@ -110,7 +110,15 @@ namespace my8.Api.Infrastructures
             else
                 using (var reader = new StreamReader(httpContext.Request.Body))
                 {
-                    var body = reader.ReadToEnd();
+                    var body = string.Empty;
+                    try
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                   catch(Exception e)
+                    {
+
+                    }
 
                     if (body == null)
                         body = string.Empty;

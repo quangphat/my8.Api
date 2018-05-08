@@ -30,10 +30,10 @@ namespace my8.Api.Controllers
             //post.Comments = 10;
             //post.Content = $"The status post #1";
             //post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
-            //post.PostBy = new Actor();
-            //post.PostBy.ActorId = "5ad6c5298895ac2a78afd1ac";
+            //post.PostBy = new Author();
+            //post.PostBy.AuthorId = "5ad6c5298895ac2a78afd1ac";
             //post.PostBy.DisplayName = "Linh Diệu";
-            //post.PostBy.ActorTypeId = (int)ActorTypeEnum.Person;
+            //post.PostBy.AuthorTypeId = (int)AuthorTypeEnum.Person;
             StatusPost created = await m_statusPostBusiness.Post(model);
 
             //StatusPost post = await m_statusPostBusiness.Post(model);
@@ -47,10 +47,10 @@ namespace my8.Api.Controllers
             return Json(post);
         }
         [HttpPost]
-        [Route("api/statuspost/getbyactor")]
-        public async Task<IActionResult> GetByActor([FromBody] Actor actor)
+        [Route("api/statuspost/getbyauthor")]
+        public async Task<IActionResult> GetByAuthor([FromBody] ShortPerson author)
         {
-            List<StatusPost> lstStatusPost = await m_statusPostBusiness.GetByActor(actor);
+            List<StatusPost> lstStatusPost = await m_statusPostBusiness.GetByAuthor(author);
             return Json(lstStatusPost);
         }
         [HttpPost]

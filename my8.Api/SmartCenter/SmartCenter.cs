@@ -81,39 +81,54 @@ namespace my8.Api.SmartCenter
         {
             string[] allPersonId = null;
             List<Task> tasks = new List<Task>();
-            Task<HashSet<string>> lstPersonByActor = GetPersonIdInvolve(jobPost.PostBy);
-            tasks.Add(lstPersonByActor);
-            //must satisfy 
-            Task<HashSet<string>> lstPersonByIndustry = GetPersonIndustry(jobPost.IndustryTags);
-            tasks.Add(lstPersonByIndustry);
-            //must satisfy 
-            Task<HashSet<string>> lstPersonBySkill = GetPersonSkill(jobPost.SkillTags);
-            tasks.Add(lstPersonBySkill);
+            Task<HashSet<string>> lstPersonByAuthor = GetPersonIdInvolve(jobPost.PostBy);
+            tasks.Add(lstPersonByAuthor);
+            Task<HashSet<string>> lstPersonByIndustry = null;
+            Task<HashSet<string>> lstPersonBySkill = null;
+            Task<HashSet<string>> lstPersonByExperience = null;
+            if (jobPost.Privacy==(int)PostPrivacyEnum.All)
+            {
+                //must satisfy 
+                lstPersonByIndustry = GetPersonIndustry(jobPost.IndustryTags);
+                tasks.Add(lstPersonByIndustry);
+                //must satisfy 
+                lstPersonBySkill = GetPersonSkill(jobPost.SkillTags);
+                tasks.Add(lstPersonBySkill);
+                // must satisfy
+                 lstPersonByExperience = GetPersonExperience(jobPost.MinExperience, jobPost.MaxExperience);
+                tasks.Add(lstPersonByExperience);
+            }
+           
             //optional
             //Task<HashSet<string>> lstPersonByLocation = GetPersonLocation(jobPost.Locations);
             //tasks.Add(lstPersonByLocation);
             //optional
             //Task<HashSet<string>> lstPersonByDegree = GetPersonDegree(jobPost.Degrees);
             //tasks.Add(lstPersonByDegree);
-            //must satisfy 
-            Task<HashSet<string>> lstPersonByExperience = GetPersonExperience(jobPost.MinExperience, jobPost.MaxExperience);
-            tasks.Add(lstPersonByExperience);
+            
             await Task.WhenAll(tasks);
             List<HashSet<string>> hashSetsMustSatisfy = new List<HashSet<string>>();
-            await Task.Run(()=> {
-                //must satisfy 
-                hashSetsMustSatisfy.Add(lstPersonByIndustry.Result);
-                hashSetsMustSatisfy.Add(lstPersonBySkill.Result);
-                hashSetsMustSatisfy.Add(lstPersonByExperience.Result);
-                string[] allPersonSatisfyJob = Utils.IntersectOrUnion(hashSetsMustSatisfy);
+            if(jobPost.Privacy==(int)PostPrivacyEnum.All)
+            {
+                await Task.Run(() => {
+                    //must satisfy 
+                    hashSetsMustSatisfy.Add(lstPersonByIndustry.Result);
+                    hashSetsMustSatisfy.Add(lstPersonBySkill.Result);
+                    hashSetsMustSatisfy.Add(lstPersonByExperience.Result);
+                    string[] allPersonSatisfyJob = Utils.IntersectOrUnion(hashSetsMustSatisfy);
 
-                string[] allPersonByPost = lstPersonByActor.Result.ToArray();
+                    string[] allPersonByPost = lstPersonByAuthor.Result.ToArray();
 
-                //hashSetsMustSatisfy.Add(lstPersonByLocation.Result);
-                //hashSetsMustSatisfy.Add(lstPersonByDegree.Result);
+                    //hashSetsMustSatisfy.Add(lstPersonByLocation.Result);
+                    //hashSetsMustSatisfy.Add(lstPersonByDegree.Result);
 
-                allPersonId = allPersonSatisfyJob.Union(allPersonByPost).ToArray();
-            });
+                    allPersonId = allPersonSatisfyJob.Union(allPersonByPost).ToArray();
+                });
+            }
+            else
+            {
+                allPersonId = lstPersonByAuthor.Result.ToArray();
+            }
             
             try
             {
@@ -138,44 +153,44 @@ namespace my8.Api.SmartCenter
                 return false;
             }
         }
-        private async Task<List<PersonAllin>> GetPersonInvolve(Actor actor)
+        private async Task<List<PersonAllin>> GetPersonInvolve(ShortPerson author)
         {
-            int actorType = actor.ActorTypeId;
+            int authorType = author.AuthorTypeId;
             IEnumerable<PersonAllin> people = null;
-            if (actorType == (int)ActorTypeEnum.Person)
+            if (authorType == (int)AuthorTypeEnum.Person)
             {
-                people = await m_PersonRepositoryN.GetFriends(actor.ActorId);
+                people = await m_PersonRepositoryN.GetFriends(author.AuthorId);
                 return people.ToList();
             }
-            if (actorType == (int)ActorTypeEnum.Page)
+            if (authorType == (int)AuthorTypeEnum.Page)
             {
-                people = await m_PageRepositoryN.GetPersonFollow(actor.ActorId);
+                people = await m_PageRepositoryN.GetPersonFollow(author.AuthorId);
                 return people.ToList();
             }
-            if (actorType == (int)ActorTypeEnum.Community)
+            if (authorType == (int)AuthorTypeEnum.Community)
             {
-                people = await m_CommunityRepositoryN.GetMembers(actor.ActorId);
+                people = await m_CommunityRepositoryN.GetMembers(author.AuthorId);
                 return people.ToList();
             }
             return null;
         }
-        private async Task<HashSet<string>> GetPersonIdInvolve(Actor actor)
+        private async Task<HashSet<string>> GetPersonIdInvolve(ShortPerson author)
         {
-            int actorType = actor.ActorTypeId;
+            int authorType = author.AuthorTypeId;
             IEnumerable<PersonAllin> people = null;
-            if (actorType == (int)ActorTypeEnum.Person)
+            if (authorType == (int)AuthorTypeEnum.Person)
             {
-                people = await m_PersonRepositoryN.GetFriends(actor.ActorId);
+                people = await m_PersonRepositoryN.GetFriends(author.AuthorId);
                 return people.Select(p=>p.Person.PersonId).ToHashSet();
             }
-            if (actorType == (int)ActorTypeEnum.Page)
+            if (authorType == (int)AuthorTypeEnum.Page)
             {
-                people = await m_PageRepositoryN.GetPersonFollow(actor.ActorId);
+                people = await m_PageRepositoryN.GetPersonFollow(author.AuthorId);
                 return people.Select(p => p.Person.PersonId).ToHashSet();
             }
-            if (actorType == (int)ActorTypeEnum.Community)
+            if (authorType == (int)AuthorTypeEnum.Community)
             {
-                people = await m_CommunityRepositoryN.GetMembers(actor.ActorId);
+                people = await m_CommunityRepositoryN.GetMembers(author.AuthorId);
                 return people.Select(p => p.Person.PersonId).ToHashSet();
             }
             return null;

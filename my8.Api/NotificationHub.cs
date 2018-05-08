@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Sockets;
 using my8.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace my8.Api
         public async Task SendToPeople(Person person)
         {
             UserConnection usr = uList.FirstOrDefault(p => p.UserId == person.PersonId);
-            await _hubContext.Clients.All.InvokeAsync("sendNotification", person.DisplayName);
+            await _hubContext.Clients.All.SendAsync("sendNotification", person.DisplayName);
             //Clients.All.InvokeAsync("sendNotification", people[0].DisplayName);
             string id = Context.ConnectionId;
             string names = Context.User.Identity.Name;

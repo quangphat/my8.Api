@@ -31,9 +31,9 @@ namespace my8.Api.Business
             return await m_JobPostRepositoryM.Get(postId);
         }
 
-        public async Task<List<JobPost>> GetByActor(Actor actor)
+        public async Task<List<JobPost>> GetByAuthor(ShortPerson author)
         {
-            return await m_JobPostRepositoryM.GetByActor(actor);
+            return await m_JobPostRepositoryM.GetByAuthor(author);
         }
 
         public async Task<List<JobPost>> Gets(string[] id)

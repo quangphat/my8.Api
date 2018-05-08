@@ -30,9 +30,9 @@ namespace my8.Api.Business
             return await m_StatuspostRepositoryM.Get(postId);
         }
 
-        public async Task<List<StatusPost>> GetByActor(Actor actor)
+        public async Task<List<StatusPost>> GetByAuthor(ShortPerson author)
         {
-            return await m_StatuspostRepositoryM.GetByActor(actor);
+            return await m_StatuspostRepositoryM.GetByAuthor(author);
         }
 
         public async Task<List<StatusPost>> Gets(string[] id)

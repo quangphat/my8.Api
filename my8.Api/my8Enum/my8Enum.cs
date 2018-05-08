@@ -11,18 +11,18 @@ namespace my8.Api.my8Enum
         JobPost=2,
         ExperiencePost=3
     }
-    public enum ActorTypeEnum
+    public enum AuthorTypeEnum
     {
         Person=1,
         Page=2,
         Community=3
     };
-    public enum PostPrivaryEnum
+    public enum PostPrivacyEnum
     {
         All=1,
         Friend=2
     }
-    public enum CommunityPrivaryEnum
+    public enum CommunityPrivacyEnum
     {
         All = 1,
         Member = 2

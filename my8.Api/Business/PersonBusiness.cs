@@ -126,5 +126,12 @@ namespace my8.Api.Business
         {
             return await m_personRepositoryN.InteractToCommunity(currentPersonId, CommunityId);
         }
+
+        public async Task<Person> Login(Person model)
+        {
+            if (model == null) return null;
+            Person person = await m_personRepositoryS.Login(model.Email,model.Password);
+            return person;
+        }
     }
 }

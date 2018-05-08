@@ -27,7 +27,7 @@ namespace my8.Api.Controllers
             JobPost post = null;
             //bool result = false;
             //model.Active = true;
-            //model.PostBy = new Actor() { ActorId = "5ad6c5298895ac2a78afd1ac", DisplayName = "Linh Diệu", ActorTypeId = (int)ActorTypeEnum.Person };
+            //model.PostBy = new Author() { AuthorId = "5ad6c5298895ac2a78afd1ac", DisplayName = "Linh Diệu", AuthorTypeId = (int)AuthorTypeEnum.Person };
             //model.Title = "Tuyển dụng lập trình viên .net";
             //model.Content = "Wayne enterprise cần tuyển .net lương 10k USD/tháng";
             //model.IndustryTags = new List<Industry>()
@@ -48,10 +48,10 @@ namespace my8.Api.Controllers
             return Json(post);
         }
         [HttpPost]
-        [Route("api/JobPost/getbyactor")]
-        public async Task<IActionResult> GetByActor([FromBody] Actor actor)
+        [Route("api/JobPost/getbyauthor")]
+        public async Task<IActionResult> GetByAuthor([FromBody] ShortPerson author)
         {
-            List<JobPost> lstStatusPost = await m_JobPostBusiness.GetByActor(actor);
+            List<JobPost> lstStatusPost = await m_JobPostBusiness.GetByAuthor(author);
             return Json(lstStatusPost);
         }
         [HttpPost]

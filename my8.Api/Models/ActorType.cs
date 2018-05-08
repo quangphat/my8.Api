@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Models
 {
-    public class ActorType
+    public class AuthorType
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

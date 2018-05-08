@@ -10,27 +10,27 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class ActorTypeRepository:MongoRepositoryBase,IActorTypeRepository
+    public class AuthorTypeRepository:MongoRepositoryBase,IAuthorTypeRepository
     {
-		IMongoCollection<ActorType> collection;
-		FilterDefinition<ActorType> filter = FilterDefinition<ActorType>.Empty;
-        public ActorTypeRepository(IOptions<MongoConnection> setting) : base(setting) 
+		IMongoCollection<AuthorType> collection;
+		FilterDefinition<AuthorType> filter = FilterDefinition<AuthorType>.Empty;
+        public AuthorTypeRepository(IOptions<MongoConnection> setting) : base(setting) 
         {
-            collection = _db.GetCollection<ActorType>("ActorType");
+            collection = _db.GetCollection<AuthorType>("AuthorType");
         }
-        public async Task<bool> Create(ActorType actortype)
+        public async Task<bool> Create(AuthorType authortype)
         {
             try
             {
-                await collection.InsertOneAsync(actortype);
+                await collection.InsertOneAsync(authortype);
                 return true;
             }
             catch { return false; }
         }
 
-        public async Task<ActorType> Get(string id)
+        public async Task<AuthorType> Get(string id)
         {
-            filter = Builders<ActorType>.Filter.Eq(p => p.Id, id);
+            filter = Builders<AuthorType>.Filter.Eq(p => p.Id, id);
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
     }

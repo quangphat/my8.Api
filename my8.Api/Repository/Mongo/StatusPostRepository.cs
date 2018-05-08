@@ -127,10 +127,10 @@ namespace my8.Api.Repository.Mongo
         }
 
 
-        public async Task<List<StatusPost>> GetByActor(Actor actor)
+        public async Task<List<StatusPost>> GetByAuthor(ShortPerson author)
         {
             var filterBuilder = Builders<StatusPost>.Filter;
-            filter = filterBuilder.Eq(p => p.PostBy.ActorId, actor.ActorId) & filterBuilder.Eq(p => p.PostBy.ActorTypeId, actor.ActorTypeId);
+            filter = filterBuilder.Eq(p => p.PostBy.AuthorId, author.AuthorId) & filterBuilder.Eq(p => p.PostBy.AuthorTypeId, author.AuthorTypeId);
             List<StatusPost> statusPosts = await collection.Find(filter).ToListAsync();
             return statusPosts;
         }

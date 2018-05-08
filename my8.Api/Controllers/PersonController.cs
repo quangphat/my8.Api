@@ -18,6 +18,13 @@ namespace my8.Api.Controllers
             m_PersonBusiness = personBusiness;
         }
         [HttpPost]
+        [Route("api/account/login")]
+        public async Task<IActionResult> Login([FromBody] Person model)
+        {
+            Person account = await m_PersonBusiness.Login(model);
+            return Json(account);
+        }
+        [HttpPost]
         [Route("api/person/create")]
         public async Task<IActionResult> Create([FromBody] Person model)
         {

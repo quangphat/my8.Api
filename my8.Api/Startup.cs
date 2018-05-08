@@ -19,7 +19,9 @@ using Newtonsoft.Json.Serialization;
 using my8.Api.IBusiness;
 using my8.Api.Business;
 using my8.Api.SmartCenter;
-using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.AspNetCore.Mvc;
+
 namespace my8.Api
 {
     public class Startup
@@ -38,13 +40,17 @@ namespace my8.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            services.Configure<MvcOptions>(options =>
             {
-                builder
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .WithOrigins("http://localhost:60202");
-            }));
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowSpecificOrigin"));
+            });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:51827").AllowAnyHeader()
+                    .AllowAnyMethod().AllowCredentials());
+            });
+
 
             services.AddSignalR();
             services.Configure<MongoConnection>(Configuration.GetSection("MongoConnection"));
@@ -88,7 +94,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IUniversityRepository, MongoR.UniversityRepository>();
 			services.AddSingleton<MongoI.IDeletedPostRepository, MongoR.DeletedPostRepository>();
 			services.AddSingleton<MongoI.ICommunityRepository, MongoR.CommunityRepository>();
-			services.AddSingleton<MongoI.IActorTypeRepository, MongoR.ActorTypeRepository>();
+			services.AddSingleton<MongoI.IAuthorTypeRepository, MongoR.AuthorTypeRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
 			services.AddSingleton<MongoI.IPostBroadcastPersonRepository, MongoR.PostBroadcastPersonRepository>();
 			services.AddSingleton<MongoI.IIndustryRepository, MongoR.IndustryRepository>();
@@ -123,15 +129,14 @@ namespace my8.Api
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseCors("CorsPolicy");
-
+            app.UseStaticFiles();
+            app.UseCors("AllowSpecificOrigin");
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("chat");
-                routes.MapHub<NotificationHub>("notification");
+                routes.MapHub<ChatHub>("/chat");
+                routes.MapHub<NotificationHub>("/notification");
             });
-            app.UseStaticFiles();
+
             app.UseMiddleware<ClientAuthorizeMiddleware>();
             app.UseMiddleware<HandShakeAuthorizeMiddleware>();
             app.UseMvc();

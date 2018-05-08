@@ -7,6 +7,7 @@ namespace my8.Api.Interfaces.Sql
 {
     public interface IPersonRepository
     {
+        Task<Person> Login(string email, string password);
         Task<bool> Create(Person person);
         Task<Person> Get(string id);
         Task<bool> Update(Person person);

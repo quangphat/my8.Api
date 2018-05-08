@@ -29,5 +29,7 @@ namespace my8.Api.IBusiness
         Task<bool> JoinCommunity(string currentPersonId, string CommunityId);
         Task<bool> OutCommunity(string currentPersonId, string CommunityId);
         Task<bool> InteractToCommunity(string currentPersonId, string CommunityId);
+
+        Task<Person> Login(Person model);
     }
 }
