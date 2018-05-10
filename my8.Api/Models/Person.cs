@@ -42,7 +42,7 @@ namespace my8.Api.Models
         [BsonIgnore]
         public string Password { get; set; }
         [BsonIgnore]
-        public DateTime? Birthday { get; set; }
+        public string Birthday { get; set; }
         [BsonIgnore]
         public Nullable<int> BirthdayPrivacy { get; set; }
         [BsonIgnore]
@@ -78,8 +78,8 @@ namespace my8.Api.Models
         [BsonIgnore]
         public string About { get; set; }
         [BsonIgnore]
-        public DateTime? CreatedTime { get; set; }
+        public string CreatedTime { get; set; }
         [BsonIgnore]
-        public DateTime? ModifiedTime { get; set; }
+        public string ModifiedTime { get; set; }
     }
 }

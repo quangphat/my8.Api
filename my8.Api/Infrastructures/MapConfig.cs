@@ -23,10 +23,10 @@ namespace my8.Api.Infrastructures
             mapper.CreateMap<string, ObjectId>().ConvertUsing(a => ObjectId.Parse(a));
             mapper.CreateMap<PostBroadcastPerson, PostBroadcastPersonHidden>();
             mapper.CreateMap<PostBroadcastPersonHidden, PostBroadcastPerson>();
-            mapper.CreateMap<PostAllType, StatusPost>();
-            mapper.CreateMap<StatusPost, PostAllType>();
-            mapper.CreateMap<PostAllType, JobPost>();
-            mapper.CreateMap<JobPost, PostAllType>();
+            mapper.CreateMap<Feed, StatusPost>();
+            mapper.CreateMap<StatusPost, Feed>();
+            mapper.CreateMap<Feed, JobPost>();
+            mapper.CreateMap<JobPost, Feed>();
 			//<AppendNewHere>
         }
     }

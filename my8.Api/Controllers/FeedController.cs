@@ -11,39 +11,39 @@ using my8.Api.SmartCenter;
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class PostAllTypeController : Controller
+    public class FeedController : Controller
     {
         ISmartCenter m_SmartCenter;
-        public PostAllTypeController(ISmartCenter smart)
+        public FeedController(ISmartCenter smart)
         {
             m_SmartCenter = smart;
         }
         [HttpGet]
-        [Route("api/PostAllType/get/{personId}/{skip}")]
+        [Route("api/Feed/get/{personId}/{skip}")]
         public async Task<IActionResult> Gets(string personId,int skip)
         {
-            List<PostAllType> lstPost = await m_SmartCenter.GetPosts(personId, skip);
+            List<Feed> lstPost = await m_SmartCenter.GetPosts(personId, skip);
             return Json(lstPost);
         }
 		//[HttpPost]
-  //      [Route("api/postalltype/create")]
-  //      public async Task<IActionResult> Create([FromBody] PostAllType model)
+  //      [Route("api/Feed/create")]
+  //      public async Task<IActionResult> Create([FromBody] Feed model)
   //      {
-  //          PostAllType postalltype= await m_PostAllTypeBusiness.Create(model);
-  //          return Json(postalltype);
+  //          Feed Feed= await m_FeedBusiness.Create(model);
+  //          return Json(Feed);
   //      }
   //      [HttpPut]
-  //      [Route("api/postalltype/update")]
-  //      public async Task<IActionResult> Update([FromBody] PostAllType model)
+  //      [Route("api/Feed/update")]
+  //      public async Task<IActionResult> Update([FromBody] Feed model)
   //      {
-  //          bool result = await m_PostAllTypeBusiness.Update(model);
+  //          bool result = await m_FeedBusiness.Update(model);
   //          return Json(result);
   //      }
   //      [HttpDelete]
-  //      [Route("api/postalltype/delete/{id}")]
+  //      [Route("api/Feed/delete/{id}")]
   //      public async Task<IActionResult> Delete(string id)
   //      {
-  //          bool rst = await m_PostAllTypeBusiness.Delete(id);
+  //          bool rst = await m_FeedBusiness.Delete(id);
   //          return Json(rst);
   //      }
     }

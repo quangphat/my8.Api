@@ -8,6 +8,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
         public string AuthorId { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }

@@ -237,17 +237,25 @@ namespace my8.Api.SmartCenter
 
             return null;
         }
-        public async Task<List<PostAllType>> GetPosts(string personId,int skip)
+        public async Task<List<Feed>> GetPosts(string personId,int skip)
         {
             List<PostBroadcastPerson> postBroadcastPersons = await m_PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, MAX_LIMIT);
-            string[] josbIds = await GetJobPostIdArray(postBroadcastPersons);
-            string[] statusIds = await GetStatusPostIdArray(postBroadcastPersons);
-            Task<List<JobPost>> jobPostsTask = m_JobPostRepository.Gets(josbIds);
-            Task<List<StatusPost>> statusPostsTask = m_StatusPostRepository.Gets(statusIds);
+            Task<List<JobPost>> jobPostsTask = GetJobPost(postBroadcastPersons);
+            Task<List<StatusPost>> statusPostsTask = GetStatusPost(postBroadcastPersons);
             await Task.WhenAll(jobPostsTask, statusPostsTask);
-            List<PostAllType> postAllTypes = Mapper.Map<List<PostAllType>>(jobPostsTask.Result);
-            postAllTypes.Concat(Mapper.Map<List<PostAllType>>(statusPostsTask.Result));
+            List<Feed> postAllTypes = Mapper.Map<List<Feed>>(jobPostsTask.Result);
+            postAllTypes.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
             return postAllTypes;
+        }
+        private async Task<List<JobPost>> GetJobPost(List<PostBroadcastPerson> postBroadcastPeople)
+        {
+            string[] josbIds = await GetJobPostIdArray(postBroadcastPeople);
+            return await m_JobPostRepository.Gets(josbIds);
+        }
+        private async Task<List<StatusPost>> GetStatusPost(List<PostBroadcastPerson> postBroadcastPeople)
+        {
+            string[] statusIds = await GetStatusPostIdArray(postBroadcastPeople);
+            return await m_StatusPostRepository.Gets(statusIds);
         }
         private async Task<string[]> GetJobPostIdArray(List<PostBroadcastPerson> lstJobPostBroadCast)
         {
@@ -264,7 +272,7 @@ namespace my8.Api.SmartCenter
             return ids;
         }
 
-        public Task<List<PostAllType>> InjectGrayMatter(List<PostBroadcastPerson> postBroadcasts, List<PostAllType> postAllTypes)
+        public Task<List<Feed>> InjectGrayMatter(List<PostBroadcastPerson> postBroadcasts, List<Feed> postAllTypes)
         {
             throw new NotImplementedException();
         }

@@ -14,8 +14,8 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public ShortPerson Commentator { get; set; }
-        public DateTime CommentTime { get; set; }
-        public DateTime EditedTime { get; set; }
+        public string CommentTime { get; set; }
+        public string EditedTime { get; set; }
         public int Likes { get; set; }
         public int Replies { get; set; } //Lượt trả lời
         public string PostId { get; set; }
