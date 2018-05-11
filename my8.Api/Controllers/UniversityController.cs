@@ -8,13 +8,15 @@ using MongoM = my8.Api.Models;
 using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using SqlI = my8.Api.Interfaces.Sql;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class UniversityController : Controller
+    public class UniversityController : BaseController
     {
         MongoI.IUniversityRepository universityRepositoryM;
-        public UniversityController(MongoI.IUniversityRepository universityRepoM)
+        public UniversityController(CurrentProcess process, MongoI.IUniversityRepository universityRepoM):base(process)
         {
             universityRepositoryM = universityRepoM;
         }

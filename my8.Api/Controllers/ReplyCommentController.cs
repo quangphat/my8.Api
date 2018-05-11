@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class ReplyCommentController : Controller
+    public class ReplyCommentController : BaseController
     {
         IReplyCommentBusiness m_ReplyCommentBusiness;
-        public ReplyCommentController(IReplyCommentBusiness replycommentBusiness)
+        public ReplyCommentController(CurrentProcess process, IReplyCommentBusiness replycommentBusiness):base(process)
         {
             m_ReplyCommentBusiness = replycommentBusiness;
         }

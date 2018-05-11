@@ -5,17 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 using my8.Api.my8Enum;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class StatusPostController : Controller
+    public class StatusPostController : BaseController
     {
         IStatusPostBusiness m_statusPostBusiness;
         IPostBroadcastPersonBusiness m_PostBroadCastToPersonBusiness;
-        public StatusPostController(IStatusPostBusiness statusPostBusiness, IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
+        public StatusPostController(CurrentProcess process, IStatusPostBusiness statusPostBusiness, IPostBroadcastPersonBusiness postBroadcastPersonBusiness):base(process)
         {
             m_statusPostBusiness = statusPostBusiness;
             m_PostBroadCastToPersonBusiness = postBroadcastPersonBusiness;

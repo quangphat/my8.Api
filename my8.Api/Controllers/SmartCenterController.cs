@@ -6,18 +6,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 using my8.Api.SmartCenter;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class SmartCenterController : Controller
+    public class SmartCenterController : BaseController
     {
         ISmartCenter m_SmartCenter;
         NotificationHub m_NotificationHub;
         private readonly IHubContext<NotificationHub> _hubContext;
-        public SmartCenterController(ISmartCenter smartCenter,NotificationHub notificationHub, IHubContext<NotificationHub> hubContext)
+        public SmartCenterController(CurrentProcess process, ISmartCenter smartCenter,NotificationHub notificationHub, IHubContext<NotificationHub> hubContext):base(process)
         {
             m_SmartCenter = smartCenter;
             m_NotificationHub = notificationHub;

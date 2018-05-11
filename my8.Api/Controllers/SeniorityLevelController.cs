@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class SeniorityLevelController : Controller
+    public class SeniorityLevelController : BaseController
     {
         ISeniorityLevelBusiness m_SeniorityLevelBusiness;
-        public SeniorityLevelController(ISeniorityLevelBusiness senioritylevelBusiness)
+        public SeniorityLevelController(CurrentProcess process, ISeniorityLevelBusiness senioritylevelBusiness):base(process)
         {
             m_SeniorityLevelBusiness = senioritylevelBusiness;
         }

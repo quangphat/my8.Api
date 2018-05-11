@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class SkillController : Controller
+    public class SkillController : BaseController
     {
         ISkillBusiness m_SkillBusiness;
-        public SkillController(ISkillBusiness skillBusiness)
+        public SkillController(CurrentProcess process, ISkillBusiness skillBusiness):base(process)
         {
             m_SkillBusiness = skillBusiness;
         }

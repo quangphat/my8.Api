@@ -5,17 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 using my8.Api.my8Enum;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class JobPostController : Controller
+    public class JobPostController : BaseController
     {
         IJobPostBusiness m_JobPostBusiness;
         IPostBroadcastPersonBusiness m_PostBroadCastToPersonBusiness;
-        public JobPostController(IJobPostBusiness jobpostBusiness, IPostBroadcastPersonBusiness postBroadcastPersonBusiness)
+        public JobPostController(CurrentProcess process, IJobPostBusiness jobpostBusiness, IPostBroadcastPersonBusiness postBroadcastPersonBusiness):base(process)
         {
             m_JobPostBusiness = jobpostBusiness;
             m_PostBroadCastToPersonBusiness = postBroadcastPersonBusiness;

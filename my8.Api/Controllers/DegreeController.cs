@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class DegreeController : Controller
+    public class DegreeController : BaseController
     {
         IDegreeBusiness m_DegreeBusiness;
-        public DegreeController(IDegreeBusiness degreeBusiness)
+        public DegreeController(CurrentProcess process, IDegreeBusiness degreeBusiness):base(process)
         {
             m_DegreeBusiness = degreeBusiness;
         }

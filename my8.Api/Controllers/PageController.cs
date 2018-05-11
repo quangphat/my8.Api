@@ -10,14 +10,15 @@ using NeoI = my8.Api.Interfaces.Neo4j;
 using SqlI = my8.Api.Interfaces.Sql;
 using my8.Api.IBusiness;
 using my8.Api.Models;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class PageController : Controller
+    public class PageController : BaseController
     {
         IPageBusiness m_pageBusiness;
-        public PageController(IPageBusiness pageBusiness)
+        public PageController(CurrentProcess process, IPageBusiness pageBusiness):base(process)
         {
             m_pageBusiness = pageBusiness;
         }

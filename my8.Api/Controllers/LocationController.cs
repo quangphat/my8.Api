@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class LocationController : Controller
+    public class LocationController : BaseController
     {
         ILocationBusiness m_LocationBusiness;
-        public LocationController(ILocationBusiness locationBusiness)
+        public LocationController(CurrentProcess process, ILocationBusiness locationBusiness):base(process)
         {
             m_LocationBusiness = locationBusiness;
         }

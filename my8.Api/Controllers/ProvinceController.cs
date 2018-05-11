@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class ProvinceController : Controller
+    public class ProvinceController : BaseController
     {
         IProvinceBusiness m_ProvinceBusiness;
-        public ProvinceController(IProvinceBusiness provinceBusiness)
+        public ProvinceController(CurrentProcess process, IProvinceBusiness provinceBusiness):base(process)
         {
             m_ProvinceBusiness = provinceBusiness;
         }

@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class PersonController : Controller
+    public class PersonController : BaseController
     {
         IPersonBusiness m_PersonBusiness;
-        public PersonController(IPersonBusiness personBusiness)
+        public PersonController(CurrentProcess process, IPersonBusiness personBusiness):base(process)
         {
             m_PersonBusiness = personBusiness;
         }

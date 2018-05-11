@@ -13,6 +13,7 @@ namespace my8.Api.Infrastructures
         {
             Mapper.Initialize(mapper =>
             {
+                ClientProfile.Config(services, mapper);
                 ConfigMapper(mapper);
             });
         }

@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class DistrictController : Controller
+    public class DistrictController : BaseController
     {
         IDistrictBusiness m_DistrictBusiness;
-        public DistrictController(IDistrictBusiness districtBusiness)
+        public DistrictController(CurrentProcess process, IDistrictBusiness districtBusiness):base(process)
         {
             m_DistrictBusiness = districtBusiness;
         }

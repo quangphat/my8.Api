@@ -5,16 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
+using my8.Api.Infrastructures;
 using my8.Api.Models;
 using my8.Api.SmartCenter;
 
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
-    public class FeedController : Controller
+    public class FeedController : BaseController
     {
         ISmartCenter m_SmartCenter;
-        public FeedController(ISmartCenter smart)
+        public FeedController(CurrentProcess process, ISmartCenter smart):base(process)
         {
             m_SmartCenter = smart;
         }
@@ -23,7 +24,7 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> Gets(string personId,int skip)
         {
             List<Feed> lstPost = await m_SmartCenter.GetPosts(personId, skip);
-            return Json(lstPost);
+            return ToResponse(lstPost);
         }
 		//[HttpPost]
   //      [Route("api/Feed/create")]
