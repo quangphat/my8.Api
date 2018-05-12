@@ -28,7 +28,7 @@ namespace my8.Api.Models
         public int Shares { get; set; }
         public int Views { get; set; }
         public string[] Images { get; set; }
-        public List<Person> PersonTags { get; set; }   
+        public List<ShortPerson> PersonTags { get; set; }   
         public bool IsShareExperience { get; set; }//Gắn thẻ là bài đăng chia sẻ kiến thức
         public bool IsAds { get; set; }//bài đăng quảng cáo.
         public int Privacy { get; set; }

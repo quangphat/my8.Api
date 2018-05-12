@@ -8,6 +8,7 @@ using my8.Api.IBusiness;
 using my8.Api.Infrastructures;
 using my8.Api.Models;
 using my8.Api.my8Enum;
+using my8.Api.SmartCenter;
 
 namespace my8.Api.Controllers
 {
@@ -16,29 +17,23 @@ namespace my8.Api.Controllers
     {
         IStatusPostBusiness m_statusPostBusiness;
         IPostBroadcastPersonBusiness m_PostBroadCastToPersonBusiness;
-        public StatusPostController(CurrentProcess process, IStatusPostBusiness statusPostBusiness, IPostBroadcastPersonBusiness postBroadcastPersonBusiness):base(process)
+        ISmartCenter m_SmartCenter;
+        public StatusPostController(CurrentProcess process, ISmartCenter smartCenter,IStatusPostBusiness statusPostBusiness):base(process)
         {
+            m_SmartCenter = smartCenter;
             m_statusPostBusiness = statusPostBusiness;
-            m_PostBroadCastToPersonBusiness = postBroadcastPersonBusiness;
         }
         [HttpPost]
-        [Route("api/statuspost/create")]
+        [Route("api/StatusPost/create")]
         public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
-            //StatusPost post = null;
-
-            //post = new StatusPost();
-            //post.Comments = 10;
-            //post.Content = $"The status post #1";
-            //post.PostTime = DateTime.Today.ToString("yyyy/MM/dd");
-            //post.PostBy = new Author();
-            //post.PostBy.AuthorId = "5ad6c5298895ac2a78afd1ac";
-            //post.PostBy.DisplayName = "Linh Diệu";
-            //post.PostBy.AuthorTypeId = (int)AuthorTypeEnum.Person;
-            StatusPost created = await m_statusPostBusiness.Post(model);
-
-            //StatusPost post = await m_statusPostBusiness.Post(model);
-            return Json(created);
+            StatusPost post = await m_statusPostBusiness.Post(model);
+            bool result = false;
+            if(post!=null)
+            {
+                result = await m_SmartCenter.BroadcastToPerson(model);
+            }
+            return ToResponse(result);
         }
         [HttpGet]
         [Route("api/statuspost/get/{postId}")]

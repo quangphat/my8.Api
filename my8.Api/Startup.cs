@@ -129,6 +129,16 @@ namespace my8.Api
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (OperationCanceledException)
+                {
+                }
+            });
             app.UseStaticFiles();
             app.UseCors("AllowSpecificOrigin");
             app.UseSignalR(routes =>
