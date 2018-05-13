@@ -100,11 +100,13 @@ namespace my8.Api.Repository.Mongo
                 return false;
             }
         }
-        public async Task<bool> UpdateComments(StatusPost post)
+        public async Task<bool> UpdateComments(string postId)
         {
-            var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, post.Id);
+            var filter = Builders<StatusPost>.Filter.Eq(p => p.Id, postId);
+            StatusPost post = await Get(postId);
+            if (post == null) return false;
             var update = Builders<StatusPost>.Update
-                            .Set(s => s.Comments, post.Comments);
+                            .Set(s => s.Comments, post.Comments+1);
             try
             {
                 await collection.UpdateOneAsync(filter, update);

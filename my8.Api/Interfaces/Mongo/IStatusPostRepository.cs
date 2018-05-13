@@ -14,7 +14,7 @@ namespace my8.Api.Interfaces.Mongo
         Task<bool> UpdatePost(StatusPost post);
         Task<bool> UpdateLikes(StatusPost post);
         Task<bool> UpdateShares(StatusPost post);
-        Task<bool> UpdateComments(StatusPost post);
+        Task<bool> UpdateComments(string postId);
         Task<bool> UpdateViews(StatusPost post);
         Task<bool> Active(string postId,bool active);
         Task<bool> DeletePost(string postId);

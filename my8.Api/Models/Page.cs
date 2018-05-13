@@ -13,7 +13,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("Id")]
-        [JsonProperty(PropertyName = "Id")]
+        [JsonProperty(PropertyName = "PageId")]
         public string PageId { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }

@@ -49,7 +49,7 @@ namespace my8.Api.Business
 
         public async Task<bool> UpdateComments(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateComments(post);
+            return await m_StatuspostRepositoryM.UpdateComments(post.Id);
         }
 
         public async Task<bool> UpdateLikes(StatusPost post)

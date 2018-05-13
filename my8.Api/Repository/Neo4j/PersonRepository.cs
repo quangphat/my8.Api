@@ -50,7 +50,7 @@ namespace my8.Api.Repository.Neo4j
             {
                 await client.Cypher
                 .Match("(u1:Person{Id:'" + sendBy + "'})", "(u2:Person{Id:'" + sendTo + "'})")
-                .Merge("(u1)-[r:Friend{Sendby:'" + sendBy + "',SendDate:'" + DateTime.Today.ToString("yyyy-MM-dd") + "',IPp:0}]->(u2)")
+                .Merge("(u1)-[r:Friend{Sendby:'" + sendBy + "',SendDate:'" + DateTime.Today.ToString("yyyy/MM/dd") + "',IPp:0}]->(u2)")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }

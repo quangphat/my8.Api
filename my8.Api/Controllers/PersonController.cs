@@ -70,11 +70,11 @@ namespace my8.Api.Controllers
             return Json(lstPerson);
         }
         [HttpGet]
-        [Route("api/person/get-followingpage/{id}")]
+        [Route("api/person/FollowingPage/{id}")]
         public async Task<IActionResult> GetFollowingPage(string id)
         {
             List<Page> lstPage = await m_PersonBusiness.GetFollowingPage(id);
-            return Json(lstPage);
+            return ToResponse(lstPage);
         }
         [HttpPost]
         [Route("api/person/followpage/{personId}/{pageId}")]

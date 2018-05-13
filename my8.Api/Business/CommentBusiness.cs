@@ -15,14 +15,20 @@ namespace my8.Api.Business
     public class CommentBusiness : ICommentBusiness
     {
         MongoI.ICommentRepository m_CommentRepositoryM;
-        public CommentBusiness(MongoI.ICommentRepository commentRepoM)
+        MongoI.IStatusPostRepository m_StatusPostRepository;
+        public CommentBusiness(MongoI.ICommentRepository commentRepoM,MongoI.IStatusPostRepository statusPostRepository)
         {
             m_CommentRepositoryM = commentRepoM;
+            m_StatusPostRepository = statusPostRepository;
         }
         public async Task<Comment> Create(Comment comment)
         {
             string id = await m_CommentRepositoryM.Create(comment);
-            comment.Id = id;
+            if(!string.IsNullOrWhiteSpace(id))
+            {
+                comment.Id = id;
+                bool updateComment = await m_StatusPostRepository.UpdateComments(comment.PostId);
+            }
             return comment;
         }
 
