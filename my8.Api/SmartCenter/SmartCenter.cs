@@ -245,7 +245,7 @@ namespace my8.Api.SmartCenter
             await Task.WhenAll(jobPostsTask, statusPostsTask);
             List<Feed> postAllTypes = Mapper.Map<List<Feed>>(jobPostsTask.Result);
             postAllTypes.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
-            return postAllTypes;
+            return postAllTypes.OrderByDescending(p=>p.PostTime).ToList();
         }
         private async Task<List<JobPost>> GetJobPost(List<PostBroadcastPerson> postBroadcastPeople)
         {
@@ -261,14 +261,14 @@ namespace my8.Api.SmartCenter
         {
             string[] ids = new string[] { };
             if (lstJobPostBroadCast == null) return ids;
-            await Task.Run(() => { ids= lstJobPostBroadCast.Where(p => p.PostType == PostTypeEnum.JobPost).Select(p => p.PostId).ToArray(); });
+            await Task.Run(() => { ids= lstJobPostBroadCast.Where(p => p.PostType == PostTypeEnum.JobPost).OrderBy(p=>p.KeyTime).Select(p => p.PostId).ToArray(); });
             return ids; 
         }
         private async Task<string[]> GetStatusPostIdArray(List<PostBroadcastPerson> lstStatusPostBroadCast)
         {
             string[] ids = new string[] { };
             if (lstStatusPostBroadCast == null) return ids;
-            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostTypeEnum.StatusPost).Select(p => p.PostId).ToArray(); });
+            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostTypeEnum.StatusPost).OrderBy(p=>p.KeyTime).Select(p => p.PostId).ToArray(); });
             return ids;
         }
 

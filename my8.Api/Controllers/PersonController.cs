@@ -23,7 +23,7 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> Login([FromBody] Person model)
         {
             Person account = await m_PersonBusiness.Login(model);
-            return Json(account);
+            return ToResponse(account);
         }
         [HttpPost]
         [Route("api/person/create")]
