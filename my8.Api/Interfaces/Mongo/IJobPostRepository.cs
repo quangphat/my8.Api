@@ -8,7 +8,7 @@ namespace my8.Api.Interfaces.Mongo
     {
         Task<List<JobPost>> Gets(string[] id);
         Task<JobPost> Get(string postId);
-        Task<List<JobPost>> GetByAuthor(ShortPerson author);
+        Task<List<JobPost>> GetByAuthor(Author author);
         Task<string> Post(JobPost post);
         Task<bool> UpdatePost(JobPost post);
         Task<bool> UpdateLikes(JobPost post);

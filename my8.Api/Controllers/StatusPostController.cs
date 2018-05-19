@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
 using my8.Api.Infrastructures;
+using my8.Api.Interfaces.SmartCenter;
 using my8.Api.Models;
 using my8.Api.my8Enum;
 using my8.Api.SmartCenter;
@@ -17,10 +18,10 @@ namespace my8.Api.Controllers
     {
         IStatusPostBusiness m_statusPostBusiness;
         IPostBroadcastPersonBusiness m_PostBroadCastToPersonBusiness;
-        ISmartCenter m_SmartCenter;
-        public StatusPostController(CurrentProcess process, ISmartCenter smartCenter,IStatusPostBusiness statusPostBusiness):base(process)
+        IFeedSmart m_FeedSmart;
+        public StatusPostController(CurrentProcess process, IFeedSmart feedSmart,IStatusPostBusiness statusPostBusiness):base(process)
         {
-            m_SmartCenter = smartCenter;
+            m_FeedSmart = feedSmart;
             m_statusPostBusiness = statusPostBusiness;
         }
         [HttpPost]
@@ -31,7 +32,7 @@ namespace my8.Api.Controllers
             bool result = false;
             if(post!=null)
             {
-                result = await m_SmartCenter.BroadcastToPerson(model);
+                result = await m_FeedSmart.BroadcastToPerson(model);
             }
             return ToResponse(result);
         }
@@ -44,7 +45,7 @@ namespace my8.Api.Controllers
         }
         [HttpPost]
         [Route("api/statuspost/getbyauthor")]
-        public async Task<IActionResult> GetByAuthor([FromBody] ShortPerson author)
+        public async Task<IActionResult> GetByAuthor([FromBody] Author author)
         {
             List<StatusPost> lstStatusPost = await m_statusPostBusiness.GetByAuthor(author);
             return Json(lstStatusPost);

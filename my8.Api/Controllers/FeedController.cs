@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
 using my8.Api.Infrastructures;
+using my8.Api.Interfaces.SmartCenter;
 using my8.Api.Models;
 using my8.Api.SmartCenter;
 
@@ -14,16 +15,16 @@ namespace my8.Api.Controllers
     [Produces("application/json")]
     public class FeedController : BaseController
     {
-        ISmartCenter m_SmartCenter;
-        public FeedController(CurrentProcess process, ISmartCenter smart):base(process)
+        IFeedSmart m_FeedSmart;
+        public FeedController(CurrentProcess process, IFeedSmart feedSmart):base(process)
         {
-            m_SmartCenter = smart;
+            m_FeedSmart = feedSmart;
         }
         [HttpGet]
         [Route("api/Feed/get/{personId}/{skip}")]
         public async Task<IActionResult> Gets(string personId,int skip)
         {
-            List<Feed> lstPost = await m_SmartCenter.GetPosts(personId, skip);
+            List<Feed> lstPost = await m_FeedSmart.GetPosts(personId, skip);
             return ToResponse(lstPost);
         }
 		//[HttpPost]

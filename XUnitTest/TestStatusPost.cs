@@ -30,7 +30,7 @@ namespace XUnitTest
             post.Images = null;
             post.Privacy = (int)PostPrivacyEnum.All;
             post.Content = "Today is Sunday";
-            ShortPerson user = new ShortPerson();
+            Author user = new Author();
             user.DisplayName = "Quang Phát";
             user.AuthorId = "5ac9be056272224af07b79d3";
             user.AuthorTypeId = (int)AuthorTypeEnum.Person;
@@ -49,7 +49,7 @@ namespace XUnitTest
         [Fact]
         public async Task Test_GetStatusPostByAuthor()
         {
-            ShortPerson user = new ShortPerson();
+            Author user = new Author();
             user.DisplayName = "Quang Phát";
             user.AuthorId = "5ac9be056272224af07b79d3";
             user.AuthorTypeId = (int)AuthorTypeEnum.Person;

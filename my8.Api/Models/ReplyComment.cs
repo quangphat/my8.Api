@@ -9,7 +9,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public ShortPerson ReplyBy { get; set; }
+        public Author ReplyBy { get; set; }
         public string ReplyTime { get; set; }
         public string EditedTime { get; set; }
         public int Likes { get; set; }

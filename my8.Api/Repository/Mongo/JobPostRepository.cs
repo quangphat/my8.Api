@@ -142,7 +142,7 @@ namespace my8.Api.Repository.Mongo
         }
 
 
-        public async Task<List<JobPost>> GetByAuthor(ShortPerson author)
+        public async Task<List<JobPost>> GetByAuthor(Author author)
         {
             var filterBuilder = Builders<JobPost>.Filter;
             filter = filterBuilder.Eq(p => p.PostBy.AuthorId, author.AuthorId) & filterBuilder.Eq(p => p.PostBy.AuthorTypeId, author.AuthorTypeId);

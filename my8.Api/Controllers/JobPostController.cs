@@ -50,7 +50,7 @@ namespace my8.Api.Controllers
         }
         [HttpPost]
         [Route("api/JobPost/getbyauthor")]
-        public async Task<IActionResult> GetByAuthor([FromBody] ShortPerson author)
+        public async Task<IActionResult> GetByAuthor([FromBody] Author author)
         {
             List<JobPost> lstStatusPost = await m_JobPostBusiness.GetByAuthor(author);
             return Json(lstStatusPost);

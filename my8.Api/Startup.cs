@@ -21,6 +21,7 @@ using my8.Api.Business;
 using my8.Api.SmartCenter;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.Mvc;
+using my8.Api.Interfaces.SmartCenter;
 
 namespace my8.Api
 {
@@ -64,7 +65,7 @@ namespace my8.Api
             MapConfig.Config(services);
             services.AddScoped<NotificationHub>();
             //SmartCenter
-            services.AddScoped<ISmartCenter, SmartCenter.SmartCenter>();
+            services.AddScoped<IFeedSmart, FeedSmart>();
             services.AddScoped<IClientAuthorizeBusiness, ClientAuthorizeBusiness>();
             //Business
             services.AddScoped<IPageBusiness, PageBusiness>();

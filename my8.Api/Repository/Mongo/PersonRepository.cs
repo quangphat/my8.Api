@@ -50,7 +50,7 @@ namespace my8.Api.Repository.Mongo
             return await collection.Find($@"{{'$or':[{{'Experience':{{'$gte':{min}}}}},{{'Experience':{{'$lte':{max}}}}}]}}").ToListAsync();
         }
 
-        //public async Task<List<ShortPerson>> SearchByEmploymentType(string keySearchs)
+        //public async Task<List<Author>> SearchByEmploymentType(string keySearchs)
         //{
         //    return await shortPersonCollection.Find($@"{{'KeySearchs':{{ '$in':[{keySearchs}]}}}}").ToListAsync();
         //}

@@ -9,10 +9,11 @@ using my8.Api.Models;
 using AutoMapper;
 using my8.Api.my8Enum;
 using my8.Api.Infrastructures;
+using my8.Api.Interfaces.SmartCenter;
 
 namespace my8.Api.SmartCenter
 {
-    public class SmartCenter:ISmartCenter
+    public class FeedSmart:IFeedSmart
     {
         private const int MAX_LIMIT = 100;
 
@@ -23,7 +24,7 @@ namespace my8.Api.SmartCenter
         NeoI.ICommunityRepository m_CommunityRepositoryN;
         MongoI.IStatusPostRepository m_StatusPostRepository;
         MongoI.IJobPostRepository m_JobPostRepository;
-        public SmartCenter(MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository
+        public FeedSmart(MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository
             ,NeoI.IPersonRepository personRepositoryN
             ,NeoI.IPageRepository pageRepositoryN
             ,NeoI.ICommunityRepository CommunityRepositoryN
@@ -153,7 +154,7 @@ namespace my8.Api.SmartCenter
                 return false;
             }
         }
-        private async Task<List<PersonAllin>> GetPersonInvolve(ShortPerson author)
+        private async Task<List<PersonAllin>> GetPersonInvolve(Author author)
         {
             int authorType = author.AuthorTypeId;
             IEnumerable<PersonAllin> people = null;
@@ -174,7 +175,7 @@ namespace my8.Api.SmartCenter
             }
             return null;
         }
-        private async Task<HashSet<string>> GetPersonIdInvolve(ShortPerson author)
+        private async Task<HashSet<string>> GetPersonIdInvolve(Author author)
         {
             int authorType = author.AuthorTypeId;
             IEnumerable<PersonAllin> people = null;

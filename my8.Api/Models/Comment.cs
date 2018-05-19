@@ -13,7 +13,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public ShortPerson Commentator { get; set; }
+        public Author Commentator { get; set; }
         public string CommentTime { get; set; }
         public string EditedTime { get; set; }
         public int Likes { get; set; }

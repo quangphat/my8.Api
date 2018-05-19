@@ -15,7 +15,7 @@ namespace my8.Api.Models
         public string Id { get; set; }
         public string PostTime { get; set; }
         public string Content { get; set; }
-        public ShortPerson PostBy { get; set; }// có thể là người/trang post, người like, người comment,...
+        public Author PostBy { get; set; }// có thể là người/trang post, người like, người comment,...
         public string EditedTime { get; set; }
         public int Likes { get; set; }
         public int Comments { get; set; } //Số comment

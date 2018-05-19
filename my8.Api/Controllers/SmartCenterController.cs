@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using my8.Api.IBusiness;
 using my8.Api.Infrastructures;
+using my8.Api.Interfaces.SmartCenter;
 using my8.Api.Models;
 using my8.Api.SmartCenter;
 
@@ -15,12 +16,12 @@ namespace my8.Api.Controllers
     [Produces("application/json")]
     public class SmartCenterController : BaseController
     {
-        ISmartCenter m_SmartCenter;
+        IFeedSmart m_FeedSmart;
         NotificationHub m_NotificationHub;
         private readonly IHubContext<NotificationHub> _hubContext;
-        public SmartCenterController(CurrentProcess process, ISmartCenter smartCenter,NotificationHub notificationHub, IHubContext<NotificationHub> hubContext):base(process)
+        public SmartCenterController(CurrentProcess process, IFeedSmart feedSmart,NotificationHub notificationHub, IHubContext<NotificationHub> hubContext):base(process)
         {
-            m_SmartCenter = smartCenter;
+            m_FeedSmart = feedSmart;
             m_NotificationHub = notificationHub;
             _hubContext = hubContext;
         }
