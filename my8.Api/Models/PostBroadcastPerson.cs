@@ -13,9 +13,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string PersonId { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
+        public string AuthorId { get; set; }
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
         public string KeyTime { get; set; }
@@ -26,9 +24,7 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string PersonId { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
+        public string AuthorId { get; set; }
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
         public string PostTime { get; set; }

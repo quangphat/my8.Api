@@ -15,7 +15,7 @@ namespace my8.Api.SmartCenter
 {
     public class FeedSmart:IFeedSmart
     {
-        private const int MAX_LIMIT = 100;
+        private const int MAX_LIMIT = 20;
 
         MongoI.IPostBroadcastPersonRepository m_PostbroadcastPersonRepositoryM;
         MongoI.IPersonRepository m_PersonRepositoryM;
@@ -62,7 +62,7 @@ namespace my8.Api.SmartCenter
                 {
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = post.Id;
-                    postBroadcast.PersonId = people[i].Person.PersonId;
+                    postBroadcast.AuthorId = people[i].Person.PersonId;
                     postBroadcast.PostType = PostTypeEnum.StatusPost;
                     postBroadcast.KeyTime = post.PostTime;
                     tasks.Add(Task.Run(() =>
@@ -138,7 +138,7 @@ namespace my8.Api.SmartCenter
                 {
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = jobPost.Id;
-                    postBroadcast.PersonId = allPersonId[i];
+                    postBroadcast.AuthorId = allPersonId[i];
                     postBroadcast.PostType = PostTypeEnum.JobPost;
                     postBroadcast.KeyTime = jobPost.PostTime;
                     lastTasks.Add(Task.Run(() =>
