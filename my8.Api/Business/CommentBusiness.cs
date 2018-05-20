@@ -23,6 +23,7 @@ namespace my8.Api.Business
         }
         public async Task<Comment> Create(Comment comment)
         {
+            comment.CommentTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             string id = await m_CommentRepositoryM.Create(comment);
             if(!string.IsNullOrWhiteSpace(id))
             {
@@ -51,7 +52,8 @@ namespace my8.Api.Business
             {
                 StatusPost post = new StatusPost();
                 post.Id = postId;
-                return await m_CommentRepositoryM.GetByPost(post,skip,Utils.LIMIT_ROW);
+                List<Comment> comments = await m_CommentRepositoryM.GetByPost(post, skip, Utils.LIMIT_ROW);
+                return comments.OrderBy(p => p.CommentTime).ToList();
             }
             if(postType == (int)PostTypeEnum.JobPost)
             {
