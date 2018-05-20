@@ -1,6 +1,9 @@
 ﻿
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace my8.Api
@@ -14,9 +17,13 @@ namespace my8.Api
             string names = Context.User.Identity.Name;
             //Clients.Group(names).InvokeAsync("dd",names, message);
         }
-        public List<string> GetlistString()
+        public override async Task OnConnectedAsync()
         {
-            return new List<string>();
+            
+            await Groups.AddAsync(Context.ConnectionId, "SignalR Users");
+            await base.OnConnectedAsync();
+            string id = Context.ConnectionId;
+            string value = Context.GetHttpContext().Request.Cookies[""];
         }
     }
 }

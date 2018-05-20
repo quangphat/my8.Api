@@ -48,7 +48,7 @@ namespace my8.Api
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:51827").AllowAnyHeader()
+                    builder => builder.WithOrigins("http://localhost:14021").AllowAnyHeader()
                     .AllowAnyMethod().AllowCredentials());
             });
 
@@ -148,7 +148,7 @@ namespace my8.Api
                 routes.MapHub<NotificationHub>("/notification");
             });
 
-           // app.UseMiddleware<ClientAuthorizeMiddleware>();
+            app.UseMiddleware<ClientAuthorizeMiddleware>();
             app.UseMiddleware<HandShakeAuthorizeMiddleware>();
             app.UseMvc();
             

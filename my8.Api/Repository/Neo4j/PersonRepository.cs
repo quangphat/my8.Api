@@ -165,7 +165,7 @@ namespace my8.Api.Repository.Neo4j
                 .OptionalMatch("(u:Person{Id:'" + userId + "'})-[:Follow]-(p:Page)")
                 .Return(p => p.As<Page>())
                 .ResultsAsync;
-            return pages;
+            return pages.Where(p=>p!=null);
         }
         public async Task<bool> FollowPage(string currentPersonId, string pageId)
         {
