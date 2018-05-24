@@ -32,7 +32,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                    .Match("(c:Community{Id:'" + Community.CommunityId + "'})")
+                    .Match($@"(c:Community{{Id:'{Community.CommunityId}'}})")
                     .Set($"c.DisplayName='{Community.DisplayName}'")
                     .Set($"c.Rate={Community.Rate}")
                     .Set($"c.Avatar='{Community.Avatar}'")
@@ -46,9 +46,7 @@ namespace my8.Api.Repository.Neo4j
         }
         public async Task<CommunityAllin> Get(string id)
         {
-            IEnumerable<CommunityAllin> Communitys = await client.Cypher.Match("(c:Community{Id:{id}})")
-                .WithParam("id", id)
-                .OptionalMatch("(c)-[j:Join]-(p:Person)")
+            IEnumerable<CommunityAllin> Communitys = await client.Cypher.Match($@"(c:Community{{Id:{id}}}) optional match (c)-[j:Join]-(p:Person)")
                 .Return((c,j)=>new CommunityAllin {
                     Community = c.As<Community>(),
                     Joins = (int)j.Count()
@@ -60,20 +58,16 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match("(u:Person{Id:'" + personId + "'})", "(c:Community{Id:'" + CommunityId + "'})")
-                .Create("(u)-[:Join{PCIp:0}]->(c)")
+                .Match($@"(u:Person{{Id:'{personId}'}}),(c:Community{{Id:'{CommunityId}'}}) create (u)-[:Join{{PCIp:0}}]->(c)")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
             catch { return false; }
         }
-        public async Task<IEnumerable<PersonAllin>> GetMembers(string CommunityId)
+        public async Task<IEnumerable<PersonAllin>> GetMembers(string communityId)
         {
             IEnumerable<PersonAllin> result = await client.Cypher
-                .Match("(c:Community{Id:{id}})")
-                .WithParams(new { id = CommunityId })
-                .OptionalMatch("(c)-[j:Join]-(u:Person)")
-                .With("u,j")
+                .Match($@"(c:Community{{Id:{{{communityId}}}) optional match (c)-[j:Join]-(u:Person) with u,j")
                 .Return((u, j) => new PersonAllin
                 {
                     Person = u.As<Person>(),
@@ -86,9 +80,7 @@ namespace my8.Api.Repository.Neo4j
         {
             try
             {
-                await client.Cypher.Match("(c:Community{Id:'" + CommunityId + "'}),(p:Person{Id:'" + personId + "'})")
-                    .OptionalMatch("(c)-[j:Join]-(p)")
-                    .Delete("j")
+                await client.Cypher.Match($@"(c:Community{{Id:'{CommunityId}'}}),(p:Person{{Id:'{personId}'}}) optional match (c)-[j:Join]-(p) delete j")
                     .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -97,10 +89,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<CommunityAllin>> Search(string searchStr, int skip, int limit)
         {
             IEnumerable<CommunityAllin> Communitys = await client.Cypher
-                .Match("(c:Community)")
-                .Where($"Lower(c.DisplayName) contains '{searchStr}'  with count(c) as Total ")
-                .Match($"(c:Page) where Lower(c.DisplayName) contains '{searchStr}'")
-                .OptionalMatch("(c)-[j:Join]-(u:Person)")
+                .Match($"(c:Community) where Lower(c.DisplayName) contains '{searchStr}'  with count(c) as Total match (c:Page) where Lower(c.DisplayName) contains '{searchStr}' optional match (c)-[j:Join]-(u:Person)")
                 .Return((c, Total, j) => new CommunityAllin
                 {
                     Community = c.As<Community>(),

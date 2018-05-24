@@ -36,7 +36,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                    .Match("(p:Page{Id:'" + page.PageId + "'})")
+                    .Match($@"(p:Page{{Id:'{page.PageId}'}})")
                     .Set($"p.DisplayName='{page.DisplayName}'")
                     .Set($"p.Rate={page.Rate}")
                     .Set($"p.Avatar='{page.Avatar}'")
@@ -50,9 +50,7 @@ namespace my8.Api.Repository.Neo4j
         }
         public async Task<PageAllin> Get(string id)
         {
-            IEnumerable<PageAllin> pages = await client.Cypher.Match("(p:Page{Id:{id}})")
-                .WithParam("id", id)
-                .OptionalMatch("(p)-[f:Follows]-(u:Person)")
+            IEnumerable<PageAllin> pages = await client.Cypher.Match($@"(p:Page{{Id:{id}}}) optional match (p)-[f:Follows]-(u:Person)")
                 .Return((p, f) => new PageAllin
                 {
                     Page = p.As<Page>(),
@@ -64,10 +62,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<PersonAllin>> GetPersonFollow(string pageId)
         {
             IEnumerable<PersonAllin> result = await client.Cypher
-                .Match("(p:Page{Id:{id}})")
-                .WithParams(new { id = pageId })
-                .OptionalMatch("(p)-[f:Follow]-(u:Person)")
-                .With("u,f")
+                .Match($@"(p:Page{{Id:{pageId}}}) optional match (p)-[f:Follow]-(u:Person) with u,f")
                 .Return((u, f) => new PersonAllin {
                     Person = u.As<Person>(),
                     FollowPage = f.As<FollowEdge>()
@@ -78,8 +73,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<Page>> Search(string searchStr,int limit)
         {
             IEnumerable<Page> pages = await client.Cypher
-                .Match("(p:Page)")
-                .Where($"Lower(p.DisplayName) contains '{searchStr}'")
+                .Match($"(p:Page) where Lower(p.DisplayName) contains '{searchStr}'")
                 .Return(p => p.As<Page>())
                 .OrderBy("p.PageIPoint")
                 .Limit(limit)
@@ -89,11 +83,7 @@ namespace my8.Api.Repository.Neo4j
         public async Task<IEnumerable<PageAllin>> Search(string searchStr,int skip, int limit)
         {
             IEnumerable<PageAllin> pages = await client.Cypher
-                .Match("(p:Page)")
-                .Where($"Lower(p.DisplayName) contains '{searchStr}'  with count(p) as Total ")
-                .Match("(p:Page)")
-                .Where($"Lower(p.DisplayName) contains '{searchStr}'")
-                .OptionalMatch("(p)-[f:Follow]-(u:Person)")
+                .Match($"(p:Page) where Lower(p.DisplayName) contains '{searchStr}'  with count(p) as Total match(p:Page) where Lower(p.DisplayName) contains '{searchStr}' optional match (p)-[f:Follow]-(u:Person)")
                 .Return((p,Total,f)=>new PageAllin {
                     Page = p.As<Model.Page>(),
                     Total = Total.As<int>(),
