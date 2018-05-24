@@ -133,5 +133,13 @@ namespace my8.Api.Controllers
             bool result = await m_PersonBusiness.JoinCommunity(id, CommunityId);
             return Json(result);
         }
+
+        [HttpGet]
+        [Route("api/person/get-recommendpages/{id}/{limit}")]
+        public async Task<IActionResult> GetRecommendPages(string id, int limit)
+        {
+            List<Page> pages = await m_PersonBusiness.GetRecommendPage(id, limit);
+            return Json(pages);
+        }
     }
 }

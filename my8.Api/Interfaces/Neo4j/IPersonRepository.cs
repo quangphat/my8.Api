@@ -21,6 +21,8 @@ namespace my8.Api.Interfaces.Neo4j
         Task<bool> FollowPage(string currentPersonId, string pageId);
         Task<bool> UnFollowPage(string currentPersonID, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);
+        Task<IEnumerable<Page>> GetRecommendPage(string personId, int limit);
+
 
         Task<IEnumerable<Community>> GetJoiningCommunitys(string userId);
         Task<bool> JoinCommunity(string currentPersonId, string CommunityId);

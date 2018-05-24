@@ -24,6 +24,7 @@ namespace my8.Api.IBusiness
         Task<bool> UnFollowPage(string currentPersonId, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);
         Task<List<Page>> GetFollowingPage(string userId);
+        Task<List<Page>> GetRecommendPage(string personId, int limit);
 
         Task<List<Community>> GetJoiningCommunitys(string personId);
         Task<bool> JoinCommunity(string currentPersonId, string CommunityId);

@@ -133,5 +133,11 @@ namespace my8.Api.Business
             Person person = await m_personRepositoryS.Login(model.Email,model.Password);
             return person;
         }
+
+        public async Task<List<Page>> GetRecommendPage(string personId, int limit)
+        {
+            IEnumerable<Page> pages = await m_personRepositoryN.GetRecommendPage(personId, limit);
+            return pages.ToList();
+        }
     }
 }

@@ -167,7 +167,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{Id:'{pageId}'}}) create (u)-[:Follow{{PPIp:0}}]->(p)")
+                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{PageId:'{pageId}'}}) create (u)-[:Follow{{PPIp:0}}]->(p)")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -182,7 +182,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{Id:'{pageId}'}}) delete r")
+                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{PageId:'{pageId}'}}) delete r")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -193,7 +193,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                   .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{Id:'{pageId}'}}) optional match (u)-[r:Follow]-(p) set r.PPIp = r.PPIp+1")
+                   .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{PageId:'{pageId}'}}) optional match (u)-[r:Follow]-(p) set r.PPIp = r.PPIp+1")
                    .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -244,5 +244,14 @@ namespace my8.Api.Repository.Neo4j
             catch { return false; }
         }
 
+        public async Task<IEnumerable<Page>> GetRecommendPage(string personId, int limit)
+        {
+            IEnumerable<Page> pages = await client.Cypher
+                .Match($@"(p:Page),(n:Person{{Id:'{personId}'}})  with p,n order by p.interactive desc where not (n)-[:Follow]-(p)")
+                .Return(p => p.As<Page>())
+                .Limit(limit)
+                .ResultsAsync;
+            return pages;
+        }
     }
 }

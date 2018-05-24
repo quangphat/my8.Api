@@ -148,7 +148,7 @@ namespace my8.Api
                 routes.MapHub<NotificationHub>("/notification");
             });
 
-            app.UseMiddleware<ClientAuthorizeMiddleware>();
+            //app.UseMiddleware<ClientAuthorizeMiddleware>();
             app.UseMiddleware<HandShakeAuthorizeMiddleware>();
             app.UseMvc();
             
