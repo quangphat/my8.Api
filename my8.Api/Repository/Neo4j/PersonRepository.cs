@@ -182,7 +182,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{PageId:'{pageId}'}}) delete r")
+                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(p:Page{{PageId:'{pageId}'}}) optional match (u)-[r:Follow]-(p) delete r")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
@@ -226,7 +226,7 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher
-                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(c:Community{{Id:'{CommunityId}'}}) delete r")
+                .Match($@"(u:Person{{Id:'{currentPersonId}'}}),(c:Community{{Id:'{CommunityId}'}}) optional match (u)-[r:Join]-(c) delete r")
                 .ExecuteWithoutResultsAsync();
                 return true;
             }
