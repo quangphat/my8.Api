@@ -62,7 +62,7 @@ namespace my8.Api.SmartCenter
                 {
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = post.Id;
-                    postBroadcast.AuthorId = people[i].Person.PersonId;
+                    postBroadcast.AuthorId = people[i].Person.Id;
                     postBroadcast.PostType = PostTypeEnum.StatusPost;
                     postBroadcast.KeyTime = post.PostTime;
                     tasks.Add(Task.Run(() =>
@@ -182,17 +182,17 @@ namespace my8.Api.SmartCenter
             if (authorType == (int)AuthorTypeEnum.Person)
             {
                 people = await m_PersonRepositoryN.GetFriends(author.AuthorId);
-                return people.Select(p=>p.Person.PersonId).ToHashSet();
+                return people.Select(p=>p.Person.Id).ToHashSet();
             }
             if (authorType == (int)AuthorTypeEnum.Page)
             {
                 people = await m_PageRepositoryN.GetPersonFollow(author.AuthorId);
-                return people.Select(p => p.Person.PersonId).ToHashSet();
+                return people.Select(p => p.Person.Id).ToHashSet();
             }
             if (authorType == (int)AuthorTypeEnum.Community)
             {
                 people = await m_CommunityRepositoryN.GetMembers(author.AuthorId);
-                return people.Select(p => p.Person.PersonId).ToHashSet();
+                return people.Select(p => p.Person.Id).ToHashSet();
             }
             return null;
         }

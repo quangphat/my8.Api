@@ -13,6 +13,7 @@ namespace my8.Api.Business
 {
     public class PersonBusiness : IPersonBusiness
     {
+        const int TOP = 10;
         MongoI.IPersonRepository m_personRepositoryM;
         NeoI.IPersonRepository m_personRepositoryN;
         SqlI.IPersonRepository m_personRepositoryS;
@@ -86,9 +87,9 @@ namespace my8.Api.Business
             IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetFriends(personId);
             return friends.ToList();
         }
-        public async Task<List<PersonAllin>> GetTopFriendInteractive(Person currentPerson, int top)
+        public async Task<List<PersonAllin>> GetTopFriendInteractive(string personId)
         {
-            IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetTopFriendInteractive(currentPerson, top);
+            IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetTopFriendInteractive(personId, TOP);
             return friends.ToList();
         }
         public async Task<List<Page>> GetFollowingPage(string personId)

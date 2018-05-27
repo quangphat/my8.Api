@@ -141,5 +141,12 @@ namespace my8.Api.Controllers
             List<Page> pages = await m_PersonBusiness.GetRecommendPage(id, limit);
             return Json(pages);
         }
+        [HttpGet]
+        [Route("api/person/getTopInteractiveFriends/{personId}")]
+        public async Task<IActionResult> GetTopInteractiveFriends(string personId)
+        {
+            List<PersonAllin> shortPeople = await m_PersonBusiness.GetTopFriendInteractive(personId);
+            return ToResponse(shortPeople);
+        }
     }
 }

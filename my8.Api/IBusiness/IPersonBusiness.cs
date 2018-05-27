@@ -19,7 +19,7 @@ namespace my8.Api.IBusiness
         Task<bool> AddFriend(string sendBy, string sendTo);
         Task<bool> UnFriend(string sendBy, string sendTo);
         Task<List<PersonAllin>> GetAllFriend(string personId);
-        Task<List<PersonAllin>> GetTopFriendInteractive(Person currentPerson, int top);
+        Task<List<PersonAllin>> GetTopFriendInteractive(string personId);
         Task<bool> FollowPage(string currentPersonId, string pageId);
         Task<bool> UnFollowPage(string currentPersonId, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);

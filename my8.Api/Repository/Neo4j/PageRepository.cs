@@ -64,7 +64,7 @@ namespace my8.Api.Repository.Neo4j
             IEnumerable<PersonAllin> result = await client.Cypher
                 .Match($@"(p:Page{{Id:{pageId}}}) optional match (p)-[f:Follow]-(u:Person) with u,f")
                 .Return((u, f) => new PersonAllin {
-                    Person = u.As<Person>(),
+                    Person = u.As<ShortPerson>(),
                     FollowPage = f.As<FollowEdge>()
                 }).ResultsAsync;
             return result;

@@ -86,7 +86,7 @@ namespace my8.Api.Repository.Neo4j
                 .Match($@"(user:Person{{Id:'{personId}'}})-[:Friend]-(u:Person) optional match (user)-[:Friend]-(common:Person)-[:Friend]-(u) where u.Id<>'{personId}'")
                 .Return((u, common) => new PersonAllin
                 {
-                    Person = u.As<Person>(),
+                    Person = u.As<ShortPerson>(),
                     CommonFriend = (int)common.Count()
                 })
                 .ResultsAsync;
@@ -94,13 +94,13 @@ namespace my8.Api.Repository.Neo4j
         }
 
 
-        public async Task<IEnumerable<PersonAllin>> GetTopFriendInteractive(Person currentPerson, int top)
+        public async Task<IEnumerable<PersonAllin>> GetTopFriendInteractive(string personId, int top)
         {
             IEnumerable<PersonAllin> lstPerson = await client.Cypher
-                .Match($@"(u1:Person{{Id:'{currentPerson.PersonId}'}})-[f:Friend]-(friend:Person)")
+                .Match($@"(u1:Person{{Id:'{personId}'}})-[f:Friend]-(friend:Person)")
                 .Return((friend, f) => new PersonAllin
                 {
-                    Person = friend.As<Person>(),
+                    Person = friend.As<ShortPerson>(),
                     Friend = f.As<FriendEdge>()
                 })
                 .OrderByDescending("f.interactive")
@@ -118,7 +118,7 @@ namespace my8.Api.Repository.Neo4j
                 .Match($@"(u1:Person{{Id:'{currentPersonId}'}}),(other:Person) where Lower(other.DisplayName) contains '{searchStr}' and other.Id<>'{currentPersonId}' optional match(u1)-[r:Friend]-(common:Person)-[:Friend]-(other) ")
                 .Return((other, common,Total) => new PersonAllin
                 {
-                    Person = other.As<Person>(),
+                    Person = other.As<ShortPerson>(),
                     CommonFriend = (int)common.Count(),
                     Total = Total.As<int>()
                 })
@@ -135,7 +135,7 @@ namespace my8.Api.Repository.Neo4j
                 .Match($@"(u1:Person{{Id:'{currentPerson.PersonId}'}}),(u2:Person{{Id:'{findingPerson.PersonId}'}}) optional match (u1)-[r:Friend]-(common:Person)-[:Friend]-(u2)")
                 .Return((u2, common) => new PersonAllin
                 {
-                    Person = u2.As<Person>(),
+                    Person = u2.As<ShortPerson>(),
                     CommonFriend = (int)common.Count()
                 })
                 .ResultsAsync;

@@ -7,7 +7,7 @@ namespace my8.Api.Models
 {
     public class PersonAllin
     {
-        public Person Person { get; set; }
+        public ShortPerson Person { get; set; }
         public FollowEdge FollowPage { get; set; }
         public FriendEdge Friend { get; set; }
         public JoinEdge JoinCommunity { get; set; }

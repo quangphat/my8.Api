@@ -7,7 +7,7 @@ namespace my8.Api.Models
 {
     public class ShortPerson
     {
-        public string PersonId { get; set; }
+        public string Id { get; set; }
         public string DisplayName { get; set; }
         public string Url { get; set; }
         public string Avatar { get; set; }

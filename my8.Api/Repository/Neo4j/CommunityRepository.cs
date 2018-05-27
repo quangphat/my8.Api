@@ -70,7 +70,7 @@ namespace my8.Api.Repository.Neo4j
                 .Match($@"(c:Community{{Id:{{{communityId}}}) optional match (c)-[j:Join]-(u:Person) with u,j")
                 .Return((u, j) => new PersonAllin
                 {
-                    Person = u.As<Person>(),
+                    Person = u.As<ShortPerson>(),
                     JoinCommunity = j.As<JoinEdge>()
                 }).ResultsAsync;
             return result;

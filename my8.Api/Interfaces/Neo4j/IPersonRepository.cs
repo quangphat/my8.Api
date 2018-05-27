@@ -12,7 +12,7 @@ namespace my8.Api.Interfaces.Neo4j
         Task<IEnumerable<Person>> FindCommonFriend(string p1, string friend);
         Task<bool> AddFriend(string sendBy, string sentTo);
         Task<bool> UnFriend(string sendBy, string sentTo);
-        Task<IEnumerable<PersonAllin>> GetTopFriendInteractive(Person currentUSer, int top);// most top interactive
+        Task<IEnumerable<PersonAllin>> GetTopFriendInteractive(string personId, int top);// most top interactive
         Task<PersonAllin> FindParticularPerson(Person currentPerson, Person findingPerson);
         Task<IEnumerable<PersonAllin>> Search(string currentPersonId, string searchStr,int skip,int limit);
         Task<bool> InteractionToFriend(Person currentPerson, Person friend);
