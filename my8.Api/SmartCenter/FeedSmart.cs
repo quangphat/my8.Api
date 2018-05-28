@@ -51,6 +51,16 @@ namespace my8.Api.SmartCenter
             bool result = await CreatePostBroadcastAsync(post);
             return result;
         }
+        public async Task<List<Feed>> GetPosts(string personId, int skip)
+        {
+            List<PostBroadcastPerson> postBroadcastPersons = await m_PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, MAX_LIMIT);
+            Task<List<JobPost>> jobPostsTask = GetJobPost(postBroadcastPersons);
+            Task<List<StatusPost>> statusPostsTask = GetStatusPost(postBroadcastPersons);
+            await Task.WhenAll(jobPostsTask, statusPostsTask);
+            List<Feed> postAllTypes = Mapper.Map<List<Feed>>(jobPostsTask.Result);
+            postAllTypes.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
+            return postAllTypes.OrderByDescending(p => p.PostTime).ToList();
+        }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
         {
             try
@@ -238,16 +248,7 @@ namespace my8.Api.SmartCenter
 
             return null;
         }
-        public async Task<List<Feed>> GetPosts(string personId,int skip)
-        {
-            List<PostBroadcastPerson> postBroadcastPersons = await m_PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, MAX_LIMIT);
-            Task<List<JobPost>> jobPostsTask = GetJobPost(postBroadcastPersons);
-            Task<List<StatusPost>> statusPostsTask = GetStatusPost(postBroadcastPersons);
-            await Task.WhenAll(jobPostsTask, statusPostsTask);
-            List<Feed> postAllTypes = Mapper.Map<List<Feed>>(jobPostsTask.Result);
-            postAllTypes.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
-            return postAllTypes.OrderByDescending(p=>p.PostTime).ToList();
-        }
+        
         private async Task<List<JobPost>> GetJobPost(List<PostBroadcastPerson> postBroadcastPeople)
         {
             string[] josbIds = await GetJobPostIdArray(postBroadcastPeople);
