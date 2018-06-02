@@ -16,7 +16,7 @@ namespace my8.Api.Models
         public string AuthorId { get; set; }
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
-        public string KeyTime { get; set; }
+        public DateTime KeyTime { get; set; }
         public int InteractivePoint { get; set; }
     }
     public class PostBroadcastPersonHidden
@@ -27,7 +27,7 @@ namespace my8.Api.Models
         public string AuthorId { get; set; }
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
-        public string PostTime { get; set; }
+        public DateTime PostTime { get; set; }
         public int InteractivePoint { get; set; }
     }
 }

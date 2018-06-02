@@ -10,8 +10,8 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public Author ReplyBy { get; set; }
-        public string ReplyTime { get; set; }
-        public string EditedTime { get; set; }
+        public DateTime ReplyTime { get; set; }
+        public DateTime EditedTime { get; set; }
         public int Likes { get; set; }
         public string PostId { get; set; }
         public string CommmentId { get; set; }

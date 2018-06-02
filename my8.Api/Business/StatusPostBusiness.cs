@@ -42,6 +42,8 @@ namespace my8.Api.Business
 
         public async Task<StatusPost> Post(StatusPost post)
         {
+            post.PostTime = DateTime.UtcNow;
+            post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             string id = await m_StatuspostRepositoryM.Post(post);
             post.Id = id;
             return post;

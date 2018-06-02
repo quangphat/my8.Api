@@ -23,7 +23,7 @@ namespace my8.Api.Business
         }
         public async Task<Comment> Create(Comment comment)
         {
-            comment.CommentTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            comment.CommentTime = DateTime.UtcNow;
             string id = await m_CommentRepositoryM.Create(comment);
             if(!string.IsNullOrWhiteSpace(id))
             {
