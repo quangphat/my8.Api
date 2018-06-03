@@ -24,6 +24,7 @@ namespace my8.Api.Business
         public async Task<Comment> Create(Comment comment)
         {
             comment.CommentTime = DateTime.UtcNow;
+            comment.CommentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             string id = await m_CommentRepositoryM.Create(comment);
             if(!string.IsNullOrWhiteSpace(id))
             {

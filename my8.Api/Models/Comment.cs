@@ -15,7 +15,9 @@ namespace my8.Api.Models
         public string Id { get; set; }
         public Author Commentator { get; set; }
         public DateTime CommentTime { get; set; }
+        public long CommentTimeUnix { get; set; }
         public DateTime EditedTime { get; set; }
+        public long EditedTimeUnix { get; set; }
         public int Likes { get; set; }
         public int Replies { get; set; } //Lượt trả lời
         public string PostId { get; set; }

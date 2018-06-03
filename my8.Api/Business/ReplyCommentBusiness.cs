@@ -20,6 +20,8 @@ namespace my8.Api.Business
         }
         public async Task<ReplyComment> Create(ReplyComment replycomment)
         {
+            replycomment.ReplyTime = DateTime.UtcNow;
+            replycomment.ReplyTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             string id = await m_ReplyCommentRepositoryM.Create(replycomment);
             replycomment.Id = id;
             return replycomment;

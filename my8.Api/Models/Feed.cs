@@ -16,26 +16,12 @@ namespace my8.Api.Models
         private DateTime _PostTime;
         public DateTime PostTime
         {
-            get
-            {
-                return _PostTime;
-            }
-            set
-            {
-                _PostTime = DateTime.UtcNow;
-            }
+            get;set;
         }
         private long _PostTimeUnix;
         public long PostTimeUnix
         {
-            get
-            {
-                return _PostTimeUnix;
-            }
-            set
-            {
-                _PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            }
+            get;set;
         }
         public string Content { get; set; }
         public Author PostBy { get; set; }// có thể là người/trang post, người like, người comment,...

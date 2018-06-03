@@ -11,7 +11,9 @@ namespace my8.Api.Models
         public string Id { get; set; }
         public Author ReplyBy { get; set; }
         public DateTime ReplyTime { get; set; }
+        public long ReplyTimeUnix { get; set; }
         public DateTime EditedTime { get; set; }
+        public long EditedTimeUnix { get; set; }
         public int Likes { get; set; }
         public string PostId { get; set; }
         public string CommmentId { get; set; }

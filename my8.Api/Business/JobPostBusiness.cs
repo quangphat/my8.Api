@@ -43,6 +43,8 @@ namespace my8.Api.Business
 
         public async Task<JobPost> Post(JobPost post)
         {
+            post.PostTime = DateTime.UtcNow;
+            post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             string id = await m_JobPostRepositoryM.Post(post);
             post.Id = id;
             return post;
