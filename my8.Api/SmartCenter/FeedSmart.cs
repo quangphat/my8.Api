@@ -59,7 +59,22 @@ namespace my8.Api.ISmartCenter
             await Task.WhenAll(jobPostsTask, statusPostsTask);
             List<Feed> postAllTypes = Mapper.Map<List<Feed>>(jobPostsTask.Result);
             postAllTypes.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
-            return postAllTypes.OrderByDescending(p => p.PostTime).ToList();
+
+            return await FilterOut(postBroadcastPersons, postAllTypes);
+        }
+        private async Task<List<Feed>> FilterOut(List<PostBroadcastPerson> postBroadcasts,List<Feed> feeds)
+        {
+            await Task.Run(() =>
+            {
+                foreach (Feed feed in feeds)
+                {
+                    PostBroadcastPerson broadcast = postBroadcasts.Where(p => p.PostId == feed.Id && (int)p.PostType == feed.PostType).FirstOrDefault();
+                    feed.Liked = broadcast.Liked;
+                    feed.BroadcastId = broadcast.Id;
+                }
+            });
+            
+            return feeds;
         }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
         {

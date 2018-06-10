@@ -28,6 +28,9 @@ namespace my8.Api.Infrastructures
             mapper.CreateMap<StatusPost, Feed>();
             mapper.CreateMap<Feed, JobPost>();
             mapper.CreateMap<JobPost, Feed>();
+            mapper.CreateMap<PostBroadcastPerson, Feed>()
+                .ForMember(a => a.Liked, b => b.MapFrom(c => c.Liked))
+                .ForMember(a => a.BroadcastId, b => b.MapFrom(c => c.Id));
 			//<AppendNewHere>
         }
     }

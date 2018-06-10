@@ -14,7 +14,7 @@ namespace my8.Api.IBusiness
         Task<StatusPost> Get(string postId);
         Task<List<StatusPost>> GetByAuthor(Author author);
         Task<bool> UpdatePost(StatusPost post);
-        Task<bool> UpdateLikes(StatusPost post);
+        Task<bool> UpdateLikes(string postId,bool like);
         Task<bool> UpdateShares(StatusPost post);
         Task<bool> UpdateComments(StatusPost post);
         Task<bool> UpdateViews(StatusPost post);

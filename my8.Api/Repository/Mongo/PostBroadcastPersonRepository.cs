@@ -32,7 +32,20 @@ namespace my8.Api.Repository.Mongo
                 return false;
             }
         }
-
+        public async Task<bool> Like(string broadcastId,bool like)
+        {
+            var update = Builders<PostBroadcastPerson>.Update
+                            .Set(s => s.Liked, like);
+            try
+            {
+                await collection.UpdateOneAsync($@"{{_id:ObjectId('{broadcastId}')}}",update);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
         public async Task<List<PostBroadcastPerson>> GetByPerson(string personId)
         {
             //filter = Builders<PostBroadcastPerson>.Filter.Regex("");

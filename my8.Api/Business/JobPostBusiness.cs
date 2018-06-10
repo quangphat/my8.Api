@@ -55,9 +55,22 @@ namespace my8.Api.Business
             return await m_JobPostRepositoryM.UpdateComments(post);
         }
 
-        public async Task<bool> UpdateLikes(JobPost post)
+        public async Task<bool> UpdateLikes(string postId,bool like)
         {
-            return await m_JobPostRepositoryM.UpdateLikes(post);
+            JobPost post = await m_JobPostRepositoryM.Get(postId);
+            if (post != null)
+            {
+                if (like)
+                {
+                    post.Likes += 1;
+                }
+                else
+                {
+                    post.Likes -= 1;
+                }
+                return await m_JobPostRepositoryM.UpdateLikes(post);
+            }
+            return false;
         }
 
         public async Task<bool> UpdatePost(JobPost post)

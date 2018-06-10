@@ -14,15 +14,9 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         private DateTime _PostTime;
-        public DateTime PostTime
-        {
-            get;set;
-        }
+        public DateTime PostTime { get;set;}
         private long _PostTimeUnix;
-        public long PostTimeUnix
-        {
-            get;set;
-        }
+        public long PostTimeUnix { get; set; }
         public string Content { get; set; }
         public Author PostBy { get; set; }// có thể là người/trang post, người like, người comment,...
         public DateTime EditedTime { get; set; }
@@ -53,5 +47,7 @@ namespace my8.Api.Models
         public string Title { get; set; }
         public string EmailToReceiveApply { get; set; }
         public int PostType { get; set; }
+        public string BroadcastId { get; set; }
+        public bool Liked { get; set; }
     }
 }

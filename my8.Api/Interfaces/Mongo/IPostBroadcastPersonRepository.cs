@@ -10,7 +10,7 @@ namespace my8.Api.Interfaces.Mongo
         Task<List<PostBroadcastPerson>> GetByPerson(string personId);
         Task<List<PostBroadcastPerson>> GetByPerson(string personId,int skip,int limit);
         Task<bool> HidePost(PostBroadcastPerson post);
-
+        Task<bool> Like(string broadcastId, bool like);
     }
 }
 
