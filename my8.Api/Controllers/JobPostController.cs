@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my8.Api.IBusiness;
 using my8.Api.Infrastructures;
-using my8.Api.Interfaces.SmartCenter;
+using my8.Api.ISmartCenter;
 using my8.Api.Models;
 using my8.Api.my8Enum;
 

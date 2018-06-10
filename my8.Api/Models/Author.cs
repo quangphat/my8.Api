@@ -10,5 +10,7 @@ namespace my8.Api.Models
         public string Avatar { get; set; }
         public string Url { get; set; }
         public int AuthorTypeId { get; set; }
+        public string WorkAs { get; set; }
+        public string Company { get; set; }
     }
 }

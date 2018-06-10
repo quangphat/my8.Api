@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace my8.Api.Interfaces.SmartCenter
+namespace my8.Api.ISmartCenter
 {
     public interface IFeedSmart
     {

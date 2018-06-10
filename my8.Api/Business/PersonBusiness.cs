@@ -140,5 +140,12 @@ namespace my8.Api.Business
             IEnumerable<Page> pages = await m_personRepositoryN.GetRecommendPage(personId, limit);
             return pages.ToList();
         }
+
+        public async Task<Person> GetByUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url)) return null;
+            url = url.Trim().ToLower();
+            return await m_personRepositoryM.GetByUrl(url);
+        }
     }
 }

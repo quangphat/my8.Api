@@ -18,10 +18,9 @@ using SqlR = my8.Api.Repository.Sql;
 using Newtonsoft.Json.Serialization;
 using my8.Api.IBusiness;
 using my8.Api.Business;
-using my8.Api.SmartCenter;
+using my8.Api.ISmartCenter;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.Mvc;
-using my8.Api.Interfaces.SmartCenter;
 
 namespace my8.Api
 {
@@ -83,6 +82,7 @@ namespace my8.Api
 			services.AddScoped<IJobPostBusiness, JobPostBusiness>();
 			services.AddScoped<ICommentBusiness, CommentBusiness>();
 			services.AddScoped<IReplyCommentBusiness, ReplyCommentBusiness>();
+			services.AddScoped<IFeedLikeBusiness, FeedLikeBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
@@ -95,7 +95,6 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IUniversityRepository, MongoR.UniversityRepository>();
 			services.AddSingleton<MongoI.IDeletedPostRepository, MongoR.DeletedPostRepository>();
 			services.AddSingleton<MongoI.ICommunityRepository, MongoR.CommunityRepository>();
-			services.AddSingleton<MongoI.IAuthorTypeRepository, MongoR.AuthorTypeRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
 			services.AddSingleton<MongoI.IPostBroadcastPersonRepository, MongoR.PostBroadcastPersonRepository>();
 			services.AddSingleton<MongoI.IIndustryRepository, MongoR.IndustryRepository>();
@@ -106,6 +105,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IDegreeRepository, MongoR.DegreeRepository>();
 			services.AddSingleton<MongoI.ISeniorityLevelRepository, MongoR.SeniorityLevelRepository>();
 			services.AddSingleton<MongoI.IReplyCommentRepository, MongoR.ReplyCommentRepository>();
+			services.AddSingleton<MongoI.IFeedLikeRepository, MongoR.FeedLikeRepository>();
 			//AppendMongoDI
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();

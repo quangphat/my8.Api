@@ -39,6 +39,12 @@ namespace my8.Api.Repository.Mongo
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
 
+        public async Task<Person> GetByUrl(string url)
+        {
+            filter = Builders<Person>.Filter.Eq(p => p.Url, url);
+            return await collection.Find(filter).FirstOrDefaultAsync();
+        }
+
         public async Task<List<Person>> SearchByDegrees(string[] keySearchs)
         {
             string formated = Utils.ArrStrToMongoSearch(keySearchs);

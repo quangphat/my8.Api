@@ -49,6 +49,13 @@ namespace my8.Api.Controllers
             return Json(person);
         }
         [HttpGet]
+        [Route("api/person/GetbyUrl/{url}")]
+        public async Task<IActionResult> GetByUrl(string url)
+        {
+            Person person = await m_PersonBusiness.GetByUrl(url);
+            return ToResponse(person);
+        }
+        [HttpGet]
         [Route("api/person/GetPersonSql/{id}")]
         public async Task<IActionResult> GetInSqlById(string id)
         {

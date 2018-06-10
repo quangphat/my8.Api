@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using my8.Api.IBusiness;
 using my8.Api.Infrastructures;
-using my8.Api.Interfaces.SmartCenter;
 using my8.Api.Models;
-using my8.Api.SmartCenter;
+using my8.Api.ISmartCenter;
 
 namespace my8.Api.Controllers
 {

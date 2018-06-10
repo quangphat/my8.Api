@@ -11,6 +11,7 @@ namespace my8.Api.IBusiness
     {
         Task<Person> Create(Person person);
         Task<Person> Get(string id);
+        Task<Person> GetByUrl(string url);
         Task<Person> GetSql(string id);
         Task<bool> Update(Person person);
         Task<List<PersonAllin>> Search(string currentPersonId, string searchStr, int skip, int limit);

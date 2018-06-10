@@ -9,9 +9,8 @@ using my8.Api.Models;
 using AutoMapper;
 using my8.Api.my8Enum;
 using my8.Api.Infrastructures;
-using my8.Api.Interfaces.SmartCenter;
 
-namespace my8.Api.SmartCenter
+namespace my8.Api.ISmartCenter
 {
     public class FeedSmart:IFeedSmart
     {
@@ -40,6 +39,7 @@ namespace my8.Api.SmartCenter
             m_StatusPostRepository = statusPostRepository;
             m_JobPostRepository = jobPostRepository;
         }
+
         public async Task<bool> BroadcastToPerson(StatusPost post)
         {
             bool result = await CreatePostBroadcastAsync(post);
@@ -72,7 +72,7 @@ namespace my8.Api.SmartCenter
                 {
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = post.Id;
-                    postBroadcast.AuthorId = people[i].Person.Id;
+                    postBroadcast.ReceiversId.Add(people[i].Person.Id);
                     postBroadcast.PostType = PostTypeEnum.StatusPost;
                     postBroadcast.KeyTime = post.PostTime;
                     tasks.Add(Task.Run(() =>
@@ -148,7 +148,7 @@ namespace my8.Api.SmartCenter
                 {
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = jobPost.Id;
-                    postBroadcast.AuthorId = allPersonId[i];
+                    postBroadcast.ReceiversId.Add(allPersonId[i]);
                     postBroadcast.PostType = PostTypeEnum.JobPost;
                     postBroadcast.KeyTime = jobPost.PostTime;
                     lastTasks.Add(Task.Run(() =>

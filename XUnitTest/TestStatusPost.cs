@@ -79,5 +79,19 @@ namespace XUnitTest
                 Assert.NotNull(body);
             });
         }
+        [Fact]
+        public async Task Test_PostBroadCast()
+        {
+            await server.Call(HttpMethod.Post, "/api/Feed/Test/5acedf96c86324070424f263", null, (rp) =>
+            {
+                Assert.NotNull(rp);
+                Assert.NotNull(rp.Content);
+                Assert.True(rp.IsSuccessStatusCode);
+
+                var body = rp.Content.ReadAsStringAsync().Result;
+
+                Assert.NotNull(body);
+            });
+        }
     }
 }

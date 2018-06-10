@@ -10,14 +10,22 @@ namespace my8.Api.Models
 {
     public class PostBroadcastPerson
     {
+        public PostBroadcastPerson()
+        {
+            PersonId = new List<string>();
+            ReceiversId = new List<string>();
+        }
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public string AuthorId { get; set; }
+        public List<string> ReceiversId { get; set; }
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
         public DateTime KeyTime { get; set; }
         public int InteractivePoint { get; set; }
+        public bool Liked { get; set; }
+        //test
+        public List<string> PersonId { get; set; }
     }
     public class PostBroadcastPersonHidden
     {

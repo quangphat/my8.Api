@@ -76,7 +76,7 @@ namespace my8.Api.Business
                     {
                         PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                         postBroadcast.PostId = post.Id;
-                        postBroadcast.AuthorId = people[i].Person.Id;
+                        postBroadcast.ReceiversId.Add(people[i].Person.Id);
                         postBroadcast.PostType = PostTypeEnum.StatusPost;
                         post.PostTime = post.PostTime;
                         m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
@@ -103,7 +103,7 @@ namespace my8.Api.Business
                     {
                         PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                         postBroadcast.PostId = post.Id;
-                        postBroadcast.AuthorId = people[i].Person.Id;
+                        postBroadcast.ReceiversId.Add(people[i].Person.Id);
                         postBroadcast.PostType = PostTypeEnum.JobPost;
                         postBroadcast.KeyTime = post.PostTime;
                         m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
