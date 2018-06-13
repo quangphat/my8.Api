@@ -34,16 +34,20 @@ namespace my8.Api.Controllers
         [Route("api/Feed/Test/{personId}")]
         public async Task<IActionResult> CreateBroadcast1MillionPerson(string personId)
         {
-            //PostBroadcastPerson feed = new PostBroadcastPerson();
-            //feed.ReceiversId = personId;
-            //feed.PostId = "";
-            //feed.PostType = my8Enum.PostTypeEnum.StatusPost;
-            //for (int i = 0; i < 300000; i++)
-            //{
-            //    ObjectId receiverId = ObjectId.GenerateNewId();
-            //    feed.PersonId.Add(receiverId.ToString());
-            //}
-            //var result = await _postBroadcastPersonBusiness.Create(feed);
+            
+            List<Receiver> receivers = new List<Receiver>();
+            for (int i = 0; i < 200000; i++)
+            {
+                ObjectId receiverId = ObjectId.GenerateNewId();
+                receivers.Add(new Receiver { PersonId = receiverId.ToString(), Like = false });
+            }
+            PostBroadcastPerson feed = new PostBroadcastPerson
+            {
+                PostId = "",
+                PostType = my8Enum.PostTypeEnum.StatusPost,
+                Receivers = receivers
+            };
+            var result = await _postBroadcastPersonBusiness.Create(feed);
             return ToResponse(false);
         }
         //[HttpPost]

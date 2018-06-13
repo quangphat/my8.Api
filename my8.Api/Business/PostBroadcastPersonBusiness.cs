@@ -70,18 +70,18 @@ namespace my8.Api.Business
                 List<PersonAllin> people = await GetPersonInvolve(post.PostBy.AuthorTypeId, post.PostBy.AuthorId);
                 if (people == null || people.Count==0) return false;
                 List<Task> tasks = new List<Task>();
-                for (int i = 0; i < people.Count - 1; i++)
-                {
-                    tasks.Add(Task.Run(() =>
-                    {
-                        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
-                        postBroadcast.PostId = post.Id;
-                        postBroadcast.ReceiversId.Add(people[i].Person.Id);
-                        postBroadcast.PostType = PostTypeEnum.StatusPost;
-                        post.PostTime = post.PostTime;
-                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
-                    }));
-                }
+                //for (int i = 0; i < people.Count - 1; i++)
+                //{
+                //    tasks.Add(Task.Run(() =>
+                //    {
+                //        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
+                //        postBroadcast.PostId = post.Id;
+                //        postBroadcast.Receivers.Add(people[i].Person.Id);
+                //        postBroadcast.PostType = PostTypeEnum.StatusPost;
+                //        post.PostTime = post.PostTime;
+                //        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
+                //    }));
+                //}
                 await Task.WhenAll(tasks);
                 return true;
             }
@@ -97,18 +97,18 @@ namespace my8.Api.Business
                 List<PersonAllin> people = await GetPersonInvolve(post.PostBy.AuthorTypeId, post.PostBy.AuthorId);
                 if (people == null) return false;
                 List<Task> tasks = new List<Task>();
-                for (int i = 0; i < people.Count-1; i++)
-                {
-                    tasks.Add(Task.Run(() =>
-                    {
-                        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
-                        postBroadcast.PostId = post.Id;
-                        postBroadcast.ReceiversId.Add(people[i].Person.Id);
-                        postBroadcast.PostType = PostTypeEnum.JobPost;
-                        postBroadcast.KeyTime = post.PostTime;
-                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
-                    }));
-                }
+                //for (int i = 0; i < people.Count-1; i++)
+                //{
+                //    tasks.Add(Task.Run(() =>
+                //    {
+                //        PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
+                //        postBroadcast.PostId = post.Id;
+                //        postBroadcast.Receivers.Add(people[i].Person.Id);
+                //        postBroadcast.PostType = PostTypeEnum.JobPost;
+                //        postBroadcast.KeyTime = post.PostTime;
+                //        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
+                //    }));
+                //}
                 await Task.WhenAll(tasks);
                 return true;
             }

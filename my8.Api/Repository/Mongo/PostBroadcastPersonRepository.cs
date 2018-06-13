@@ -55,7 +55,7 @@ namespace my8.Api.Repository.Mongo
         public async Task<List<PostBroadcastPerson>> GetByPerson(string personId,int skip,int limit)
         {
             //filter = Builders<PostBroadcastPerson>.Filter.Eq(p => p.ReceiversId, personId);
-            List<PostBroadcastPerson> lstPost = await collection.Find($@"{{ReceiversId:'{personId}'}}").Sort("{PostTime:1}").Skip(skip).Limit(limit).ToListAsync();
+            List<PostBroadcastPerson> lstPost = await collection.Find($@"{{'Receivers.PersonId':'{personId}'}}").Sort("{PostTime:1}").Skip(skip).Limit(limit).ToListAsync();
             return lstPost;
         }
 
@@ -67,7 +67,7 @@ namespace my8.Api.Repository.Mongo
                 if (moveResult == true)
                 {
                     var filterBuilder = Builders<PostBroadcastPerson>.Filter;
-                    filter = filterBuilder.Eq(p => p.PostId, post.PostId) & filterBuilder.Eq(p => p.ReceiversId, post.ReceiversId) & filterBuilder.Eq(p => p.PostType, post.PostType);
+                    filter = filterBuilder.Eq(p => p.PostId, post.PostId) & filterBuilder.Eq(p => p.Receivers, post.Receivers) & filterBuilder.Eq(p => p.PostType, post.PostType);
                     await collection.DeleteOneAsync(filter);
                 }
                 return true;

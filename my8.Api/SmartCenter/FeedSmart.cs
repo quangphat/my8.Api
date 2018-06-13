@@ -12,7 +12,7 @@ using my8.Api.Infrastructures;
 
 namespace my8.Api.ISmartCenter
 {
-    public class FeedSmart:IFeedSmart
+    public class FeedSmart : IFeedSmart
     {
         private const int MAX_LIMIT = 20;
 
@@ -24,12 +24,12 @@ namespace my8.Api.ISmartCenter
         MongoI.IStatusPostRepository m_StatusPostRepository;
         MongoI.IJobPostRepository m_JobPostRepository;
         public FeedSmart(MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository
-            ,NeoI.IPersonRepository personRepositoryN
-            ,NeoI.IPageRepository pageRepositoryN
-            ,NeoI.ICommunityRepository CommunityRepositoryN
-            ,MongoI.IPersonRepository personRepositoryM
-            ,MongoI.IStatusPostRepository statusPostRepository
-            ,MongoI.IJobPostRepository jobPostRepository)
+            , NeoI.IPersonRepository personRepositoryN
+            , NeoI.IPageRepository pageRepositoryN
+            , NeoI.ICommunityRepository CommunityRepositoryN
+            , MongoI.IPersonRepository personRepositoryM
+            , MongoI.IStatusPostRepository statusPostRepository
+            , MongoI.IJobPostRepository jobPostRepository)
         {
             m_PostbroadcastPersonRepositoryM = postBroadcastPersonRepository;
             m_PersonRepositoryN = personRepositoryN;
@@ -62,7 +62,7 @@ namespace my8.Api.ISmartCenter
 
             return await FilterOut(postBroadcastPersons, postAllTypes);
         }
-        private async Task<List<Feed>> FilterOut(List<PostBroadcastPerson> postBroadcasts,List<Feed> feeds)
+        private async Task<List<Feed>> FilterOut(List<PostBroadcastPerson> postBroadcasts, List<Feed> feeds)
         {
             await Task.Run(() =>
             {
@@ -73,7 +73,7 @@ namespace my8.Api.ISmartCenter
                     feed.BroadcastId = broadcast.Id;
                 }
             });
-            
+
             return feeds;
         }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
@@ -81,21 +81,16 @@ namespace my8.Api.ISmartCenter
             try
             {
                 List<PersonAllin> people = await GetPersonInvolve(post.PostBy);
+                List<Receiver> receivers = Mapper.Map<List<Receiver>>(people);
                 if (people == null || people.Count == 0) return false;
-                List<Task> tasks = new List<Task>();
-                for (int i = 0; i < people.Count; i++)
+                PostBroadcastPerson postBroadcast = new PostBroadcastPerson
                 {
-                    PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
-                    postBroadcast.PostId = post.Id;
-                    postBroadcast.ReceiversId.Add(people[i].Person.Id);
-                    postBroadcast.PostType = PostTypeEnum.StatusPost;
-                    postBroadcast.KeyTime = post.PostTime;
-                    tasks.Add(Task.Run(() =>
-                    {
-                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
-                    }));
-                }
-                await Task.WhenAll(tasks);
+                    PostId = post.Id,
+                    Receivers = receivers,
+                    PostType = PostTypeEnum.StatusPost,
+                    KeyTime = post.PostTime
+                };
+                await m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
                 return true;
             }
             catch
@@ -112,7 +107,7 @@ namespace my8.Api.ISmartCenter
             Task<HashSet<string>> lstPersonByIndustry = null;
             Task<HashSet<string>> lstPersonBySkill = null;
             Task<HashSet<string>> lstPersonByExperience = null;
-            if (jobPost.Privacy==(int)PostPrivacyEnum.All)
+            if (jobPost.Privacy == (int)PostPrivacyEnum.All)
             {
                 //must satisfy 
                 lstPersonByIndustry = GetPersonIndustry(jobPost.IndustryTags);
@@ -121,22 +116,23 @@ namespace my8.Api.ISmartCenter
                 lstPersonBySkill = GetPersonSkill(jobPost.SkillTags);
                 tasks.Add(lstPersonBySkill);
                 // must satisfy
-                 lstPersonByExperience = GetPersonExperience(jobPost.MinExperience, jobPost.MaxExperience);
+                lstPersonByExperience = GetPersonExperience(jobPost.MinExperience, jobPost.MaxExperience);
                 tasks.Add(lstPersonByExperience);
             }
-           
+
             //optional
             //Task<HashSet<string>> lstPersonByLocation = GetPersonLocation(jobPost.Locations);
             //tasks.Add(lstPersonByLocation);
             //optional
             //Task<HashSet<string>> lstPersonByDegree = GetPersonDegree(jobPost.Degrees);
             //tasks.Add(lstPersonByDegree);
-            
+
             await Task.WhenAll(tasks);
             List<HashSet<string>> hashSetsMustSatisfy = new List<HashSet<string>>();
-            if(jobPost.Privacy==(int)PostPrivacyEnum.All)
+            if (jobPost.Privacy == (int)PostPrivacyEnum.All)
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     //must satisfy 
                     hashSetsMustSatisfy.Add(lstPersonByIndustry.Result);
                     hashSetsMustSatisfy.Add(lstPersonBySkill.Result);
@@ -155,23 +151,21 @@ namespace my8.Api.ISmartCenter
             {
                 allPersonId = lstPersonByAuthor.Result.ToArray();
             }
-            
+            List<Receiver> receivers = allPersonId.Select(p => new Receiver
+            {
+                PersonId = p,
+                Like = false
+            }).ToList();
             try
             {
-                List<Task> lastTasks = new List<Task>();
-                for (int i=0;i<allPersonId.Length;i++)
+                PostBroadcastPerson postBroadcast = new PostBroadcastPerson
                 {
-                    PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
-                    postBroadcast.PostId = jobPost.Id;
-                    postBroadcast.ReceiversId.Add(allPersonId[i]);
-                    postBroadcast.PostType = PostTypeEnum.JobPost;
-                    postBroadcast.KeyTime = jobPost.PostTime;
-                    lastTasks.Add(Task.Run(() =>
-                    {
-                        m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
-                    }));
-                }
-                await Task.WhenAll(lastTasks);
+                    PostId = jobPost.Id,
+                    Receivers = receivers,
+                    PostType = PostTypeEnum.JobPost,
+                    KeyTime = jobPost.PostTime
+                };
+                await m_PostbroadcastPersonRepositoryM.Create(postBroadcast);
                 return true;
             }
             catch
@@ -207,7 +201,7 @@ namespace my8.Api.ISmartCenter
             if (authorType == (int)AuthorTypeEnum.Person)
             {
                 people = await m_PersonRepositoryN.GetFriends(author.AuthorId);
-                return people.Select(p=>p.Person.Id).ToHashSet();
+                return people.Select(p => p.Person.Id).ToHashSet();
             }
             if (authorType == (int)AuthorTypeEnum.Page)
             {
@@ -248,9 +242,9 @@ namespace my8.Api.ISmartCenter
             List<Person> people = await m_PersonRepositoryM.SearchByDegrees(new string[] { });
             return people.Select(p => p.PersonId).ToHashSet();
         }
-        private async Task<HashSet<string>> GetPersonExperience(int minYear,int maxYear)
+        private async Task<HashSet<string>> GetPersonExperience(int minYear, int maxYear)
         {
-            List<Person> people = await m_PersonRepositoryM.SearchByExperience(minYear,maxYear);
+            List<Person> people = await m_PersonRepositoryM.SearchByExperience(minYear, maxYear);
             return people.Select(p => p.PersonId).ToHashSet();
         }
         private async Task<string[]> GetPersonSeniority(List<SeniorityLevel> seniorityLevels)
@@ -263,7 +257,7 @@ namespace my8.Api.ISmartCenter
 
             return null;
         }
-        
+
         private async Task<List<JobPost>> GetJobPost(List<PostBroadcastPerson> postBroadcastPeople)
         {
             string[] josbIds = await GetJobPostIdArray(postBroadcastPeople);
@@ -278,14 +272,14 @@ namespace my8.Api.ISmartCenter
         {
             string[] ids = new string[] { };
             if (lstJobPostBroadCast == null) return ids;
-            await Task.Run(() => { ids= lstJobPostBroadCast.Where(p => p.PostType == PostTypeEnum.JobPost).OrderBy(p=>p.KeyTime).Select(p => p.PostId).ToArray(); });
-            return ids; 
+            await Task.Run(() => { ids = lstJobPostBroadCast.Where(p => p.PostType == PostTypeEnum.JobPost).OrderBy(p => p.KeyTime).Select(p => p.PostId).ToArray(); });
+            return ids;
         }
         private async Task<string[]> GetStatusPostIdArray(List<PostBroadcastPerson> lstStatusPostBroadCast)
         {
             string[] ids = new string[] { };
             if (lstStatusPostBroadCast == null) return ids;
-            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostTypeEnum.StatusPost).OrderBy(p=>p.KeyTime).Select(p => p.PostId).ToArray(); });
+            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostTypeEnum.StatusPost).OrderBy(p => p.KeyTime).Select(p => p.PostId).ToArray(); });
             return ids;
         }
 
