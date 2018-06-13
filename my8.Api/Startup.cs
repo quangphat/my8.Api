@@ -21,6 +21,7 @@ using my8.Api.Business;
 using my8.Api.ISmartCenter;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.Mvc;
+using my8.Api.SmartCenter;
 
 namespace my8.Api
 {

@@ -18,14 +18,14 @@ namespace my8.Api.Controllers
     {
         IFeedSmart m_FeedSmart;
         IPostBroadcastPersonRepository _postBroadcastPersonBusiness;
-        public FeedController(CurrentProcess process, IFeedSmart feedSmart, IPostBroadcastPersonRepository postBroadcastPersonBusiness) :base(process)
+        public FeedController(CurrentProcess process, IFeedSmart feedSmart, IPostBroadcastPersonRepository postBroadcastPersonBusiness) : base(process)
         {
             m_FeedSmart = feedSmart;
             _postBroadcastPersonBusiness = postBroadcastPersonBusiness;
         }
         [HttpGet]
         [Route("api/Feed/get/{personId}/{skip}")]
-        public async Task<IActionResult> Gets(string personId,int skip)
+        public async Task<IActionResult> Gets(string personId, int skip)
         {
             List<Feed> lstPost = await m_FeedSmart.GetPosts(personId, skip);
             return ToResponse(lstPost);
@@ -34,20 +34,24 @@ namespace my8.Api.Controllers
         [Route("api/Feed/Test/{personId}")]
         public async Task<IActionResult> CreateBroadcast1MillionPerson(string personId)
         {
-            
-            List<Receiver> receivers = new List<Receiver>();
-            for (int i = 0; i < 200000; i++)
+            for (int j = 0; j < 1000000; j++)
             {
+                //List<Receiver> receivers = new List<Receiver>();
+                //for (int i = 0; i < 50000; i++)
+                //{
+                //    ObjectId receiverId = ObjectId.GenerateNewId();
+                //    receivers.Add(new Receiver { PersonId = receiverId.ToString(), Like = false });
+                //}
                 ObjectId receiverId = ObjectId.GenerateNewId();
-                receivers.Add(new Receiver { PersonId = receiverId.ToString(), Like = false });
+                PostBroadcastPerson feed = new PostBroadcastPerson
+                {
+                    PostId = "",
+                    PostType = my8Enum.PostTypeEnum.StatusPost,
+                    ReceiverId = receiverId.ToString()
+                };
+                var result = await _postBroadcastPersonBusiness.Create(feed);
             }
-            PostBroadcastPerson feed = new PostBroadcastPerson
-            {
-                PostId = "",
-                PostType = my8Enum.PostTypeEnum.StatusPost,
-                Receivers = receivers
-            };
-            var result = await _postBroadcastPersonBusiness.Create(feed);
+            //List<Feed> feeds = await m_FeedSmart.GetPosts("5b20901e497a0448b852f34d", 0);
             return ToResponse(false);
         }
         //[HttpPost]

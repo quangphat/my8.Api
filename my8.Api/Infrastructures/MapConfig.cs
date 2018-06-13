@@ -29,7 +29,7 @@ namespace my8.Api.Infrastructures
             mapper.CreateMap<Feed, JobPost>();
             mapper.CreateMap<JobPost, Feed>();
             mapper.CreateMap<PostBroadcastPerson, Feed>()
-                .ForMember(a => a.Liked, b => b.MapFrom(c => c.Liked))
+                .ForMember(a => a.Liked, b => b.MapFrom(c => c.Like))
                 .ForMember(a => a.BroadcastId, b => b.MapFrom(c => c.Id));
             mapper.CreateMap<PersonAllin, Receiver>()
                 .ForMember(a => a.PersonId, b => b.MapFrom(c => c.Person.Id))
