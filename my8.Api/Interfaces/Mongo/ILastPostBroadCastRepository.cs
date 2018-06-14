@@ -8,8 +8,8 @@ namespace my8.Api.Interfaces.Mongo
     {
         Task<string> Create(LastPostBroadCast lastpostbroadcast);
         Task<LastPostBroadCast> Get(string id);
-        Task<LastPostBroadCast> GetByPageId(string pageId);
-        Task<LastPostBroadCast> GetByCommunityId(string communityId);
+        Task<LastPostBroadCast> GetByPageId(string pageId,string personId);
+        Task<LastPostBroadCast> GetByCommunityId(string communityId,string personId);
         Task<bool> Update(LastPostBroadCast lastpostbroadcast);
         Task<bool> Delete(string id);
     }

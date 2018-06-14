@@ -69,22 +69,22 @@ namespace my8.Api.Repository.Mongo
             catch { return false; }
         }
 
-        public async Task<LastPostBroadCast> GetByPageId(string pageId)
+        public async Task<LastPostBroadCast> GetByPageId(string pageId,string personId)
         {
             try
             {
-                return await collection.Find($@"{{'AuthorId':'{pageId}','AuthorType':{(int)AuthorTypeEnum.Page}}}").FirstOrDefaultAsync();
+                return await collection.Find($@"{{'AuthorId':'{pageId}','AuthorType':{(int)AuthorTypeEnum.Page},PersonId:'{personId}'}}").FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
                 return null;
             }
         }
-        public async Task<LastPostBroadCast> GetByCommunityId(string communityId)
+        public async Task<LastPostBroadCast> GetByCommunityId(string communityId, string personId)
         {
             try
             {
-                return await collection.Find($@"{{'AuthorId':'{communityId}','AuthorType':{(int)AuthorTypeEnum.Community}}}").FirstOrDefaultAsync();
+                return await collection.Find($@"{{'AuthorId':'{communityId}','AuthorType':{(int)AuthorTypeEnum.Community},PersonId:'{personId}'}}").FirstOrDefaultAsync();
             }
             catch (Exception e)
             {

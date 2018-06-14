@@ -44,24 +44,21 @@ namespace my8.Api.SmartCenter
         }
         public async Task<bool> BroadcastToPerson(StatusPost post)
         {
-            bool result = await CreatePostBroadcastAsync(post);
-            return result;
+            return await CreatePostBroadcastAsync(post);
         }
 
         public async Task<bool> BroadcastToPerson(JobPost post)
         {
-            bool result = await CreatePostBroadcastAsync(post);
-            return result;
+            return await CreatePostBroadcastAsync(post);
         }
         public async Task<List<Feed>> GetPosts(string personId, int skip)
         {
-            List<PostBroadcastPerson> postBroadcastPersons = await _PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, Utils.LIMIT_FEED);
-            Task<List<JobPost>> jobPostsTask = GetJobPost(postBroadcastPersons);
-            Task<List<StatusPost>> statusPostsTask = GetStatusPost(postBroadcastPersons);
+            Task<List<JobPost>> jobPostsTask = GetJobPost(await _PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, Utils.LIMIT_FEED));
+            Task<List<StatusPost>> statusPostsTask = GetStatusPost(await _PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, Utils.LIMIT_FEED));
             await Task.WhenAll(jobPostsTask, statusPostsTask);
-            List<Feed> postAllTypes = Mapper.Map<List<Feed>>(jobPostsTask.Result);
-            postAllTypes.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
-            return postAllTypes.OrderByDescending(p => p.PostTime).ToList();
+            List<Feed> feeds = Mapper.Map<List<Feed>>(jobPostsTask.Result);
+            feeds.AddRange(Mapper.Map<List<Feed>>(statusPostsTask.Result));
+            return feeds.OrderByDescending(p => p.PostTime).ToList();
         }
         private async Task<bool> CreatePostBroadcastAsync(StatusPost post)
         {
@@ -171,20 +168,19 @@ namespace my8.Api.SmartCenter
         {
             int authorType = author.AuthorTypeId;
             IEnumerable<PersonAllin> people = null;
-            if (authorType == (int)AuthorTypeEnum.Person)
+            switch (authorType)
             {
-                people = await _personRepositoryN.GetFriends(author.AuthorId);
-                return people.ToList();
-            }
-            if (authorType == (int)AuthorTypeEnum.Page)
-            {
-                people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
-                return people.ToList();
-            }
-            if (authorType == (int)AuthorTypeEnum.Community)
-            {
-                people = await _communityRepositoryN.GetMembers(author.AuthorId);
-                return people.ToList();
+                case (int)AuthorTypeEnum.Person:
+                    people = await _personRepositoryN.GetFriends(author.AuthorId);
+                    return people.ToList();
+                case (int)AuthorTypeEnum.Page:
+                    people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
+                    return people.ToList();
+                case (int)AuthorTypeEnum.Community:
+                    people = await _communityRepositoryN.GetMembers(author.AuthorId);
+                    return people.ToList();
+                default:
+                    break;
             }
             return null;
         }
@@ -192,20 +188,28 @@ namespace my8.Api.SmartCenter
         {
             int authorType = author.AuthorTypeId;
             IEnumerable<PersonAllin> people = null;
-            if (authorType == (int)AuthorTypeEnum.Person)
+            switch (authorType)
             {
-                people = await _personRepositoryN.GetFriends(author.AuthorId);
-                return people.Select(p => p.Person.Id).ToHashSet();
-            }
-            if (authorType == (int)AuthorTypeEnum.Page)
-            {
-                people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
-                return people.Select(p => p.Person.Id).ToHashSet();
-            }
-            if (authorType == (int)AuthorTypeEnum.Community)
-            {
-                people = await _communityRepositoryN.GetMembers(author.AuthorId);
-                return people.Select(p => p.Person.Id).ToHashSet();
+                case (int)AuthorTypeEnum.Person:
+                    {
+                        people = await _personRepositoryN.GetFriends(author.AuthorId);
+                        return people.Select(p => p.Person.Id).ToHashSet();
+                    }
+
+                case (int)AuthorTypeEnum.Page:
+                    {
+                        people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
+                        return people.Select(p => p.Person.Id).ToHashSet();
+                    }
+
+                case (int)AuthorTypeEnum.Community:
+                    {
+                        people = await _communityRepositoryN.GetMembers(author.AuthorId);
+                        return people.Select(p => p.Person.Id).ToHashSet();
+                    }
+
+                default:
+                    break;
             }
             return null;
         }
@@ -305,13 +309,15 @@ namespace my8.Api.SmartCenter
                 for (int i = 0; i < authors.Count(); i++)
                 {
                     lastPost = null;
-                    if(authors[i].AuthorTypeId == (int)AuthorTypeEnum.Page)
+                    switch (authors[i].AuthorTypeId)
                     {
-                        lastPost = await _lastPostBroadCastRepository.GetByPageId(authors[i].AuthorId);
-                    }
-                    else if(authors[i].AuthorTypeId == (int)AuthorTypeEnum.Community)
-                    {
-                        lastPost = await _lastPostBroadCastRepository.GetByCommunityId(authors[i].AuthorId);
+                        case (int)AuthorTypeEnum.Page:
+                            lastPost = await _lastPostBroadCastRepository.GetByPageId(authors[i].AuthorId, personId);
+                            break;
+                        case (int)AuthorTypeEnum.Community:
+                            lastPost = await _lastPostBroadCastRepository.GetByCommunityId(authors[i].AuthorId, personId);
+                            break;
+                        default:break;
                     }
                     long lastPostTimeUnix = 0;
                     if (lastPost != null)
