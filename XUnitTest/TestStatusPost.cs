@@ -30,7 +30,7 @@ namespace XUnitTest
             post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             post.Images = null;
             post.Privacy = (int)PostPrivacyEnum.All;
-            post.Content = "Tomorrow is saturday";
+            post.Content = "Yeah";
             post.PostBy = new Author()
             {
                 DisplayName = "",
