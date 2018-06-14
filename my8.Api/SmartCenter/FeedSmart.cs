@@ -173,12 +173,12 @@ namespace my8.Api.SmartCenter
                 case (int)AuthorTypeEnum.Person:
                     people = await _personRepositoryN.GetFriends(author.AuthorId);
                     return people.ToList();
-                case (int)AuthorTypeEnum.Page:
-                    people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
-                    return people.ToList();
-                case (int)AuthorTypeEnum.Community:
-                    people = await _communityRepositoryN.GetMembers(author.AuthorId);
-                    return people.ToList();
+                //case (int)AuthorTypeEnum.Page:
+                //    people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
+                //    return people.ToList();
+                //case (int)AuthorTypeEnum.Community:
+                //    people = await _communityRepositoryN.GetMembers(author.AuthorId);
+                //    return people.ToList();
                 default:
                     break;
             }
@@ -196,17 +196,17 @@ namespace my8.Api.SmartCenter
                         return people.Select(p => p.Person.Id).ToHashSet();
                     }
 
-                case (int)AuthorTypeEnum.Page:
-                    {
-                        people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
-                        return people.Select(p => p.Person.Id).ToHashSet();
-                    }
+                //case (int)AuthorTypeEnum.Page:
+                //    {
+                //        people = await _pageRepositoryN.GetPersonFollow(author.AuthorId);
+                //        return people.Select(p => p.Person.Id).ToHashSet();
+                //    }
 
-                case (int)AuthorTypeEnum.Community:
-                    {
-                        people = await _communityRepositoryN.GetMembers(author.AuthorId);
-                        return people.Select(p => p.Person.Id).ToHashSet();
-                    }
+                //case (int)AuthorTypeEnum.Community:
+                //    {
+                //        people = await _communityRepositoryN.GetMembers(author.AuthorId);
+                //        return people.Select(p => p.Person.Id).ToHashSet();
+                //    }
 
                 default:
                     break;
@@ -306,7 +306,7 @@ namespace my8.Api.SmartCenter
             {
                 LastPostBroadCast lastPost = null;
                 PostBroadcastPerson postBroadcastPerson = null;
-                for (int i = 0; i < authors.Count(); i++)
+                for (int i = 0; i < authors.Count; i++)
                 {
                     lastPost = null;
                     switch (authors[i].AuthorTypeId)
@@ -332,14 +332,14 @@ namespace my8.Api.SmartCenter
                         feeds.AddRange(Mapper.Map<List<Feed>>(getstatusPostsTask.Result));
                     if (getJobPostTask.Result != null)
                         feeds.AddRange(Mapper.Map<List<Feed>>(getJobPostTask.Result));
-                    foreach (Feed feed in feeds)
+                    for (int j = 0; j < feeds.Count; j++)
                     {
                         postBroadcastPerson = new PostBroadcastPerson
                         {
-                            PostId = feed.Id,
-                            KeyTime = feed.PostTimeUnix,
+                            PostId = feeds[j].Id,
+                            KeyTime = feeds[j].PostTimeUnix,
                             Like = false,
-                            PostType = (PostTypeEnum)feed.PostType,
+                            PostType = (PostTypeEnum)feeds[j].PostType,
                             ReceiverId = personId
                         };
                         result = await _PostbroadcastPersonRepositoryM.Create(postBroadcastPerson);
