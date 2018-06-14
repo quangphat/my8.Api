@@ -8,6 +8,7 @@ namespace my8.Api.ISmartCenter
 {
     public interface IFeedSmart
     {
+        Task<bool> InitBroadcast(string personId);
         Task<bool> BroadcastToPerson(StatusPost post);
         Task<bool> BroadcastToPerson(JobPost post);
         Task<List<Feed>> GetPosts(string personId, int skip);

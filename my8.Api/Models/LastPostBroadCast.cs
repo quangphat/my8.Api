@@ -15,7 +15,7 @@ namespace my8.Api.Models
         public AuthorTypeEnum AuthorType { get; set; }
         public string PersonId { get; set; }
         public string LastPostIdToPerson { get; set; }
-        public PostTypeEnum PostType { get; set; }
+        //public PostTypeEnum PostType { get; set; }
         public long LastPostTimeToPerson { get; set; }
     }
 }

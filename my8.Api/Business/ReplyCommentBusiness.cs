@@ -42,7 +42,7 @@ namespace my8.Api.Business
 
         public async Task<List<ReplyComment>> GetByComment(string commentId, int skip)
         {
-            return await m_ReplyCommentRepositoryM.GetByComment(commentId, skip, Utils.LIMIT_ROW);
+            return await m_ReplyCommentRepositoryM.GetByComment(commentId, skip, Utils.LIMIT_ROW_COMMENT);
         }
     }
 }

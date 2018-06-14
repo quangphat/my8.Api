@@ -53,14 +53,14 @@ namespace my8.Api.Business
             {
                 StatusPost post = new StatusPost();
                 post.Id = postId;
-                List<Comment> comments = await m_CommentRepositoryM.GetByPost(post, skip, Utils.LIMIT_ROW);
+                List<Comment> comments = await m_CommentRepositoryM.GetByPost(post, skip, Utils.LIMIT_ROW_COMMENT);
                 return comments.OrderBy(p => p.CommentTime).ToList();
             }
             if(postType == (int)PostTypeEnum.JobPost)
             {
                 JobPost post = new JobPost();
                 post.Id = postId;
-                return await m_CommentRepositoryM.GetByPost(post, skip, Utils.LIMIT_ROW);
+                return await m_CommentRepositoryM.GetByPost(post, skip, Utils.LIMIT_ROW_COMMENT);
             }
             return null;
         }

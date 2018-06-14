@@ -18,7 +18,7 @@ namespace my8.Api.Models
         public string Id { get; set; }
         public string PostId { get; set; }
         public PostTypeEnum PostType { get; set; }
-        public DateTime KeyTime { get; set; }
+        public long KeyTime { get; set; }
         public int InteractivePoint { get; set; }
         public bool Like { get; set; }
         public string ReceiverId { get; set; }

@@ -29,10 +29,10 @@ namespace my8.Api.Controllers
         {
             StatusPost post = await m_statusPostBusiness.Post(model);
             bool result = false;
-            if(post!=null)
-            {
-                result = await m_FeedSmart.BroadcastToPerson(model);
-            }
+            //if(post!=null)
+            //{
+            //    result = await m_FeedSmart.BroadcastToPerson(model);
+            //}
             return ToResponse(result);
         }
         [HttpGet]

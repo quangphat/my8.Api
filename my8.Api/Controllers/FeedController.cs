@@ -54,27 +54,34 @@ namespace my8.Api.Controllers
             //List<Feed> feeds = await m_FeedSmart.GetPosts("5b20901e497a0448b852f34d", 0);
             return ToResponse(false);
         }
-        //[HttpPost]
-        //      [Route("api/Feed/create")]
-        //      public async Task<IActionResult> Create([FromBody] Feed model)
-        //      {
-        //          Feed Feed= await m_FeedBusiness.Create(model);
-        //          return Json(Feed);
-        //      }
-        //      [HttpPut]
-        //      [Route("api/Feed/update")]
-        //      public async Task<IActionResult> Update([FromBody] Feed model)
-        //      {
-        //          bool result = await m_FeedBusiness.Update(model);
-        //          return Json(result);
-        //      }
-        //      [HttpDelete]
-        //      [Route("api/Feed/delete/{id}")]
-        //      public async Task<IActionResult> Delete(string id)
-        //      {
-        //          bool rst = await m_FeedBusiness.Delete(id);
-        //          return Json(rst);
-        //      }
+        [HttpPost]
+        [Route("api/Feed/create/{personId}")]
+        public async Task<IActionResult> Create(string personId)
+        {
+            //Feed Feed = await m_FeedBusiness.Create(model);
+            return ToResponse(false);
+        }
+        [HttpPost]
+        [Route("api/Feed/Init/{personId}")]
+        public async Task<IActionResult> Init(string personId)
+        {
+            bool result = await m_FeedSmart.InitBroadcast(personId);
+            return ToResponse(false);
+        }
+        //[HttpPut]
+        //[Route("api/Feed/update")]
+        //public async Task<IActionResult> Update([FromBody] Feed model)
+        //{
+        //    bool result = await m_FeedBusiness.Update(model);
+        //    return Json(result);
+        //}
+        //[HttpDelete]
+        //[Route("api/Feed/delete/{id}")]
+        //public async Task<IActionResult> Delete(string id)
+        //{
+        //    bool rst = await m_FeedBusiness.Delete(id);
+        //    return Json(rst);
+        //}
 
     }
 }
