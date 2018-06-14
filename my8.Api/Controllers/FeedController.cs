@@ -66,7 +66,7 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> Init(string personId)
         {
             bool result = await m_FeedSmart.InitBroadcast(personId);
-            return ToResponse(false);
+            return ToResponse(result);
         }
         //[HttpPut]
         //[Route("api/Feed/update")]
