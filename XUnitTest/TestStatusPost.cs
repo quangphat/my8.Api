@@ -29,13 +29,13 @@ namespace XUnitTest
             post.PostTime = DateTime.UtcNow;
             post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             post.Images = null;
-            post.Privacy = (int)PostPrivacyEnum.All;
+            post.Privacy = (int)PostPrivacyType.All;
             post.Content = "Yeah";
             post.PostBy = new Author()
             {
                 DisplayName = "",
                 AuthorId = "5ad063f571db6e14c4681aa9",
-                AuthorTypeId = (int)AuthorTypeEnum.Page
+                AuthorTypeId = (int)my8.Api.my8Enum.AuthorType.Page
             };
 
             await server.Call(HttpMethod.Post, "/api/StatusPost/create", post, (rp) =>
@@ -55,7 +55,7 @@ namespace XUnitTest
             Author user = new Author();
             user.DisplayName = "Quang Phát";
             user.AuthorId = "5ac9be056272224af07b79d3";
-            user.AuthorTypeId = (int)AuthorTypeEnum.Person;
+            user.AuthorTypeId = (int)my8.Api.my8Enum.AuthorType.Person;
             await server.Call(HttpMethod.Post, "/api/m-statuspost/getbyauthor", user, (rp) =>
             {
                 Assert.NotNull(rp);

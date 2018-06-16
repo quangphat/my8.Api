@@ -46,7 +46,7 @@ namespace my8.Api.Controllers
                 PostBroadcastPerson feed = new PostBroadcastPerson
                 {
                     PostId = "",
-                    PostType = my8Enum.PostTypeEnum.StatusPost,
+                    PostType = my8Enum.PostType.StatusPost,
                     ReceiverId = receiverId.ToString()
                 };
                 var result = await _postBroadcastPersonBusiness.Create(feed);

@@ -73,12 +73,12 @@ namespace my8.Api.Repository.Mongo
 
         public async Task<List<Comment>> GetByPost(StatusPost post, int skip, int limit)
         {
-            return await collection.Find($@"{{'PostId':'{post.Id}','PostType':{(int)PostTypeEnum.StatusPost}}}").Skip(skip).Limit(limit).ToListAsync();
+            return await collection.Find($@"{{'PostId':'{post.Id}','PostType':{(int)PostType.StatusPost}}}").Skip(skip).Limit(limit).ToListAsync();
         }
 
         public async Task<List<Comment>> GetByPost(JobPost post, int skip, int limit)
         {
-            return await collection.Find($@"{{'PostId':'{post.Id}','PostType':{(int)PostTypeEnum.JobPost}}}").Skip(skip).Limit(limit).ToListAsync();
+            return await collection.Find($@"{{'PostId':'{post.Id}','PostType':{(int)PostType.JobPost}}}").Skip(skip).Limit(limit).ToListAsync();
         }
     }
 }

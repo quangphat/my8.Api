@@ -42,12 +42,10 @@ namespace my8.Api.Repository.Mongo
             var filter = Builders<Location>.Filter.Eq(p => p.Id, location.Id);
             var update = Builders<Location>.Update
                             .Set(s => s.Id, location.Id)
-                            .Set(s => s.Country, location.Country)
-                            .Set(s => s.Province, location.Province)
-                            .Set(s => s.District, location.District)
-                            .Set(s => s.Street, location.Street)
+                            .Set(s => s.DisplayName, location.DisplayName)
                             .Set(s=>s.KeySearchs,location.KeySearchs)
-                            .Set(s => s.Display, location.Display);
+                            .Set(s => s.LocationType, location.LocationType)
+                            .Set(s => s.CountryCode, location.CountryCode);
             try
             {
                 await collection.UpdateOneAsync(filter, update);

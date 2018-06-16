@@ -17,7 +17,7 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string PostId { get; set; }
-        public PostTypeEnum PostType { get; set; }
+        public PostType PostType { get; set; }
         public long KeyTime { get; set; }
         public int InteractivePoint { get; set; }
         public bool Like { get; set; }
@@ -30,7 +30,7 @@ namespace my8.Api.Models
         public string Id { get; set; }
         public string AuthorId { get; set; }
         public string PostId { get; set; }
-        public PostTypeEnum PostType { get; set; }
+        public PostType PostType { get; set; }
         public DateTime PostTime { get; set; }
         public int InteractivePoint { get; set; }
     }

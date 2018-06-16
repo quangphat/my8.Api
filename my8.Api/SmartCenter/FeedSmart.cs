@@ -72,7 +72,7 @@ namespace my8.Api.SmartCenter
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = post.Id;
                     postBroadcast.ReceiverId = people[i].Person.Id;
-                    postBroadcast.PostType = PostTypeEnum.StatusPost;
+                    postBroadcast.PostType = PostType.StatusPost;
                     postBroadcast.KeyTime = post.PostTimeUnix;
                     tasks.Add(Task.Run(() =>
                     {
@@ -96,7 +96,7 @@ namespace my8.Api.SmartCenter
             Task<HashSet<string>> lstPersonByIndustry = null;
             Task<HashSet<string>> lstPersonBySkill = null;
             Task<HashSet<string>> lstPersonByExperience = null;
-            if (jobPost.Privacy == (int)PostPrivacyEnum.All)
+            if (jobPost.Privacy == (int)PostPrivacyType.All)
             {
                 //must satisfy 
                 lstPersonByIndustry = GetPersonIndustry(jobPost.IndustryTags);
@@ -118,7 +118,7 @@ namespace my8.Api.SmartCenter
 
             await Task.WhenAll(tasks);
             List<HashSet<string>> hashSetsMustSatisfy = new List<HashSet<string>>();
-            if (jobPost.Privacy == (int)PostPrivacyEnum.All)
+            if (jobPost.Privacy == (int)PostPrivacyType.All)
             {
                 await Task.Run(() =>
                 {
@@ -149,7 +149,7 @@ namespace my8.Api.SmartCenter
                     PostBroadcastPerson postBroadcast = new PostBroadcastPerson();
                     postBroadcast.PostId = jobPost.Id;
                     postBroadcast.ReceiverId = allPersonId[i];
-                    postBroadcast.PostType = PostTypeEnum.JobPost;
+                    postBroadcast.PostType = PostType.JobPost;
                     postBroadcast.KeyTime = jobPost.PostTimeUnix;
                     lastTasks.Add(Task.Run(() =>
                     {
@@ -170,7 +170,7 @@ namespace my8.Api.SmartCenter
             IEnumerable<PersonAllin> people = null;
             switch (authorType)
             {
-                case (int)AuthorTypeEnum.Person:
+                case (int)my8Enum.AuthorType.Person:
                     people = await _personRepositoryN.GetFriends(author.AuthorId);
                     return people.ToList();
                 //case (int)AuthorTypeEnum.Page:
@@ -190,7 +190,7 @@ namespace my8.Api.SmartCenter
             IEnumerable<PersonAllin> people = null;
             switch (authorType)
             {
-                case (int)AuthorTypeEnum.Person:
+                case (int)my8Enum.AuthorType.Person:
                     {
                         people = await _personRepositoryN.GetFriends(author.AuthorId);
                         return people.Select(p => p.Person.Id).ToHashSet();
@@ -270,14 +270,14 @@ namespace my8.Api.SmartCenter
         {
             string[] ids = new string[] { };
             if (lstJobPostBroadCast == null) return ids;
-            await Task.Run(() => { ids = lstJobPostBroadCast.Where(p => p.PostType == PostTypeEnum.JobPost).OrderBy(p => p.KeyTime).Select(p => p.PostId).ToArray(); });
+            await Task.Run(() => { ids = lstJobPostBroadCast.Where(p => p.PostType == PostType.JobPost).OrderBy(p => p.KeyTime).Select(p => p.PostId).ToArray(); });
             return ids;
         }
         private async Task<string[]> GetStatusPostIdArray(List<PostBroadcastPerson> lstStatusPostBroadCast)
         {
             string[] ids = new string[] { };
             if (lstStatusPostBroadCast == null) return ids;
-            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostTypeEnum.StatusPost).OrderBy(p => p.KeyTime).Select(p => p.PostId).ToArray(); });
+            await Task.Run(() => { ids = lstStatusPostBroadCast.Where(p => p.PostType == PostType.StatusPost).OrderBy(p => p.KeyTime).Select(p => p.PostId).ToArray(); });
             return ids;
         }
 
@@ -308,13 +308,14 @@ namespace my8.Api.SmartCenter
                 PostBroadcastPerson postBroadcastPerson = null;
                 for (int i = 0; i < authors.Count; i++)
                 {
+                    if(authors[i] == null) continue;
                     lastPost = null;
                     switch (authors[i].AuthorTypeId)
                     {
-                        case (int)AuthorTypeEnum.Page:
+                        case (int)my8Enum.AuthorType.Page:
                             lastPost = await _lastPostBroadCastRepository.GetByPageId(authors[i].AuthorId, personId);
                             break;
-                        case (int)AuthorTypeEnum.Community:
+                        case (int)my8Enum.AuthorType.Community:
                             lastPost = await _lastPostBroadCastRepository.GetByCommunityId(authors[i].AuthorId, personId);
                             break;
                         default:break;
@@ -339,7 +340,7 @@ namespace my8.Api.SmartCenter
                             PostId = feeds[j].Id,
                             KeyTime = feeds[j].PostTimeUnix,
                             Like = false,
-                            PostType = (PostTypeEnum)feeds[j].PostType,
+                            PostType = (PostType)feeds[j].PostType,
                             ReceiverId = personId
                         };
                         result = await _PostbroadcastPersonRepositoryM.Create(postBroadcastPerson);
@@ -355,7 +356,7 @@ namespace my8.Api.SmartCenter
                                 LastPostIdToPerson = lastFeed.Id,
                                 LastPostTimeToPerson = lastFeed.PostTimeUnix,
                                 PersonId = personId,
-                                AuthorType = (AuthorTypeEnum)lastFeed.PostBy.AuthorTypeId
+                                AuthorType = (my8Enum.AuthorType)lastFeed.PostBy.AuthorTypeId
                             };
                             await _lastPostBroadCastRepository.Create(lastPost);
                         }

@@ -21,7 +21,9 @@ namespace my8.Api.Models
         public int Likes { get; set; }
         public int Replies { get; set; } //Lượt trả lời
         public string PostId { get; set; }
-        public PostTypeEnum PostType { get; set; }
+        public PostType PostType { get; set; }
         public string Content { get; set; }
+        [BsonIgnore]
+        public Author FeedAuthor { get; set; }
     }
 }

@@ -46,17 +46,17 @@ namespace my8.Api.Business
         private async Task<List<PersonAllin>> GetPersonInvolve(int authorType,string authorId)
         {
             IEnumerable<PersonAllin> people = null;
-            if (authorType == (int)AuthorTypeEnum.Person)
+            if (authorType == (int)my8Enum.AuthorType.Person)
             {
                 people = await m_PersonRepository.GetFriends(authorId);
                 return people.ToList();
             }
-            if (authorType == (int)AuthorTypeEnum.Page)
+            if (authorType == (int)my8Enum.AuthorType.Page)
             {
                 people = await m_PageRepository.GetPersonFollow(authorId);
                 return people.ToList();
             }
-            if (authorType == (int)AuthorTypeEnum.Community)
+            if (authorType == (int)my8Enum.AuthorType.Community)
             {
                 people = await m_CommunityRepository.GetMembers(authorId);
                 return people.ToList();

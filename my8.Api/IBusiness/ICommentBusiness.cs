@@ -9,7 +9,7 @@ namespace my8.Api.IBusiness
 {
     public interface ICommentBusiness
     {
-        Task<Comment> Create(Comment comment);
+        Task<CommentNotify> Create(Comment comment);
         Task<Comment> Get(string commentId);
         Task<List<Comment>> GetByPost(string postId,int postType,int skip);
         Task<bool> Update(Comment comment);

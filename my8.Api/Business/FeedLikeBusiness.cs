@@ -51,7 +51,7 @@ namespace my8.Api.Business
         }
         private async Task<bool> UpdateLikes(FeedLike feedlike)
         {
-            if(feedlike.FeedType== my8Enum.PostTypeEnum.StatusPost)
+            if(feedlike.FeedType== my8Enum.PostType.StatusPost)
             {
                 StatusPost post = await _statusPostRepository.Get(feedlike.FeedId);
                 if (post != null)
@@ -67,7 +67,7 @@ namespace my8.Api.Business
                     return await _statusPostRepository.UpdateLikes(post);
                 }
             }
-            else if(feedlike.FeedType== my8Enum.PostTypeEnum.JobPost)
+            else if(feedlike.FeedType== my8Enum.PostType.JobPost)
             {
                 JobPost post = await _jobPostRepository.Get(feedlike.FeedId);
                 if (post != null)

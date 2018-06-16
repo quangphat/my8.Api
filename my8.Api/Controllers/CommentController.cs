@@ -22,8 +22,8 @@ namespace my8.Api.Controllers
         [Route("api/comment/create")]
         public async Task<IActionResult> Create([FromBody] Comment model)
         {
-            Comment comment= await m_CommentBusiness.Create(model);
-            return ToResponse(comment);
+            CommentNotify commentNotify= await m_CommentBusiness.Create(model);
+            return ToResponse(commentNotify);
         }
         [HttpGet]
         [Route("api/comment/getbypost/{postId}/{postType}/{skip}")]

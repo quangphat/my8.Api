@@ -13,7 +13,7 @@ namespace my8.Api.Models
         [BsonElement("Id")]
         [JsonProperty(PropertyName = "Id")]
         public string Id { get; set; }
-        public PostTypeEnum FeedType { get; set; }
+        public PostType FeedType { get; set; }
         public string FeedId { get; set; }
         public Author Author { get; set; }
         public bool Liked { get; set; }

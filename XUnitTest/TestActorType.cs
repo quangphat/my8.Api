@@ -14,23 +14,7 @@ namespace XUnitTest
         {
             server = _server;
         }
-        [Fact]
-        public async Task TestCreateAuthorType()
-        {
-            AuthorType authorType = new AuthorType();
-            authorType.Name = "person";
-            authorType.Value = (int)AuthorTypeEnum.Person;
-            await server.Call(HttpMethod.Post, "/api/m-authortype-create",authorType, (rp) =>
-            {
-                Assert.NotNull(rp);
-                Assert.NotNull(rp.Content);
-                Assert.True(rp.IsSuccessStatusCode);
-
-                var body = rp.Content.ReadAsStringAsync().Result;
-
-                Assert.NotNull(body);
-            });
-        }
+        
         [Fact]
         public async Task TestGetAuthorType()
         {

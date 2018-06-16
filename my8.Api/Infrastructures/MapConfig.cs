@@ -27,10 +27,10 @@ namespace my8.Api.Infrastructures
             mapper.CreateMap<PostBroadcastPersonHidden, PostBroadcastPerson>();
             mapper.CreateMap<Feed, StatusPost>();
             mapper.CreateMap<StatusPost, Feed>()
-                .ForMember(p => p.PostType, b => b.UseValue((int)PostTypeEnum.StatusPost));
+                .ForMember(p => p.PostType, b => b.UseValue((int)PostType.StatusPost));
             mapper.CreateMap<Feed, JobPost>();
             mapper.CreateMap<JobPost, Feed>()
-                .ForMember(p => p.PostType, b => b.UseValue((int)PostTypeEnum.JobPost));
+                .ForMember(p => p.PostType, b => b.UseValue((int)PostType.JobPost));
             mapper.CreateMap<PostBroadcastPerson, Feed>()
                 .ForMember(a => a.Liked, b => b.MapFrom(c => c.Like))
                 .ForMember(a => a.BroadcastId, b => b.MapFrom(c => c.Id));
@@ -38,11 +38,11 @@ namespace my8.Api.Infrastructures
                 .ForMember(a => a.PersonId, b => b.MapFrom(c => c.Person.Id))
                 .ForMember(a => a.Like, b=>b.UseValue(false));
             mapper.CreateMap<Page, Author>()
-                .ForMember(a => a.AuthorId, b => b.MapFrom(c => c.PageId))
-                .ForMember(a => a.AuthorTypeId, b => b.UseValue((int)AuthorTypeEnum.Page));
+                .ForMember(a => a.AuthorId, (IMemberConfigurationExpression<Page, Author, string> b) => b.MapFrom(c => c.PageId))
+                .ForMember(a => a.AuthorTypeId, (IMemberConfigurationExpression<Page, Author, int> b) => b.UseValue((int)my8Enum.AuthorType.Page));
             mapper.CreateMap<Community, Author>()
-               .ForMember(a => a.AuthorId, b => b.MapFrom(c => c.CommunityId))
-               .ForMember(a => a.AuthorTypeId, b => b.UseValue((int)AuthorTypeEnum.Community));
+               .ForMember(a => a.AuthorId, (IMemberConfigurationExpression<Community, Author, string> b) => b.MapFrom(c => c.CommunityId))
+               .ForMember(a => a.AuthorTypeId, (IMemberConfigurationExpression<Community, Author, int> b) => b.UseValue((int)my8Enum.AuthorType.Community));
             //<AppendNewHere>
         }
     }

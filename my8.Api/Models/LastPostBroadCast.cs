@@ -12,7 +12,7 @@ namespace my8.Api.Models
         [BsonElement("Id")]
         public string Id { get; set; }
         public string AuthorId { get; set; }
-        public AuthorTypeEnum AuthorType { get; set; }
+        public AuthorType AuthorType { get; set; }
         public string PersonId { get; set; }
         public string LastPostIdToPerson { get; set; }
         //public PostTypeEnum PostType { get; set; }

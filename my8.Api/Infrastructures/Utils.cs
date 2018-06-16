@@ -58,5 +58,9 @@ namespace my8.Api.Infrastructures
 
             return hashed;
         }
+        public static long GetUnixTime()
+        {
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        }
     }
 }

@@ -73,7 +73,7 @@ namespace my8.Api.Repository.Mongo
         {
             try
             {
-                return await collection.Find($@"{{'AuthorId':'{pageId}','AuthorType':{(int)AuthorTypeEnum.Page},PersonId:'{personId}'}}").FirstOrDefaultAsync();
+                return await collection.Find($@"{{'AuthorId':'{pageId}','AuthorType':{(int)AuthorType.Page},PersonId:'{personId}'}}").FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -84,7 +84,7 @@ namespace my8.Api.Repository.Mongo
         {
             try
             {
-                return await collection.Find($@"{{'AuthorId':'{communityId}','AuthorType':{(int)AuthorTypeEnum.Community},PersonId:'{personId}'}}").FirstOrDefaultAsync();
+                return await collection.Find($@"{{'AuthorId':'{communityId}','AuthorType':{(int)AuthorType.Community},PersonId:'{personId}'}}").FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
