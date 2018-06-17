@@ -15,13 +15,10 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("Id")]
         public string Id { get; set; }
-        public Author Commentator { get; set; }
-        public string CommentId { get; set; }
+		public string CommentatorId { get; set; }
+        public AuthorType CommentatorType { get; set; }
         public string FeedId { get; set; }
         public PostType FeedType { get; set; }
-        public string FeedAuthorId { get; set; }
-        public AuthorType FeedAuthorType { get; set; }
-        public long CommentTimeUnix { get; set; }
     }
 }
 

@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using my8.Api.Infrastructures;
 using my8.Api.Interfaces.Mongo;
 using my8.Api.Models;
+using my8.Api.my8Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,9 +63,10 @@ namespace my8.Api.Repository.Mongo
             }
             catch { return false; }
         }
-        public async Task<List<CommentNotify>> Search(string searchStr)
+
+        public async Task<long> CountCommentator(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType)
         {
-            return null;
+            return await collection.CountAsync($@"{{FeedId:'{feedId}',FeedType:{(int)postType},CommentatorId:{{$nin:['{exceptCommentatorId}']}},CommentatorType:{{$eq:{(int)exceptAuthorType}}}}}");
         }
     }
 }

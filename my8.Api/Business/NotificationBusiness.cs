@@ -9,36 +9,31 @@ using my8.Api.Models;
 using AutoMapper;
 namespace my8.Api.Business
 {
-    public class CommentNotifyBusiness : ICommentNotifyBusiness
+    public class NotificationBusiness : INotificationBusiness
     {
-        MongoI.ICommentNotifyRepository m_CommentNotifyRepositoryM;
-        public CommentNotifyBusiness(MongoI.ICommentNotifyRepository commentnotifyRepoM)
+        MongoI.INotificationRepository m_CommentNotifyRepositoryM;
+        public NotificationBusiness(MongoI.INotificationRepository commentnotifyRepoM)
         {
             m_CommentNotifyRepositoryM = commentnotifyRepoM;
         }
-        public async Task<CommentNotify> Create(CommentNotify commentnotify)
+        public async Task<Notification> Create(Notification commentnotify)
         {
             string id = await m_CommentNotifyRepositoryM.Create(commentnotify);
             commentnotify.Id = id;
             return commentnotify;
         }
 
-        public async Task<CommentNotify> Get(string commentnotifyId)
+        public async Task<Notification> Get(string commentnotifyId)
         {
             return await m_CommentNotifyRepositoryM.Get(commentnotifyId);
         }
-        public async Task<bool> Update(CommentNotify commentnotify)
+        public async Task<bool> Update(Notification commentnotify)
         {
             return await m_CommentNotifyRepositoryM.Update(commentnotify);
         }
         public async Task<bool> Delete(string id)
         {
             return await m_CommentNotifyRepositoryM.Delete(id);
-        }
-        public async Task<List<CommentNotify>> Search(string searchStr)
-        {
-            searchStr = searchStr.ToLower();
-            return await m_CommentNotifyRepositoryM.Search(searchStr);
         }
     }
 }

@@ -34,4 +34,10 @@ namespace my8.Api.my8Enum
         District=3,
         Ward=4
     }
+    public enum NotifyType
+    {
+        Comment=1,
+        Like=2,
+        Share=3
+    }
 }

@@ -22,7 +22,7 @@ namespace my8.Api.Controllers
         [Route("api/comment/create")]
         public async Task<IActionResult> Create([FromBody] Comment model)
         {
-            CommentNotify commentNotify= await m_CommentBusiness.Create(model);
+            Notification commentNotify= await m_CommentBusiness.Create(model);
             return ToResponse(commentNotify);
         }
         [HttpGet]

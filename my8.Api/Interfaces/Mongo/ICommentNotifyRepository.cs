@@ -1,4 +1,5 @@
 using my8.Api.Models;
+using my8.Api.my8Enum;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace my8.Api.Interfaces.Mongo
         Task<CommentNotify> Get(string id);
         Task<bool> Update(CommentNotify commentnotify);
         Task<bool> Delete(string id);
-        Task<List<CommentNotify>> Search(string searchStr);
+        Task<long> CountCommentator(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType);
     }
 }
 
