@@ -50,16 +50,16 @@ namespace my8.Api.Repository.Mongo
 
         }
 
-        public async Task<bool> Create(FeedLike feedlike)
+        public async Task<string> Create(FeedLike feedlike)
         {
             try
             {
                 await collection.InsertOneAsync(feedlike);
-                return true;
+                return feedlike.Id;
             }
             catch (Exception e)
             {
-                return false;
+                return string.Empty;
             }
         }
     }

@@ -18,5 +18,8 @@ namespace my8.Api.Models
         public Author Author { get; set; }
         public bool Liked { get; set; }
         public string BroadCastId { get;set; }
+        public long LikedTimeUnix { get; set; }
+        [BsonIgnore]
+        public Author FeedAuthor { get; set; }
     }
 }
