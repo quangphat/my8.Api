@@ -28,14 +28,29 @@ namespace my8.Api.Business
         }
         public async Task<Notification> Create(Comment comment)
         {
+            if (comment == null || comment.Feed == null) return null;
+            string[] receiversId = null;
+            if(comment.Feed.PostingAs== ActionAsType.Person)
+            {
+                receiversId = new string[] { comment.Feed.PersonId };
+            }
+            else if(comment.Feed.PostingAs == ActionAsType.Page)
+            {
+                //Get list page's admins
+            }
+            else if(comment.Feed.PostingAs == ActionAsType.Community)
+            {
+                //get list pcommunity's admin
+            }
             comment.CommentTime = DateTime.UtcNow;
             comment.CommentTimeUnix = Utils.GetUnixTime();
+
             string id = await _commentRepositoryM.Create(comment);
             if (!string.IsNullOrWhiteSpace(id))
             {
                 comment.Id = id;
-                bool updateComment = await _statusPostRepository.UpdateComments(comment.PostId);// update number of comment.
-                long countOthersCommentator = await _notifyRepository.CountCommentator(comment.PostId, comment.PostType, comment.Commentator.AuthorId, (AuthorType)comment.Commentator.AuthorTypeId,NotifyType.Comment,comment.FeedAuthor.AuthorId);
+                bool updateComment = await _statusPostRepository.UpdateComments(comment.FeedId);// update number of comment.
+                long countOthersCommentator = await _notifyRepository.CountOthers(comment.FeedId, comment.FeedType, comment.Commentator.AuthorId, (AuthorType)comment.Commentator.AuthorTypeId,NotifyType.Comment,comment.PersonId);
                 Notification notify = new Notification
                 {
                     AuthorId = comment.Commentator.AuthorId,
@@ -44,11 +59,12 @@ namespace my8.Api.Business
                     NotifyType = NotifyType.Comment,
                     NotifyTimeUnix = comment.CommentTimeUnix,
                     CommentId = comment.Id,
-                    FeedType = comment.PostType,
-                    FeedId = comment.PostId,
-                    ReceiverId = comment.FeedAuthor.AuthorId,
-                    ReceiverType = (AuthorType)comment.FeedAuthor.AuthorTypeId,
-                    OthersCommentator = countOthersCommentator
+                    FeedType = comment.FeedType,
+                    FeedId = comment.FeedId,
+                    ReceiversId = receiversId,
+                    TargetId = comment.Feed.PostBy.AuthorId,
+                    TargetType = (NotificationTargetType)comment.Feed.PostingAs,
+                    OthersCount = countOthersCommentator
                 };
                 Notification exist = await _notifyRepository.Get(notify.FeedId, notify.FeedType,notify.AuthorId,notify.AuthorType);
                 if (exist == null)
@@ -60,15 +76,6 @@ namespace my8.Api.Business
                     notify.Id = exist.Id;
                     await _notifyRepository.Update(notify);
                 }
-                //CommentNotify commentNotify = new CommentNotify
-                //{
-                //    FeedType = comment.PostType,
-                //    CommentatorId = comment.Commentator.AuthorId,
-                //    CommentatorType = (AuthorType)comment.Commentator.AuthorTypeId,
-                //    FeedId = comment.PostId
-                //};
-                
-                //await _commentNotifyRepository.Create(commentNotify);
                 if (string.IsNullOrWhiteSpace(notify.Id)) return null;
                 return notify;
             }

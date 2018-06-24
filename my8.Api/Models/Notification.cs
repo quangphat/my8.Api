@@ -22,10 +22,11 @@ namespace my8.Api.Models
         public string CommentId { get; set; }
         public string FeedId { get; set; }
         public PostType FeedType { get; set; }
-        public string ReceiverId { get; set; }
-        public AuthorType ReceiverType { get; set; }
+        public string[] ReceiversId { get; set; }//alway is person
+        public string TargetId { get; set; } //Page or Community
+        public NotificationTargetType TargetType { get; set; }
         public long NotifyTimeUnix { get; set; }
-        public long OthersCommentator { get; set; }
+        public long OthersCount { get; set; }
     }
 }
 

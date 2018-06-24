@@ -23,6 +23,7 @@ namespace my8.Api.Repository.Mongo
         public async Task<bool> Update(FeedLike feedlike)
         {
             var update = Builders<FeedLike>.Update
+                            .Set(s => s.LikedTimeUnix, feedlike.LikedTimeUnix)
                             .Set(s => s.Liked, feedlike.Liked);
 
             try

@@ -55,6 +55,10 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.Images, post.Images)
                             .Set(s => s.PersonTags, post.PersonTags)
                             .Set(s => s.IsShareExperience, post.IsShareExperience)
+                            .Set(s => s.EditedTimeUnix, post.EditedTimeUnix)
+                            .Set(s => s.EditedBy, post.EditedBy)
+                            .Set(s => s.PersonId, post.PersonId)
+                            .Set(s => s.PostingAsType, post.PostingAsType)
                             .Set(s => s.IsAds, post.IsAds);
 
             try

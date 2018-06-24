@@ -13,10 +13,12 @@ namespace my8.Api.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+        public string PersonId { get; set; }
         public DateTime PostTime { get;set;}
         public long PostTimeUnix { get; set; }
         public string Content { get; set; }
         public Author PostBy { get; set; }// có thể là người/trang post, người like, người comment,...
+        public ActionAsType PostingAs { get; set; } //Từ cách người đăng: người, trang, cộng đồng
         public DateTime EditedTime { get; set; }
         public int Likes { get; set; }
         public int Comments { get; set; } //Số comment

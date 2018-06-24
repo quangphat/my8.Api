@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using my8.Api.my8Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,11 @@ namespace my8.Api.Models
         public DateTime PostTime { get; set; }
         public long PostTimeUnix { get; set; }
         public string Content { get; set; }
+        public string PersonId { get; set; }
         public Author PostBy { get; set; }// có thể là người/trang post, người like, người comment,...
         public DateTime EditedTime { get; set; }
         public long EditedTimeUnix { get; set; }
+        public string EditedBy { get; set; }
         public int Likes { get; set; }
         public int Comments { get; set; } //Số comment
         public int Shares { get; set; }
@@ -48,6 +51,7 @@ namespace my8.Api.Models
         public EmploymentType EmploymentType { get; set; }
         public int MinExperience { get; set; }
         public int MaxExperience { get; set; }
+        public ActionAsType PostingAsType { get; set; }
         [BsonIgnore]
         public int PostType { get; } = 2;
     }

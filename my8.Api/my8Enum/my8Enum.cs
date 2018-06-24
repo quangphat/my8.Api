@@ -11,6 +11,12 @@ namespace my8.Api.my8Enum
         JobPost=2,
         ExperiencePost=3
     }
+    public enum ActionAsType
+    {
+        Person=1,
+        Page=2,
+        Community=3
+    }
     public enum AuthorType
     {
         Person=1,
@@ -39,5 +45,11 @@ namespace my8.Api.my8Enum
         Comment=1,
         Like=2,
         Share=3
+    }
+    public enum NotificationTargetType
+    {
+        Person = 1,
+        Page =2,
+        Community=3
     }
 }

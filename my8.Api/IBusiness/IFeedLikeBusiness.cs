@@ -9,6 +9,6 @@ namespace my8.Api.IBusiness
 {
     public interface IFeedLikeBusiness
     {
-        Task<bool> Like(FeedLike feedlike);
+        Task<Notification> Like(FeedLike feedlike, Feed feed);
     }
 }

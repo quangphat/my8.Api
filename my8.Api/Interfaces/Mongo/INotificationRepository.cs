@@ -12,7 +12,7 @@ namespace my8.Api.Interfaces.Mongo
         Task<Notification> Get(string feedId, PostType feedType, string authorId, AuthorType authorType);
         Task<bool> Update(Notification commentnotify);
         Task<bool> Delete(string id);
-        Task<long> CountCommentator(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string feedAuthorId);
+        Task<long> CountOthers(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string feedAuthorId);
     }
 }
 

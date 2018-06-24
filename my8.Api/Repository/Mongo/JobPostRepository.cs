@@ -70,6 +70,8 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.MinSalary, post.MinSalary)
                             .Set(s => s.MaxSalary, post.MaxSalary)
                             .Set(s => s.Title, post.Title)
+                            .Set(s => s.PersonId, post.PersonId)
+                            .Set(s => s.PostingAsType, post.PostingAsType)
                             .Set(s => s.EmailToReceiveApply, post.EmailToReceiveApply);
 
             try

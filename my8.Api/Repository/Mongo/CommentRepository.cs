@@ -50,8 +50,8 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.EditedTime, comment.EditedTime)
                             .Set(s => s.Likes, comment.Likes)
                             .Set(s => s.Replies, comment.Replies)
-                            .Set(s => s.PostId, comment.PostId)
-                            .Set(s => s.PostType, comment.PostType)
+                            .Set(s => s.FeedId, comment.FeedId)
+                            .Set(s => s.FeedType, comment.FeedType)
                             .Set(s => s.Content, comment.Content);
 
             try

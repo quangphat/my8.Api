@@ -28,27 +28,40 @@ namespace my8.Api.Business
             _postBroadcastPersonRepository = postBroadcastPersonRepository;
             _statusPostRepository = statusPostRepository;
             _jobPostRepository = jobPostRepository;
+            _notifyRepository = NotifyRepository;
         }
 
-        public async Task<bool> Like(FeedLike feedlike)
+        public async Task<Notification> Like(FeedLike feedlike, Feed feed)
         {
+            if (feedlike == null || feed == null) return null;
             feedlike.LikedTimeUnix = Utils.GetUnixTime();
+            string[] receiversId = null;
+            if (feed.PostingAs == ActionAsType.Person)
+            {
+                receiversId = new string[] { feed.PersonId };
+            }
+            else if (feed.PostingAs == ActionAsType.Page)
+            {
+                //Get list page's admins
+            }
+            else if (feed.PostingAs == ActionAsType.Community)
+            {
+                //get list pcommunity's admin
+            }
             FeedLike exist = await m_FeedLikeRepositoryM.Get(feedlike);
-
-            string result = string.Empty;
             if (exist == null)
             {
-                result = await m_FeedLikeRepositoryM.Create(feedlike);
+                 await m_FeedLikeRepositoryM.Create(feedlike);
             }
             else
             {
+                feedlike.Id = exist.Id;
                 await m_FeedLikeRepositoryM.Update(feedlike);
-                result = feedlike.Id;
             }
-            if (!string.IsNullOrWhiteSpace(result))
+            if (!string.IsNullOrWhiteSpace(feedlike.Id))
             {
                 await _postBroadcastPersonRepository.Like(feedlike.BroadCastId, feedlike.Liked);
-                long countOthersCommentator = await _notifyRepository.CountCommentator(feedlike.FeedId, feedlike.FeedType, feedlike.Author.AuthorId, (AuthorType)feedlike.Author.AuthorTypeId, NotifyType.Like, feedlike.FeedAuthor.AuthorId);
+                long countOthersCommentator = await _notifyRepository.CountOthers(feedlike.FeedId, feedlike.FeedType, feedlike.Author.AuthorId, (AuthorType)feedlike.Author.AuthorTypeId, NotifyType.Like, feedlike.FeedAuthor.AuthorId);
                 Notification notify = new Notification
                 {
                     AuthorId = feedlike.Author.AuthorId,
@@ -59,9 +72,10 @@ namespace my8.Api.Business
                     CommentId = null,
                     FeedType = feedlike.FeedType,
                     FeedId = feedlike.FeedId,
-                    ReceiverId = feedlike.FeedAuthor.AuthorId,
-                    ReceiverType = (AuthorType)feedlike.FeedAuthor.AuthorTypeId,
-                    OthersCommentator = countOthersCommentator
+                    ReceiversId = receiversId,
+                    TargetId = feed.PostBy.AuthorId,
+                    TargetType = (NotificationTargetType)feed.PostingAs,
+                    OthersCount = countOthersCommentator
                 };
                 Notification existNotifi = await _notifyRepository.Get(notify.FeedId, notify.FeedType, notify.AuthorId, notify.AuthorType);
                 if (existNotifi == null)
@@ -73,9 +87,10 @@ namespace my8.Api.Business
                     notify.Id = existNotifi.Id;
                     await _notifyRepository.Update(notify);
                 }
-                return await UpdateLikes(feedlike);
+                await UpdateLikes(feedlike);
+                return notify;
             }
-            return false;
+            return null;
         }
         private async Task<bool> UpdateLikes(FeedLike feedlike)
         {

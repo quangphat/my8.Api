@@ -53,10 +53,11 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.CommentId, notification.CommentId)
                             .Set(s => s.FeedId, notification.FeedId)
                             .Set(s => s.FeedType, notification.FeedType)
-                            .Set(s => s.ReceiverId, notification.ReceiverId)
-                            .Set(s => s.ReceiverType, notification.ReceiverType)
+                            .Set(s => s.ReceiversId, notification.ReceiversId)
+                            .Set(s => s.TargetId, notification.TargetId)
+                            .Set(s => s.TargetType, notification.TargetType)
                             .Set(s => s.NotifyTimeUnix, notification.NotifyTimeUnix)
-                            .Set(s => s.OthersCommentator, notification.OthersCommentator);
+                            .Set(s => s.OthersCount, notification.OthersCount);
 
             try
             {
@@ -78,9 +79,11 @@ namespace my8.Api.Repository.Mongo
             }
             catch { return false; }
         }
-        public async Task<long> CountCommentator(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string feedAuthorId)
+        public async Task<long> CountOthers(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string exceptPersonId)
         {
-            return await collection.CountAsync($@"{{FeedId:'{feedId}',FeedType:{(int)postType},AuthorId:{{$nin:['{exceptCommentatorId}','{feedAuthorId}']}},NotifyType:{(int)notifyType},AuthorType:{(int)exceptAuthorType}}}");
+            //if(exceptAuthorType == AuthorType.Person)
+                return await collection.CountAsync($@"{{FeedId:'{feedId}',FeedType:{(int)postType},AuthorId:{{$nin:['{exceptCommentatorId}','{exceptPersonId}']}},NotifyType:{(int)notifyType},AuthorType:{(int)exceptAuthorType}}}");
+
         }
 
     }
