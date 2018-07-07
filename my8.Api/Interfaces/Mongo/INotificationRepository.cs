@@ -10,9 +10,10 @@ namespace my8.Api.Interfaces.Mongo
         Task<string> Create(Notification commentnotify);
         Task<Notification> Get(string id);
         Task<Notification> Get(string feedId, PostType feedType, string authorId, AuthorType authorType);
+        Task<Notification> GetByCodeExist(string code);
         Task<bool> Update(Notification commentnotify);
         Task<bool> Delete(string id);
-        Task<long> CountOthers(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string feedAuthorId);
+        Task<long> CountOthers(string code, string actionAuthorId, string feedAuthorId);
     }
 }
 

@@ -49,8 +49,9 @@ namespace my8.Api.Business
             if (!string.IsNullOrWhiteSpace(id))
             {
                 comment.Id = id;
-                bool updateComment = await _statusPostRepository.UpdateComments(comment.FeedId);// update number of comment.
-                long countOthersCommentator = await _notifyRepository.CountOthers(comment.FeedId, comment.FeedType, comment.Commentator.AuthorId, (AuthorType)comment.Commentator.AuthorTypeId,NotifyType.Comment,comment.PersonId);
+                await _statusPostRepository.UpdateComments(comment.FeedId,true);// update number of comment.
+                string code = Utils.GenerateNotifyCodeCount(comment);
+                long countOthersCommentator = await _notifyRepository.CountOthers(code, comment.Commentator.AuthorId,comment.Feed.PersonId);
                 Notification notify = new Notification
                 {
                     AuthorId = comment.Commentator.AuthorId,
@@ -66,7 +67,10 @@ namespace my8.Api.Business
                     TargetType = (NotificationTargetType)comment.Feed.PostingAs,
                     OthersCount = countOthersCommentator
                 };
-                Notification exist = await _notifyRepository.Get(notify.FeedId, notify.FeedType,notify.AuthorId,notify.AuthorType);
+                string codeExist = Utils.GenerateNotifyCodeExist(notify);
+                notify.CodeCount = code;
+                notify.CodeExist = codeExist;
+                Notification exist = await _notifyRepository.GetByCodeExist(codeExist);
                 if (exist == null)
                 {
                     notify.Id = await _notifyRepository.Create(notify);

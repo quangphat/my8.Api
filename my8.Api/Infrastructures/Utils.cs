@@ -1,4 +1,6 @@
-﻿using System;
+﻿using my8.Api.Models;
+using my8.Api.my8Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -61,6 +63,26 @@ namespace my8.Api.Infrastructures
         public static long GetUnixTime()
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        }
+        public static string GenerateNotifyCodeCount(string feedId,int feedType,int notifyType,int actionAuthorType)
+        {
+            return $"{feedId}_{feedType}_{notifyType}_{actionAuthorType}";
+        }
+        public static string GenerateNotifyCodeCount(Comment comment)
+        {
+            return GenerateNotifyCodeCount(comment.FeedId, (int)comment.FeedType, (int)NotifyType.Comment,comment.Commentator.AuthorTypeId);
+        }
+        public static string GenerateNotifyCodeCount(FeedLike feedlike)
+        {
+            return GenerateNotifyCodeCount(feedlike.FeedId, (int)feedlike.FeedType, (int)NotifyType.Like,feedlike.Author.AuthorTypeId);
+        }
+        public static string GenerateNotifyCodeExist(string feedId,int feedType, string notifyAuthorId, int notifyAuthorType)
+        {
+            return $"{feedId}_{feedType}_{notifyAuthorId}_{notifyAuthorType}";
+        }
+        public static string GenerateNotifyCodeExist(Notification notify)
+        {
+            return GenerateNotifyCodeExist(notify.FeedId, (int)notify.FeedType, notify.AuthorId, (int)notify.AuthorType);
         }
     }
 }

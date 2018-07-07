@@ -20,9 +20,9 @@ namespace my8.Api.Controllers
         }
 		[HttpPost]
         [Route("api/feedlike/create")]
-        public async Task<IActionResult> Create([FromBody] FeedLike model,[FromBody] Feed feed)
+        public async Task<IActionResult> Create([FromBody] FeedLike model)
         {
-            Notification notify= await m_FeedLikeBusiness.Like(model,feed);
+            Notification notify= await m_FeedLikeBusiness.Like(model);
             return ToResponse(notify);
         }
     }

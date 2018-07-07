@@ -12,10 +12,11 @@ namespace my8.Api.Interfaces.Mongo
         Task<List<JobPost>> GetByAuthor(Author author, int skip, int limit, long unixPostTime);
         Task<string> Post(JobPost post);
         Task<bool> UpdatePost(JobPost post);
-        Task<bool> UpdateLikes(JobPost post);
-        Task<bool> UpdateShares(JobPost post);
-        Task<bool> UpdateComments(JobPost post);
-        Task<bool> UpdateViews(JobPost post);
+        Task<bool> Like(string postId);
+        Task<bool> UnLike(string postId);
+        Task<bool> UpdateShares(string postId, bool inc);
+        Task<bool> UpdateComments(string postId, bool inc);
+        Task<bool> UpdateViews(string postId, bool inc);
         Task<bool> Active(string postId, bool active);
         Task<bool> DeletePost(string postId);
     }

@@ -42,11 +42,17 @@ namespace my8.Api.Repository.Mongo
         {
             return await collection.Find($@"{{FeedId:'{feedId}',FeedType:{(int)feedType},AuthorId:'{authorId}',AuthorType:{(int)authorType}}}").FirstOrDefaultAsync();
         }
+        public async Task<Notification> GetByCodeExist(string code)
+        {
+            return await collection.Find($@"{{CodeExist:'{code}'}}").FirstOrDefaultAsync();
+        }
         public async Task<bool> Update(Notification notification)
         {
             var filter = Builders<Notification>.Filter.Eq(p => p.Id, notification.Id);
             var update = Builders<Notification>.Update
                             .Set(s => s.AuthorId, notification.AuthorId)
+                            .Set(s => s.CodeCount, notification.CodeCount)
+                            .Set(s => s.CodeExist, notification.CodeExist)
                             .Set(s => s.AuthorDisplayName, notification.AuthorDisplayName)
                             .Set(s => s.AuthorType, notification.AuthorType)
                             .Set(s => s.NotifyType, notification.NotifyType)
@@ -79,13 +85,16 @@ namespace my8.Api.Repository.Mongo
             }
             catch { return false; }
         }
-        public async Task<long> CountOthers(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string exceptPersonId)
+        //public async Task<long> CountOthers(string feedId, PostType postType, string exceptCommentatorId, AuthorType exceptAuthorType, NotifyType notifyType, string exceptPersonId)
+        //{
+        //    //if(exceptAuthorType == AuthorType.Person)
+        //        return await collection.CountAsync($@"{{FeedId:'{feedId}',FeedType:{(int)postType},AuthorId:{{$nin:['{exceptCommentatorId}','{exceptPersonId}']}},NotifyType:{(int)notifyType},AuthorType:{(int)exceptAuthorType}}}");
+
+        //}
+        public async Task<long> CountOthers(string code,string actionAuthorId, string feedAuthorId)
         {
-            //if(exceptAuthorType == AuthorType.Person)
-                return await collection.CountAsync($@"{{FeedId:'{feedId}',FeedType:{(int)postType},AuthorId:{{$nin:['{exceptCommentatorId}','{exceptPersonId}']}},NotifyType:{(int)notifyType},AuthorType:{(int)exceptAuthorType}}}");
-
+            return await collection.CountAsync($@"{{CodeCount:'{code}',AuthorId:{{$nin:['{actionAuthorId}','{feedAuthorId}']}}}}");
         }
-
     }
 }
 

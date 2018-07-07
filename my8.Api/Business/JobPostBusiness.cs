@@ -11,81 +11,76 @@ namespace my8.Api.Business
 {
     public class JobPostBusiness : IJobPostBusiness
     {
-        MongoI.IJobPostRepository m_JobPostRepositoryM;
+        MongoI.IJobPostRepository _jobPostRepository;
         public JobPostBusiness(MongoI.IJobPostRepository jobpostRepoM)
         {
-            m_JobPostRepositoryM = jobpostRepoM;
+            _jobPostRepository = jobpostRepoM;
         }
         public async Task<bool> Active(string postId, bool active)
         {
-            return await m_JobPostRepositoryM.Active(postId, active);
+            return await _jobPostRepository.Active(postId, active);
         }
 
         public async Task<bool> DeletePost(string postId)
         {
-            return await m_JobPostRepositoryM.DeletePost(postId);
+            return await _jobPostRepository.DeletePost(postId);
         }
 
         public async Task<JobPost> Get(string postId)
         {
-            return await m_JobPostRepositoryM.Get(postId);
+            return await _jobPostRepository.Get(postId);
         }
 
         public async Task<List<JobPost>> GetByAuthor(Author author)
         {
-            return await m_JobPostRepositoryM.GetByAuthor(author);
+            return await _jobPostRepository.GetByAuthor(author);
         }
 
         public async Task<List<JobPost>> Gets(string[] id)
         {
-            return await m_JobPostRepositoryM.Gets(id);
+            return await _jobPostRepository.Gets(id);
         }
 
         public async Task<JobPost> Post(JobPost post)
         {
             post.PostTime = DateTime.UtcNow;
             post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            string id = await m_JobPostRepositoryM.Post(post);
+            string id = await _jobPostRepository.Post(post);
             post.Id = id;
             return post;
         }
 
         public async Task<bool> UpdateComments(JobPost post)
         {
-            return await m_JobPostRepositoryM.UpdateComments(post);
+            return await _jobPostRepository.UpdateComments(post.Id,true);
         }
 
         public async Task<bool> UpdateLikes(string postId,bool like)
         {
-            JobPost post = await m_JobPostRepositoryM.Get(postId);
-            if (post != null)
+            if (string.IsNullOrWhiteSpace(postId)) return false;
+            if (like)
             {
-                if (like)
-                {
-                    post.Likes += 1;
-                }
-                else
-                {
-                    post.Likes -= 1;
-                }
-                return await m_JobPostRepositoryM.UpdateLikes(post);
+                return await _jobPostRepository.Like(postId);
             }
-            return false;
+            else
+            {
+                return await _jobPostRepository.UnLike(postId);
+            }
         }
 
         public async Task<bool> UpdatePost(JobPost post)
         {
-            return await m_JobPostRepositoryM.UpdatePost(post);
+            return await _jobPostRepository.UpdatePost(post);
         }
 
         public async Task<bool> UpdateShares(JobPost post)
         {
-            return await m_JobPostRepositoryM.UpdateShares(post);
+            return await _jobPostRepository.UpdateShares(post.Id,true);
         }
 
         public async Task<bool> UpdateViews(JobPost post)
         {
-            return await m_JobPostRepositoryM.UpdateViews(post);
+            return await _jobPostRepository.UpdateViews(post.Id,true);
         }
     }
 }

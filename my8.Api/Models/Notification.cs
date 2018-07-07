@@ -15,6 +15,8 @@ namespace my8.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("Id")]
         public string Id { get; set; }
+        public string CodeCount { get; set; }
+        public string CodeExist { get; set; }
         public string AuthorId { get; set; }
         public string AuthorDisplayName { get; set; }
         public AuthorType AuthorType { get; set; }

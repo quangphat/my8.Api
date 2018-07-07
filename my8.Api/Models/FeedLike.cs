@@ -13,6 +13,7 @@ namespace my8.Api.Models
         [BsonElement("Id")]
         [JsonProperty(PropertyName = "Id")]
         public string Id { get; set; }
+        public string PersonId { get; set; }
         public PostType FeedType { get; set; }
         public string FeedId { get; set; }
         public Author Author { get; set; }
@@ -21,5 +22,7 @@ namespace my8.Api.Models
         public long LikedTimeUnix { get; set; }
         [BsonIgnore]
         public Author FeedAuthor { get; set; }
+        [BsonIgnore]
+        public ShortFeed Feed { get; set; }
     }
 }

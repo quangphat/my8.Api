@@ -85,59 +85,70 @@ namespace my8.Api.Repository.Mongo
             }
         }
 
-        public async Task<bool> UpdateShares(JobPost post)
+        public async Task<bool> UpdateShares(string postId, bool inc)
         {
-            var filter = Builders<JobPost>.Filter.Eq(p => p.Id, post.Id);
-
-            var update = Builders<JobPost>.Update
-                            .Set(s => s.Shares, post.Shares);
             try
             {
-                await collection.UpdateOneAsync(filter, update);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> UpdateViews(JobPost post)
-        {
-            var filter = Builders<JobPost>.Filter.Eq(p => p.Id, post.Id);
-            var update = Builders<JobPost>.Update
-                            .Set(s => s.Views, post.Views);
-            try
-            {
-                await collection.UpdateOneAsync(filter, update);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        public async Task<bool> UpdateComments(JobPost post)
-        {
-            var filter = Builders<JobPost>.Filter.Eq(p => p.Id, post.Id);
-            var update = Builders<JobPost>.Update
-                            .Set(s => s.Comments, post.Comments);
-            try
-            {
-                await collection.UpdateOneAsync(filter, update);
+                if (inc)
+                {
+                    await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}')}}", "{$inc:{Shares:1}}");
+                }
+                else
+                {
+                    await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}'),Shares:{{$gt:0}}}}", "{$inc:{Shares:-1}}");
+                }
                 return true;
             }
             catch { return false; }
         }
 
-        public async Task<bool> UpdateLikes(JobPost post)
+        public async Task<bool> UpdateViews(string postId, bool inc)
         {
-            var filter = Builders<JobPost>.Filter.Eq(p => p.Id, post.Id);
-            var update = Builders<JobPost>.Update
-                            .Set(s => s.Likes, post.Likes);
             try
             {
-                await collection.UpdateOneAsync(filter, update);
+                if (inc)
+                {
+                    await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}')}}", "{$inc:{Views:1}}");
+                }
+                else
+                {
+                    await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}'),Views:{{$gt:0}}}}", "{$inc:{Views:-1}}");
+                }
+                return true;
+            }
+            catch { return false; }
+        }
+        public async Task<bool> UpdateComments(string postId, bool inc)
+        {
+            try
+            {
+                if (inc)
+                {
+                    await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}')}}", "{$inc:{Comments:1}}");
+                }
+                else
+                {
+                    await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}'),Comments:{{$gt:0}}}}", "{$inc:{Comments:-1}}");
+                }
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public async Task<bool> Like(string postId)
+        {
+            try
+            {
+                await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}')}}", "{$inc:{Likes:1}}");
+                return true;
+            }
+            catch { return false; }
+        }
+        public async Task<bool> UnLike(string postId)
+        {
+            try
+            {
+                await collection.UpdateOneAsync($@"{{_id:ObjectId('{postId}'),Likes:{{$gt:0}}}}", "{$inc:{Likes:-1}}");
                 return true;
             }
             catch { return false; }

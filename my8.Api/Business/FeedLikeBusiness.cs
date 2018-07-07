@@ -14,7 +14,7 @@ namespace my8.Api.Business
 {
     public class FeedLikeBusiness : IFeedLikeBusiness
     {
-        MongoI.IFeedLikeRepository m_FeedLikeRepositoryM;
+        MongoI.IFeedLikeRepository _feedLikeRepositoryM;
         MongoI.IPostBroadcastPersonRepository _postBroadcastPersonRepository;
         MongoI.IStatusPostRepository _statusPostRepository;
         MongoI.IJobPostRepository _jobPostRepository;
@@ -24,44 +24,45 @@ namespace my8.Api.Business
             MongoI.IStatusPostRepository statusPostRepository,
             MongoI.IJobPostRepository jobPostRepository, MongoI.INotificationRepository NotifyRepository)
         {
-            m_FeedLikeRepositoryM = feedlikeRepoM;
+            _feedLikeRepositoryM = feedlikeRepoM;
             _postBroadcastPersonRepository = postBroadcastPersonRepository;
             _statusPostRepository = statusPostRepository;
             _jobPostRepository = jobPostRepository;
             _notifyRepository = NotifyRepository;
         }
 
-        public async Task<Notification> Like(FeedLike feedlike, Feed feed)
+        public async Task<Notification> Like(FeedLike feedlike)
         {
-            if (feedlike == null || feed == null) return null;
+            if (feedlike == null || feedlike.Feed == null) return null;
             feedlike.LikedTimeUnix = Utils.GetUnixTime();
             string[] receiversId = null;
-            if (feed.PostingAs == ActionAsType.Person)
+            if (feedlike.Feed.PostingAs == ActionAsType.Person)
             {
-                receiversId = new string[] { feed.PersonId };
+                receiversId = new string[] { feedlike.Feed.PersonId };
             }
-            else if (feed.PostingAs == ActionAsType.Page)
+            else if (feedlike.Feed.PostingAs == ActionAsType.Page)
             {
-                //Get list page's admins
+                //Get list page's admin
             }
-            else if (feed.PostingAs == ActionAsType.Community)
+            else if (feedlike.Feed.PostingAs == ActionAsType.Community)
             {
-                //get list pcommunity's admin
+                //get list community's admin
             }
-            FeedLike exist = await m_FeedLikeRepositoryM.Get(feedlike);
+            FeedLike exist = await _feedLikeRepositoryM.Get(feedlike);
             if (exist == null)
             {
-                 await m_FeedLikeRepositoryM.Create(feedlike);
+                 await _feedLikeRepositoryM.Create(feedlike);
             }
             else
             {
                 feedlike.Id = exist.Id;
-                await m_FeedLikeRepositoryM.Update(feedlike);
+                await _feedLikeRepositoryM.Update(feedlike);
             }
             if (!string.IsNullOrWhiteSpace(feedlike.Id))
             {
                 await _postBroadcastPersonRepository.Like(feedlike.BroadCastId, feedlike.Liked);
-                long countOthersCommentator = await _notifyRepository.CountOthers(feedlike.FeedId, feedlike.FeedType, feedlike.Author.AuthorId, (AuthorType)feedlike.Author.AuthorTypeId, NotifyType.Like, feedlike.FeedAuthor.AuthorId);
+                string code = Utils.GenerateNotifyCodeCount(feedlike);
+                long countOthersCommentator = await _notifyRepository.CountOthers(code, feedlike.Author.AuthorId, feedlike.PersonId);
                 Notification notify = new Notification
                 {
                     AuthorId = feedlike.Author.AuthorId,
@@ -73,11 +74,14 @@ namespace my8.Api.Business
                     FeedType = feedlike.FeedType,
                     FeedId = feedlike.FeedId,
                     ReceiversId = receiversId,
-                    TargetId = feed.PostBy.AuthorId,
-                    TargetType = (NotificationTargetType)feed.PostingAs,
+                    TargetId = feedlike.Feed.PostBy.AuthorId,
+                    TargetType = (NotificationTargetType)feedlike.Feed.PostingAs,
                     OthersCount = countOthersCommentator
                 };
-                Notification existNotifi = await _notifyRepository.Get(notify.FeedId, notify.FeedType, notify.AuthorId, notify.AuthorType);
+                string codeExist = Utils.GenerateNotifyCodeExist(notify);
+                Notification existNotifi = await _notifyRepository.GetByCodeExist(codeExist);
+                notify.CodeCount = code;
+                notify.CodeExist = codeExist;
                 if (existNotifi == null)
                 {
                     notify.Id = await _notifyRepository.Create(notify);
@@ -96,36 +100,27 @@ namespace my8.Api.Business
         {
             if (feedlike.FeedType == my8Enum.PostType.StatusPost)
             {
-                StatusPost post = await _statusPostRepository.Get(feedlike.FeedId);
-                if (post != null)
+                if (string.IsNullOrWhiteSpace(feedlike.FeedId)) return false;
+                if (feedlike.Liked)
                 {
-                    if (feedlike.Liked)
-                    {
-                        post.Likes += 1;
-                    }
-                    else
-                    {
-                        post.Likes -= 1;
-                    }
-                    return await _statusPostRepository.UpdateLikes(post);
+                    return await _statusPostRepository.Like(feedlike.FeedId);
+                }
+                else
+                {
+                    return await _statusPostRepository.UnLike(feedlike.FeedId);
                 }
             }
             else if (feedlike.FeedType == my8Enum.PostType.JobPost)
             {
-                JobPost post = await _jobPostRepository.Get(feedlike.FeedId);
-                if (post != null)
+                if (string.IsNullOrWhiteSpace(feedlike.FeedId)) return false;
+                if (feedlike.Liked)
                 {
-                    if (feedlike.Liked)
-                    {
-                        post.Likes += 1;
-                    }
-                    else
-                    {
-                        post.Likes -= 1;
-                    }
-                    return await _jobPostRepository.UpdateLikes(post);
+                    return await _jobPostRepository.Like(feedlike.FeedId);
                 }
-                return false;
+                else
+                {
+                    return await _jobPostRepository.UnLike(feedlike.FeedId);
+                }
             }
             return false;
         }

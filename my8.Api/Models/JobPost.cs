@@ -45,6 +45,7 @@ namespace my8.Api.Models
         public List<Skill> SkillTags { get; set; }
         public List<Location> Locations { get; set; }
         public List<Degree> Degrees { get; set; }
+        public List<Certificate> Certificates { get; set; }
         public bool Active { get; set; }
         public string Expire { get; set; }//Ngày hết hạn
         public SeniorityLevel Seniority { get; set; }

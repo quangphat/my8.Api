@@ -51,25 +51,20 @@ namespace my8.Api.Business
 
         public async Task<bool> UpdateComments(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateComments(post.Id);
+            return await m_StatuspostRepositoryM.UpdateComments(post.Id,true);
         }
 
-        public async Task<bool> UpdateLikes(string postId,bool like)
+        public async Task<bool> UpdateLikes(string postId, bool like)
         {
-            StatusPost post = await m_StatuspostRepositoryM.Get(postId);
-            if(post!=null)
+            if (string.IsNullOrWhiteSpace(postId)) return false;
+            if (like)
             {
-                if(like)
-                {
-                    post.Likes += 1;
-                }
-                else
-                {
-                    post.Likes -= 1;
-                }
-                return await m_StatuspostRepositoryM.UpdateLikes(post);
+                return await m_StatuspostRepositoryM.Like(postId);
             }
-            return false;
+            else
+            {
+                return await m_StatuspostRepositoryM.UnLike(postId);
+            }
         }
 
         public async Task<bool> UpdatePost(StatusPost post)
@@ -79,12 +74,12 @@ namespace my8.Api.Business
 
         public async Task<bool> UpdateShares(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateShares(post);
+            return await m_StatuspostRepositoryM.UpdateShares(post.Id,true);
         }
 
         public async Task<bool> UpdateViews(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateViews(post);
+            return await m_StatuspostRepositoryM.UpdateViews(post.Id,true);
         }
     }
 }
