@@ -29,7 +29,7 @@ namespace my8.Api.Models
         public bool IsFindJob { get; set; }//Gắn thẻ là tìm việc
         public bool IsShareExperience { get; set; }//Gắn thẻ là bài đăng chia sẻ kiến thức
         public bool IsAds { get; set; }//bài đăng quảng cáo.
-        public List<Industry> IndustryTags { get; set; }//Lĩnh vực công việc
+        public List<JobFunction> JobFunctionTags { get; set; }//Lĩnh vực công việc
         public List<Skill> SkillTags { get; set; }
         public List<Location> Locations { get; set; }
 

@@ -41,7 +41,7 @@ namespace my8.Api.Models
         public decimal MaxSalary { get; set; }
         public string Title { get; set; }
         public string EmailToReceiveApply { get; set; }//Gửi thông báo đến email khi có người apply
-        public List<Industry> IndustryTags { get; set; }//Lĩnh vực công việc
+        public List<JobFunction> JobFunctionTags { get; set; }//Lĩnh vực công việc
         public List<Skill> SkillTags { get; set; }
         public List<Location> Locations { get; set; }
         public List<Degree> Degrees { get; set; }

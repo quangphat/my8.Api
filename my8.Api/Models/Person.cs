@@ -23,7 +23,7 @@ namespace my8.Api.Models
         public string Company { get; set; }
         public double Rate { get; set; }//Đánh giá 
         public double Experience { get; set; }
-        public List<Industry> IndustryTags { get; set; }
+        public List<JobFunction> JobFunctionTags { get; set; }
         public string[] IndustriesCode { get; set; }
         public List<Skill> SkillTags { get; set; }
         public string[] SkillsCode { get; set; }

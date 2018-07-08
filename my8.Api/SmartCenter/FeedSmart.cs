@@ -93,14 +93,14 @@ namespace my8.Api.SmartCenter
             List<Task> tasks = new List<Task>();
             Task<HashSet<string>> lstPersonByAuthor = GetPersonIdInvolve(jobPost.PostBy);
             tasks.Add(lstPersonByAuthor);
-            Task<HashSet<string>> lstPersonByIndustry = null;
+            Task<HashSet<string>> lstPersonByJobFunction = null;
             Task<HashSet<string>> lstPersonBySkill = null;
             Task<HashSet<string>> lstPersonByExperience = null;
             if (jobPost.Privacy == (int)PostPrivacyType.All)
             {
                 //must satisfy 
-                lstPersonByIndustry = GetPersonIndustry(jobPost.IndustryTags);
-                tasks.Add(lstPersonByIndustry);
+                lstPersonByJobFunction = GetPersonJobFunction(jobPost.JobFunctionTags);
+                tasks.Add(lstPersonByJobFunction);
                 //must satisfy 
                 lstPersonBySkill = GetPersonSkill(jobPost.SkillTags);
                 tasks.Add(lstPersonBySkill);
@@ -123,7 +123,7 @@ namespace my8.Api.SmartCenter
                 await Task.Run(() =>
                 {
                     //must satisfy 
-                    hashSetsMustSatisfy.Add(lstPersonByIndustry.Result);
+                    hashSetsMustSatisfy.Add(lstPersonByJobFunction.Result);
                     hashSetsMustSatisfy.Add(lstPersonBySkill.Result);
                     hashSetsMustSatisfy.Add(lstPersonByExperience.Result);
                     string[] allPersonSatisfyJob = Utils.IntersectOrUnion(hashSetsMustSatisfy);
@@ -213,7 +213,7 @@ namespace my8.Api.SmartCenter
             }
             return null;
         }
-        private async Task<HashSet<string>> GetPersonIndustry(List<Industry> industries)
+        private async Task<HashSet<string>> GetPersonJobFunction(List<JobFunction> industries)
         {
             if (industries == null) return new HashSet<string>();
             string[] keySearch = industries.Select(p => p.Code).ToArray();

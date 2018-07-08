@@ -56,7 +56,7 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.IsFindJob, post.IsFindJob)
                             .Set(s => s.IsShareExperience, post.IsShareExperience)
                             .Set(s => s.IsAds, post.IsAds)
-                            .Set(s => s.IndustryTags, post.IndustryTags)
+                            .Set(s => s.JobFunctionTags, post.JobFunctionTags)
                             .Set(s => s.SkillTags, post.SkillTags)
                             .Set(s => s.Locations, post.Locations)
                             .Set(s => s.MinExperience, post.MinExperience)

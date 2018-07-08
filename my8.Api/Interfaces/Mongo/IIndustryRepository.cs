@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Interfaces.Mongo
 {
-    public interface IIndustryRepository
+    public interface IJobFunctionRepository
     {
-        Task<string> Create(Industry industry);
-        Task<Industry> Get(string id);
-        Task<Industry> GetbyCode(string code);
-        Task<List<Industry>> Search(string searchStr);
-        Task<List<Industry>> Gets();
-        Task<bool> Update(Industry industry);
+        Task<string> Create(JobFunction JobFunction);
+        Task<JobFunction> Get(string id);
+        Task<JobFunction> GetbyCode(string code);
+        Task<List<JobFunction>> Search(string searchStr);
+        Task<List<JobFunction>> Gets();
+        Task<bool> Update(JobFunction JobFunction);
         Task<bool> Delete(string id);
-        //Task<List<Industry>> GetsByPerson(string personId);
+        //Task<List<JobFunction>> GetsByPerson(string personId);
     }
 }
 

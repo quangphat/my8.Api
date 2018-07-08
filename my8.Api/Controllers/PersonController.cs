@@ -35,8 +35,8 @@ namespace my8.Api.Controllers
             model.Rate = 7;
 
             model.Experience = 2;
-            model.IndustryTags = new List<Industry>() {
-                new Industry(){ Code="hr",Display="HR" }
+            model.JobFunctionTags = new List<JobFunction>() {
+                new JobFunction(){ Code="hr",Display="HR" }
             };
             Person person =  await m_PersonBusiness.Create(model);
             return Json(person);

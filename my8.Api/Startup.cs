@@ -73,7 +73,7 @@ namespace my8.Api
 			services.AddScoped<ICommunityBusiness, CommunityBusiness>();
 			services.AddScoped<IStatusPostBusiness, StatusPostBusiness>();
 			services.AddScoped<IPostBroadcastPersonBusiness, PostBroadcastPersonBusiness>();
-			services.AddScoped<IIndustryBusiness, IndustryBusiness>();
+			services.AddScoped<IJobFunctionBusiness, JobFunctionBusiness>();
 			services.AddScoped<ISkillBusiness, SkillBusiness>();
 			services.AddScoped<ILocationBusiness, LocationBusiness>();
 			services.AddScoped<IProvinceBusiness, ProvinceBusiness>();
@@ -100,7 +100,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.ICommunityRepository, MongoR.CommunityRepository>();
             services.AddSingleton<MongoI.IPageRepository, MongoR.PageRepository>();
 			services.AddSingleton<MongoI.IPostBroadcastPersonRepository, MongoR.PostBroadcastPersonRepository>();
-			services.AddSingleton<MongoI.IIndustryRepository, MongoR.IndustryRepository>();
+			services.AddSingleton<MongoI.IJobFunctionRepository, MongoR.JobFunctionRepository>();
 			services.AddSingleton<MongoI.ISkillRepository, MongoR.SkillRepository>();
 			services.AddSingleton<MongoI.ILocationRepository, MongoR.LocationRepository>();
 			services.AddSingleton<MongoI.IProvinceRepository, MongoR.ProvinceRepository>();

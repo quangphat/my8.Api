@@ -3,9 +3,9 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace my8.Api.Models
 {
-    public class Industry
+    public class JobFunction
     {
-        public Industry() { }
+        public JobFunction() { }
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
