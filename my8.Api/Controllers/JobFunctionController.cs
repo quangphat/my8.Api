@@ -14,7 +14,7 @@ namespace my8.Api.Controllers
     public class JobFunctionController : BaseController
     {
         IJobFunctionBusiness m_JobFunctionBusiness;
-        public JobFunctionController(CurrentProcess process, IJobFunctionBusiness JobFunctionBusiness):base(process)
+        public JobFunctionController(CurrentProcess process, IJobFunctionBusiness JobFunctionBusiness) : base(process)
         {
             m_JobFunctionBusiness = JobFunctionBusiness;
         }
@@ -64,8 +64,8 @@ namespace my8.Api.Controllers
         [Route("api/JobFunction/search/{searchStr}")]
         public async Task<IActionResult> Search(string searchStr)
         {
-            List<JobFunction> industries = await m_JobFunctionBusiness.Search(searchStr);
-            return Json(industries);
+            List<JobFunction> jobFunctions = await m_JobFunctionBusiness.Search(searchStr);
+            return ToResponse(jobFunctions);
         }
     }
 }
