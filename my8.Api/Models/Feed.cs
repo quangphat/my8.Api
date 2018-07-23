@@ -38,7 +38,7 @@ namespace my8.Api.Models
         public List<Degree> Degrees { get; set; }
         public bool Active { get; set; }
         public int Privacy { get; set; }
-        public SeniorityLevel Seniority { get; set; }
+        public SeniorityLevelType SeniorityType { get; set; }
         public EmploymentType EmploymentType { get; set; }
 
         public int Applies { get; set; }

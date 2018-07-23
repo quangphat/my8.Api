@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using my8.Api.my8Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace my8.Api.Models
         public List<Degree> Degrees { get; set; }
         public bool Active { get; set; }
         public string Expire { get; set; }//Ngày hết hạn
-        public SeniorityLevel Seniority { get; set; }
+        public SeniorityLevelType Seniority { get; set; }
         public EmploymentType EmploymentType { get; set; }
         public int MinExperience { get; set; }
         public int MaxExperience { get; set; }

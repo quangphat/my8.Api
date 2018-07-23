@@ -79,7 +79,6 @@ namespace my8.Api
 			services.AddScoped<IProvinceBusiness, ProvinceBusiness>();
 			services.AddScoped<IDistrictBusiness, DistrictBusiness>();
 			services.AddScoped<IDegreeBusiness, DegreeBusiness>();
-			services.AddScoped<ISeniorityLevelBusiness, SeniorityLevelBusiness>();
 			services.AddScoped<IJobPostBusiness, JobPostBusiness>();
 			services.AddScoped<ICommentBusiness, CommentBusiness>();
 			services.AddScoped<IReplyCommentBusiness, ReplyCommentBusiness>();
@@ -106,7 +105,6 @@ namespace my8.Api
 			services.AddSingleton<MongoI.IProvinceRepository, MongoR.ProvinceRepository>();
 			services.AddSingleton<MongoI.IDistrictRepository, MongoR.DistrictRepository>();
 			services.AddSingleton<MongoI.IDegreeRepository, MongoR.DegreeRepository>();
-			services.AddSingleton<MongoI.ISeniorityLevelRepository, MongoR.SeniorityLevelRepository>();
 			services.AddSingleton<MongoI.IReplyCommentRepository, MongoR.ReplyCommentRepository>();
 			services.AddSingleton<MongoI.IFeedLikeRepository, MongoR.FeedLikeRepository>();
 			services.AddSingleton<MongoI.ILastPostBroadCastRepository, MongoR.LastPostBroadCastRepository>();

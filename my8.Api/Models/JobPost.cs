@@ -27,6 +27,7 @@ namespace my8.Api.Models
         public long EditedTimeUnix { get; set; }
         public string EditedBy { get; set; }
         public int Likes { get; set; }
+        public string CompanyName { get; set; }
         public int Comments { get; set; } //Số comment
         public int Shares { get; set; }
         public int Views { get; set; }
@@ -48,7 +49,7 @@ namespace my8.Api.Models
         public List<Certificate> Certificates { get; set; }
         public bool Active { get; set; }
         public string Expire { get; set; }//Ngày hết hạn
-        public SeniorityLevel Seniority { get; set; }
+        public SeniorityLevelType Seniority { get; set; }
         public EmploymentType EmploymentType { get; set; }
         public int MinExperience { get; set; }
         public int MaxExperience { get; set; }

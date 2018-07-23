@@ -52,6 +52,7 @@ namespace my8.Api.Repository.Mongo
                             .Set(s => s.Shares, post.Shares)
                             .Set(s => s.Views, post.Views)
                             .Set(s => s.Images, post.Images)
+                            .Set(s => s.CompanyName, post.CompanyName)
                             .Set(s => s.PersonTags, post.PersonTags)
                             .Set(s => s.IsFindJob, post.IsFindJob)
                             .Set(s => s.IsShareExperience, post.IsShareExperience)

@@ -7,6 +7,8 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.my8Enum;
+
 namespace my8.Api.Business
 {
     public class JobPostBusiness : IJobPostBusiness
@@ -45,6 +47,20 @@ namespace my8.Api.Business
         {
             post.PostTime = DateTime.UtcNow;
             post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            post.Active = true;
+            post.Applies = 0;
+            post.Comments = 0;
+            post.Likes = 0;
+            post.IsAds = false;
+            post.Shares = 0;
+            post.Views = 0;
+            post.IsFindJob = false;
+            post.MinExperience = 0;
+            post.MaxExperience = 0;
+            post.MinSalary = 0;
+            post.MaxSalary = 0;
+            post.EmailToReceiveApply = string.Empty;
+            post.Privacy = (int)PostPrivacyType.All;
             string id = await _jobPostRepository.Post(post);
             post.Id = id;
             return post;

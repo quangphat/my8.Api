@@ -245,7 +245,7 @@ namespace my8.Api.SmartCenter
             List<Person> people = await _personRepositoryM.SearchByExperience(minYear, maxYear);
             return people.Select(p => p.PersonId).ToHashSet();
         }
-        private async Task<string[]> GetPersonSeniority(List<SeniorityLevel> seniorityLevels)
+        private async Task<string[]> GetPersonSeniority(List<int> seniorityLevels)
         {
 
             return null;
