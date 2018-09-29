@@ -13,6 +13,7 @@ using my8.Api.ISmartCenter;
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
+    [Route("StatusPosts")]
     public class StatusPostController : BaseController
     {
         IStatusPostBusiness m_statusPostBusiness;
@@ -24,7 +25,7 @@ namespace my8.Api.Controllers
             m_statusPostBusiness = statusPostBusiness;
         }
         [HttpPost]
-        [Route("api/StatusPost/create")]
+        [Route("create")]
         public async Task<IActionResult> CreatePost([FromBody] StatusPost model)
         {
             StatusPost post = await m_statusPostBusiness.Post(model);
@@ -36,21 +37,21 @@ namespace my8.Api.Controllers
             return ToResponse(result);
         }
         [HttpGet]
-        [Route("api/statuspost/get/{postId}")]
+        [Route("{postId}")]
         public async Task<IActionResult> Get(string postId)
         {
             StatusPost post = await m_statusPostBusiness.Get(postId);
             return Json(post);
         }
         [HttpPost]
-        [Route("api/statuspost/getbyauthor")]
+        [Route("getbyauthor")]
         public async Task<IActionResult> GetByAuthor([FromBody] Author author)
         {
             List<StatusPost> lstStatusPost = await m_statusPostBusiness.GetByAuthor(author);
             return Json(lstStatusPost);
         }
         [HttpPost]
-        [Route("api/statuspost/getmultiple-statuspost")]
+        [Route("multipleStatuspost")]
         public async Task<IActionResult> Gets([FromBody] string[] ids)
         {
             List<StatusPost> lstStatusPost = await m_statusPostBusiness.Gets(ids);

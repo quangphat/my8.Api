@@ -11,6 +11,7 @@ using my8.Api.Models;
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
+    [Route("jobFunctions")]
     public class JobFunctionController : BaseController
     {
         IJobFunctionBusiness m_JobFunctionBusiness;
@@ -19,53 +20,49 @@ namespace my8.Api.Controllers
             m_JobFunctionBusiness = JobFunctionBusiness;
         }
 		[HttpPost]
-        [Route("api/JobFunction/create")]
         public async Task<IActionResult> Create([FromBody] JobFunction model)
         {
             JobFunction JobFunction = await m_JobFunctionBusiness.Create(model);
             return Json(JobFunction);
         }
         [HttpGet]
-        [Route("api/JobFunction/getbyId/{id}")]
-        public async Task<IActionResult> GetById(string id)
+        [Route("search/{searchStr}")]
+        public async Task<IActionResult> Search(string searchStr)
         {
-            JobFunction JobFunction = await m_JobFunctionBusiness.Get(id);
+            List<JobFunction> jobFunctions = await m_JobFunctionBusiness.Search(searchStr);
+            return ToResponse(jobFunctions);
+        }
+        [HttpGet]
+        [Route("{id}/{code}")]
+        public async Task<IActionResult> Get(string id,string code)
+        {
+            JobFunction JobFunction = null;
+            if(!string.IsNullOrWhiteSpace(id))
+                JobFunction = await m_JobFunctionBusiness.Get(id);
+            else
+                JobFunction = await m_JobFunctionBusiness.GetByCode(code);
             return Json(JobFunction);
         }
         [HttpGet]
-        [Route("api/JobFunction/getbyCode/{code}")]
-        public async Task<IActionResult> GetByCode(string code)
-        {
-            JobFunction JobFunction = await m_JobFunctionBusiness.GetByCode(code);
-            return Json(JobFunction);
-        }
-        [HttpGet]
-        [Route("api/JobFunction")]
         public async Task<IActionResult> GetAll()
         {
             List<JobFunction> results = await m_JobFunctionBusiness.Gets();
             return ToResponse(results);
         }
         [HttpPut]
-        [Route("api/JobFunction/update")]
+        [Route("update")]
         public async Task<IActionResult> Update([FromBody] JobFunction model)
         {
             bool result = await m_JobFunctionBusiness.Update(model);
             return Json(result);
         }
         [HttpDelete]
-        [Route("api/JobFunction/delete/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             bool rst = await m_JobFunctionBusiness.Delete(id);
             return Json(rst);
         }
-        [HttpGet]
-        [Route("api/JobFunction/search/{searchStr}")]
-        public async Task<IActionResult> Search(string searchStr)
-        {
-            List<JobFunction> jobFunctions = await m_JobFunctionBusiness.Search(searchStr);
-            return ToResponse(jobFunctions);
-        }
+        
     }
 }

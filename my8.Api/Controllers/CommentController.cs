@@ -11,6 +11,7 @@ using my8.Api.Models;
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
+    [Route("comments")]
     public class CommentController : BaseController
     {
         ICommentBusiness m_CommentBusiness;
@@ -19,28 +20,26 @@ namespace my8.Api.Controllers
             m_CommentBusiness = commentBusiness;
         }
 		[HttpPost]
-        [Route("api/comment/create")]
         public async Task<IActionResult> Create([FromBody] Comment model)
         {
             Notification commentNotify= await m_CommentBusiness.Create(model);
             return ToResponse(commentNotify);
         }
         [HttpGet]
-        [Route("api/comment/getbypost/{postId}/{postType}/{skip}")]
+        [Route("getbypost/{postId}/{postType}/{skip}")]
         public async Task<IActionResult> GetByPost(string postId,int postType,int skip)
         {
             List<Comment> comments = await m_CommentBusiness.GetByPost(postId, postType,skip);
             return ToResponse(comments);
         }
         [HttpPut]
-        [Route("api/comment/update")]
         public async Task<IActionResult> Update([FromBody] Comment model)
         {
             bool result = await m_CommentBusiness.Update(model);
             return ToResponse(result);
         }
         [HttpDelete]
-        [Route("api/comment/delete/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             bool rst = await m_CommentBusiness.Delete(id);

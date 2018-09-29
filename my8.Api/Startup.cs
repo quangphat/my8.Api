@@ -154,7 +154,7 @@ namespace my8.Api
             });
 
             //app.UseMiddleware<ClientAuthorizeMiddleware>();
-            app.UseMiddleware<HandShakeAuthorizeMiddleware>();
+            //app.UseMiddleware<HandShakeAuthorizeMiddleware>();
             app.UseMvc();
             
         }

@@ -11,6 +11,7 @@ using my8.Api.Models;
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
+    [Route("Feed")]
     public class FeedLikeController : BaseController
     {
         IFeedLikeBusiness m_FeedLikeBusiness;
@@ -19,7 +20,7 @@ namespace my8.Api.Controllers
             m_FeedLikeBusiness = feedlikeBusiness;
         }
 		[HttpPost]
-        [Route("api/feedlike/create")]
+        [Route("create")]
         public async Task<IActionResult> Create([FromBody] FeedLike model)
         {
             Notification notify= await m_FeedLikeBusiness.Like(model);

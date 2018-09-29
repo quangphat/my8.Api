@@ -10,7 +10,7 @@ using my8.Api.Models;
 
 namespace my8.Api.Controllers
 {
-    [Produces("application/json")]
+    [Route("Persons")]
     public class PersonController : BaseController
     {
         IPersonBusiness m_PersonBusiness;
@@ -19,14 +19,14 @@ namespace my8.Api.Controllers
             m_PersonBusiness = personBusiness;
         }
         [HttpPost]
-        [Route("api/account/login")]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] Person model)
         {
             Person account = await m_PersonBusiness.Login(model);
             return ToResponse(account);
         }
         [HttpPost]
-        [Route("api/person/create")]
+        [Route("create")]
         public async Task<IActionResult> Create([FromBody] Person model)
         {
             model = new Person();
@@ -42,63 +42,63 @@ namespace my8.Api.Controllers
             return Json(person);
         }
         [HttpGet]
-        [Route("api/person/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
             Person person = await m_PersonBusiness.Get(id);
             return Json(person);
         }
         [HttpGet]
-        [Route("api/person/GetbyUrl/{url}")]
+        [Route("GetbyUrl/{url}")]
         public async Task<IActionResult> GetByUrl(string url)
         {
             Person person = await m_PersonBusiness.GetByUrl(url);
             return ToResponse(person);
         }
         [HttpGet]
-        [Route("api/person/GetPersonSql/{id}")]
+        [Route("GetPersonSql/{id}")]
         public async Task<IActionResult> GetInSqlById(string id)
         {
             Person person = await m_PersonBusiness.GetSql(id);
             return Json(person);
         }
         [HttpPut]
-        [Route("api/person/update")]
+        [Route("update")]
         public async Task<IActionResult> UpdatePerson([FromBody] Person person)
         {
             bool rs = await m_PersonBusiness.Update(person);
             return Json(rs);
         }
         [HttpGet]
-        [Route("api/person/search/{searchstr}/{skip}/{limit}/{currentPersonId}")]
+        [Route("search/{searchstr}/{skip}/{limit}/{currentPersonId}")]
         public async Task<IActionResult> Search(string searchstr,int skip,int limit,string currentPersonId)
         {
             List<PersonAllin> lstPerson = await m_PersonBusiness.Search(currentPersonId, searchstr, skip, limit);
             return Json(lstPerson);
         }
         [HttpGet]
-        [Route("api/person/FollowingPage/{id}")]
-        public async Task<IActionResult> GetFollowingPage(string id)
+        [Route("{personId}/FollowingPages")]
+        public async Task<IActionResult> GetFollowingPage(string personId)
         {
-            List<Page> lstPage = await m_PersonBusiness.GetFollowingPage(id);
+            List<Page> lstPage = await m_PersonBusiness.GetFollowingPage(personId);
             return ToResponse(lstPage);
         }
         [HttpPost]
-        [Route("api/person/followpage/{personId}/{pageId}")]
+        [Route("followpage/{personId}/{pageId}")]
         public async Task<IActionResult> FollowPage(string personId,string pageId)
         {
             bool result = await m_PersonBusiness.FollowPage(personId,pageId);
             return Json(result);
         }
         [HttpPost]
-        [Route("api/person/unfollowpage/{personId}/{pageId}")]
+        [Route("unfollowpage/{personId}/{pageId}")]
         public async Task<IActionResult> UnFollowPage(string personId, string pageId)
         {
             bool result = await m_PersonBusiness.UnFollowPage(personId, pageId);
             return Json(result);
         }
         [HttpPost]
-        [Route("api/person/interacttopage/{personId}/{pageId}")]
+        [Route("interacttopage/{personId}/{pageId}")]
         public async Task<IActionResult> InteractToPage(string personId, string pageId)
         {
             bool result = await m_PersonBusiness.InteractToPage(personId, pageId);
@@ -106,50 +106,50 @@ namespace my8.Api.Controllers
         }
 
         [HttpPost]
-        [Route("api/person/addfriend/{sendbyId}/{sendtoId}")]
+        [Route("addfriend/{sendbyId}/{sendtoId}")]
         public async Task<IActionResult> AddFriend(string sendbyId, string sendtoId)
         {
             bool result = await m_PersonBusiness.AddFriend(sendbyId, sendtoId);
             return Json(result);
         }
         [HttpPost]
-        [Route("api/person/unfriend/{sendbyId}/{sendtoId}")]
+        [Route("unfriend/{sendbyId}/{sendtoId}")]
         public async Task<IActionResult> UnFriend(string sendbyId, string sendtoId)
         {
             bool result = await m_PersonBusiness.UnFriend(sendbyId, sendtoId);
             return Json(result);
         }
         [HttpGet]
-        [Route("api/person/get-allfriend/{id}")]
+        [Route("getAllfriend/{id}")]
         public async Task<IActionResult> GetAllFriends(string id)
         {
             List<PersonAllin> lstFriend = await m_PersonBusiness.GetAllFriend(id);
             return Json(lstFriend);
         }
         [HttpGet]
-        [Route("api/person/get-commonfriend/{id}/{friendId}")]
+        [Route("getCommonfriend/{id}/{friendId}")]
         public async Task<IActionResult> GetAllFriends(string id,string friendId)
         {
             List<Person> lstFriend = await m_PersonBusiness.FindCommondFriend(id,friendId);
             return Json(lstFriend);
         }
         [HttpPost]
-        [Route("api/person/join-Community/{id}/{CommunityId}")]
-        public async Task<IActionResult> JoinCommunity(string id,string CommunityId)
+        [Route("{personId}/joinCommunity/{CommunityId}")]
+        public async Task<IActionResult> JoinCommunity(string personId, string CommunityId)
         {
-            bool result = await m_PersonBusiness.JoinCommunity(id, CommunityId);
+            bool result = await m_PersonBusiness.JoinCommunity(personId, CommunityId);
             return Json(result);
         }
 
         [HttpGet]
-        [Route("api/person/get-recommendpages/{id}/{limit}")]
-        public async Task<IActionResult> GetRecommendPages(string id, int limit)
+        [Route("{personId}/getRecommendpages/{limit}")]
+        public async Task<IActionResult> GetRecommendPages(string personId, int limit)
         {
-            List<Page> pages = await m_PersonBusiness.GetRecommendPage(id, limit);
+            List<Page> pages = await m_PersonBusiness.GetRecommendPage(personId, limit);
             return Json(pages);
         }
         [HttpGet]
-        [Route("api/person/getTopInteractiveFriends/{personId}")]
+        [Route("{personId}/TopInteractiveFriends")]
         public async Task<IActionResult> GetTopInteractiveFriends(string personId)
         {
             List<PersonAllin> shortPeople = await m_PersonBusiness.GetTopFriendInteractive(personId);

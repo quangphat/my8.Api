@@ -13,6 +13,7 @@ using my8.Api.my8Enum;
 namespace my8.Api.Controllers
 {
     [Produces("application/json")]
+    [Route("JobPosts")]
     public class JobPostController : BaseController
     {
         IJobPostBusiness m_JobPostBusiness;
@@ -23,7 +24,7 @@ namespace my8.Api.Controllers
             m_FeedSmart = feedSmart;
         }
         [HttpPost]
-        [Route("api/JobPost/create")]
+        [Route("create")]
         public async Task<IActionResult> CreatePost([FromBody] JobPost model)
         {
             JobPost post = await m_JobPostBusiness.Post(model);
@@ -35,21 +36,21 @@ namespace my8.Api.Controllers
             return ToResponse(result);
         }
         [HttpGet]
-        [Route("api/JobPost/get/{postId}")]
+        [Route("{postId}")]
         public async Task<IActionResult> Get(string postId)
         {
             JobPost post = await m_JobPostBusiness.Get(postId);
             return Json(post);
         }
         [HttpPost]
-        [Route("api/JobPost/getbyauthor")]
+        [Route("getbyauthor")]
         public async Task<IActionResult> GetByAuthor([FromBody] Author author)
         {
             List<JobPost> lstStatusPost = await m_JobPostBusiness.GetByAuthor(author);
             return Json(lstStatusPost);
         }
         [HttpPost]
-        [Route("api/JobPost/getmultiple-JobPost")]
+        [Route("getmultipleJobPost")]
         public async Task<IActionResult> Gets([FromBody] string[] ids)
         {
             List<JobPost> lstStatusPost = await m_JobPostBusiness.Gets(ids);
