@@ -26,7 +26,7 @@ namespace my8.Api.Controllers
             return ToResponse(commentNotify);
         }
         [HttpGet]
-        [Route("getbypost/{postId}/{postType}/{skip}")]
+        [Route("{postId}/{postType}/{skip}")]
         public async Task<IActionResult> GetByPost(string postId,int postType,int skip)
         {
             List<Comment> comments = await m_CommentBusiness.GetByPost(postId, postType,skip);
