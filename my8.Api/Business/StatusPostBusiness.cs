@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoI = my8.Api.Interfaces.Mongo;
 using my8.Api.Models;
+using my8.Api.my8Enum;
+
 namespace my8.Api.Business
 {
     public class StatusPostBusiness : IStatusPostBusiness
@@ -30,9 +32,13 @@ namespace my8.Api.Business
             return await m_StatuspostRepositoryM.Get(postId);
         }
 
-        public async Task<List<StatusPost>> GetByAuthor(Author author)
+        public async Task<List<StatusPost>> GetByAuthorPerson(string personId, int type, int page, int limit,long lastPostTimeUnix = 0)
         {
-            return await m_StatuspostRepositoryM.GetByAuthor(author);
+            if (type == (int)AuthorType.Person)
+            {
+                return await m_StatuspostRepositoryM.GetByAuthorPerson(personId, page, limit);
+            }
+            return null;
         }
 
         public async Task<List<StatusPost>> Gets(string[] id)
@@ -51,7 +57,7 @@ namespace my8.Api.Business
 
         public async Task<bool> UpdateComments(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateComments(post.Id,true);
+            return await m_StatuspostRepositoryM.UpdateComments(post.Id, true);
         }
 
         public async Task<bool> UpdateLikes(string postId, bool like)
@@ -74,12 +80,12 @@ namespace my8.Api.Business
 
         public async Task<bool> UpdateShares(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateShares(post.Id,true);
+            return await m_StatuspostRepositoryM.UpdateShares(post.Id, true);
         }
 
         public async Task<bool> UpdateViews(StatusPost post)
         {
-            return await m_StatuspostRepositoryM.UpdateViews(post.Id,true);
+            return await m_StatuspostRepositoryM.UpdateViews(post.Id, true);
         }
     }
 }

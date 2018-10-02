@@ -8,8 +8,9 @@ namespace my8.Api.Interfaces.Mongo
     {
         Task<List<JobPost>> Gets(string[] id);
         Task<JobPost> Get(string postId);
-        Task<List<JobPost>> GetByAuthor(Author author);
-        Task<List<JobPost>> GetByAuthor(Author author, int skip, int limit, long unixPostTime);
+        Task<List<JobPost>> GetByAuthorPerson(string personId, int page, int limit, long lastPostTimeUnix = 0);
+        //Task<List<JobPost>> GetByAuthor(Author author);
+        //Task<List<JobPost>> GetByAuthor(Author author, int skip, int limit, long unixPostTime);
         Task<string> Post(JobPost post);
         Task<bool> UpdatePost(JobPost post);
         Task<bool> Like(string postId);

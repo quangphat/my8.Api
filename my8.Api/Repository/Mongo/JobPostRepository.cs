@@ -154,23 +154,26 @@ namespace my8.Api.Repository.Mongo
             }
             catch { return false; }
         }
-
-
-        public async Task<List<JobPost>> GetByAuthor(Author author)
+        public async Task<List<JobPost>> GetByAuthorPerson(string personId, int page, int limit, long lastPostTimeUnix = 0)
         {
-            var filterBuilder = Builders<JobPost>.Filter;
-            filter = filterBuilder.Eq(p => p.PostBy.AuthorId, author.AuthorId) & filterBuilder.Eq(p => p.PostBy.AuthorTypeId, author.AuthorTypeId);
-            List<JobPost> statusPosts = await collection.Find(filter).ToListAsync();
-            return statusPosts;
+            return await collection.Find($@"{{'PersonId':'{personId}',PostTimeUnix:{{$gt:{lastPostTimeUnix}}}}}").Sort("{PostTimeUnix:-1}").Skip(page * limit).Limit(limit).ToListAsync();
         }
-        public async Task<List<JobPost>> GetByAuthor(Author author, int skip, int limit, long unixPostTime = 0)
-        {
-            var filterBuilder = Builders<StatusPost>.Filter;
-            //filter = filterBuilder.Eq(p => p.PostBy.AuthorId, author.AuthorId) & filterBuilder.Eq(p => p.PostBy.AuthorTypeId, author.AuthorTypeId);
-            List<JobPost> jobPosts = await collection.Find($@"{{'PostBy.AuthorId':'{author.AuthorId}','PostBy.AuthorTypeId':{author.AuthorTypeId},PostTimeUnix:{{$gt:{unixPostTime}}}}}")
-                .Sort("{PostTimeUnix:-1}").Limit(limit).ToListAsync();
-            return jobPosts;
-        }
+
+        //public async Task<List<JobPost>> GetByAuthor(Author author)
+        //{
+        //    var filterBuilder = Builders<JobPost>.Filter;
+        //    filter = filterBuilder.Eq(p => p.PostBy.AuthorId, author.AuthorId) & filterBuilder.Eq(p => p.PostBy.AuthorTypeId, author.AuthorTypeId);
+        //    List<JobPost> statusPosts = await collection.Find(filter).ToListAsync();
+        //    return statusPosts;
+        //}
+        //public async Task<List<JobPost>> GetByAuthor(Author author, int skip, int limit, long unixPostTime = 0)
+        //{
+        //    var filterBuilder = Builders<StatusPost>.Filter;
+        //    //filter = filterBuilder.Eq(p => p.PostBy.AuthorId, author.AuthorId) & filterBuilder.Eq(p => p.PostBy.AuthorTypeId, author.AuthorTypeId);
+        //    List<JobPost> jobPosts = await collection.Find($@"{{'PostBy.AuthorId':'{author.AuthorId}','PostBy.AuthorTypeId':{author.AuthorTypeId},PostTimeUnix:{{$gt:{unixPostTime}}}}}")
+        //        .Sort("{PostTimeUnix:-1}").Limit(limit).ToListAsync();
+        //    return jobPosts;
+        //}
         public async Task<bool> Active(string postId, bool active)
         {
             var filter = Builders<JobPost>.Filter.Eq(p => p.Id, postId);

@@ -32,11 +32,18 @@ namespace my8.Api.Business
         {
             return await _jobPostRepository.Get(postId);
         }
-
-        public async Task<List<JobPost>> GetByAuthor(Author author)
+        public async Task<List<JobPost>> GetByAuthorPerson(string personId, int type, int page, int limit, long lastPostTimeUnix = 0)
         {
-            return await _jobPostRepository.GetByAuthor(author);
+            if (type == (int)AuthorType.Person)
+            {
+                return await _jobPostRepository.GetByAuthorPerson(personId, page, limit);
+            }
+            return null;
         }
+        //public async Task<List<JobPost>> GetByAuthor(Author author)
+        //{
+        //    return await _jobPostRepository.GetByAuthor(author);
+        //}
 
         public async Task<List<JobPost>> Gets(string[] id)
         {

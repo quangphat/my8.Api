@@ -12,7 +12,7 @@ namespace my8.Api.IBusiness
         Task<StatusPost> Post(StatusPost post);
         Task<List<StatusPost>> Gets(string[] id);
         Task<StatusPost> Get(string postId);
-        Task<List<StatusPost>> GetByAuthor(Author author);
+        Task<List<StatusPost>> GetByAuthorPerson(string personId,int type, int page, int limit, long lastPostTimeUnix = 0);
         Task<bool> UpdatePost(StatusPost post);
         Task<bool> UpdateLikes(string postId,bool like);
         Task<bool> UpdateShares(StatusPost post);

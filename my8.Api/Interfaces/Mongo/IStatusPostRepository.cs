@@ -9,8 +9,7 @@ namespace my8.Api.Interfaces.Mongo
     {
         Task<List<StatusPost>> Gets(string[] id);
         Task<StatusPost> Get(string postId);
-        Task<List<StatusPost>> GetByAuthor(Author author);
-        Task<List<StatusPost>> GetByAuthor(Author author,int skip, int limit, long unixPostTime);
+        Task<List<StatusPost>> GetByAuthorPerson(string personId,int page, int limit, long lastPostTimeUnix = 0);
         Task<string> Post(StatusPost post);
         Task<bool> UpdatePost(StatusPost post);
 

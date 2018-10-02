@@ -40,21 +40,21 @@ namespace my8.Api.Controllers
         public async Task<IActionResult> Get(string postId)
         {
             JobPost post = await m_JobPostBusiness.Get(postId);
-            return Json(post);
+            return ToResponse(post);
         }
-        [HttpPost]
-        [Route("getbyauthor")]
-        public async Task<IActionResult> GetByAuthor([FromBody] Author author)
+        [HttpGet]
+        [Route("{authorId}/{authorType}/{page}/{limit}")]
+        public async Task<IActionResult> GetByAuthor(string authorId, int authorType, int page, int limit)
         {
-            List<JobPost> lstStatusPost = await m_JobPostBusiness.GetByAuthor(author);
-            return Json(lstStatusPost);
+            List<JobPost> lstStatusPost = await m_JobPostBusiness.GetByAuthorPerson(authorId, authorType, page, limit);
+            return ToResponse(lstStatusPost);
         }
         [HttpPost]
         [Route("getmultipleJobPost")]
         public async Task<IActionResult> Gets([FromBody] string[] ids)
         {
             List<JobPost> lstStatusPost = await m_JobPostBusiness.Gets(ids);
-            return Json(lstStatusPost);
+            return ToResponse(lstStatusPost);
         }
     }
 }

@@ -325,8 +325,8 @@ namespace my8.Api.SmartCenter
                     {
                         lastPostTimeUnix = lastPost.LastPostTimeToPerson;
                     }
-                    Task<List<StatusPost>> getstatusPostsTask = _statusPostRepository.GetByAuthor(authors[i], 0, Utils.LIMIT_FEED, lastPostTimeUnix);
-                    Task<List<JobPost>> getJobPostTask = _jobPostRepository.GetByAuthor(authors[i], 0, Utils.LIMIT_FEED, lastPostTimeUnix);
+                    Task<List<StatusPost>> getstatusPostsTask = _statusPostRepository.GetByAuthorPerson(authors[i].AuthorId, 0, Utils.LIMIT_FEED, lastPostTimeUnix);
+                    Task<List<JobPost>> getJobPostTask = _jobPostRepository.GetByAuthorPerson(authors[i].AuthorId, 0, Utils.LIMIT_FEED, lastPostTimeUnix);
                     await Task.WhenAll(getstatusPostsTask, getJobPostTask);
                     List<Feed> feeds = new List<Feed>();
                     if (getstatusPostsTask.Result != null)

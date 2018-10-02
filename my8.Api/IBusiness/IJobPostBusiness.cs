@@ -12,7 +12,8 @@ namespace my8.Api.IBusiness
         Task<JobPost> Post(JobPost post);
         Task<List<JobPost>> Gets(string[] id);
         Task<JobPost> Get(string postId);
-        Task<List<JobPost>> GetByAuthor(Author author);
+        Task<List<JobPost>> GetByAuthorPerson(string personId, int type, int page, int limit, long lastPostTimeUnix = 0);
+        //Task<List<JobPost>> GetByAuthor(Author author);
         Task<bool> UpdatePost(JobPost post);
         Task<bool> UpdateLikes(string postId,bool like);
         Task<bool> UpdateShares(JobPost post);
