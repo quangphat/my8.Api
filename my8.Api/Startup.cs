@@ -85,6 +85,7 @@ namespace my8.Api
 			services.AddScoped<IFeedLikeBusiness, FeedLikeBusiness>();
 			services.AddScoped<ILastPostBroadCastBusiness, LastPostBroadCastBusiness>();
 			services.AddScoped<INotificationBusiness, NotificationBusiness>();
+			services.AddScoped<IExperienceBusiness, ExperienceBusiness>();
 			//<AppendBusinessDI>
 
             //Mongo
@@ -111,6 +112,7 @@ namespace my8.Api
 			services.AddSingleton<MongoI.INotificationRepository, MongoR.NotificationRepository>();
 			services.AddSingleton<MongoI.ICommentNotifyRepository, MongoR.CommentNotifyRepository>();
 			services.AddSingleton<MongoI.INotificationRepository, MongoR.NotificationRepository>();
+			services.AddSingleton<MongoI.IExperienceRepository, MongoR.ExperienceRepository>();
 			//AppendMongoDI
             //Neo
             services.AddSingleton<NeoI.IPageRepository, NeoR.PageRepository>();

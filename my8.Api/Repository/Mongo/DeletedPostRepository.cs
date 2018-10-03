@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class DeletedPostRepository:MongoRepositoryBase,IDeletedPostRepository
+    public class DeletedPostRepository:MongoRepositoryBase<DeletedPost>,IDeletedPostRepository
     {
 		IMongoCollection<DeletedPost> collection;
 		FilterDefinition<DeletedPost> filter = FilterDefinition<DeletedPost>.Empty;

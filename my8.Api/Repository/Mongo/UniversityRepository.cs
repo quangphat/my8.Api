@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class UniversityRepository:MongoRepositoryBase,IUniversityRepository
+    public class UniversityRepository:MongoRepositoryBase<University>,IUniversityRepository
     {
 		IMongoCollection<University> collection;
         public UniversityRepository(IOptions<MongoConnection> setting) : base(setting) 

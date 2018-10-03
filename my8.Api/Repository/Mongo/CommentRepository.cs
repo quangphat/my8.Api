@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class CommentRepository : MongoRepositoryBase,ICommentRepository
+    public class CommentRepository : MongoRepositoryBase<Comment>,ICommentRepository
     {
         IMongoCollection<Comment> collection;
         FilterDefinition<Comment> filter = FilterDefinition<Comment>.Empty;

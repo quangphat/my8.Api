@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class FeedLikeRepository:MongoRepositoryBase,IFeedLikeRepository
+    public class FeedLikeRepository:MongoRepositoryBase<FeedLike>,IFeedLikeRepository
     {
 		IMongoCollection<FeedLike> collection;
 		FilterDefinition<FeedLike> filter = FilterDefinition<FeedLike>.Empty;

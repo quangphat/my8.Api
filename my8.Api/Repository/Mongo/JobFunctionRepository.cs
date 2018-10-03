@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class JobFunctionRepository : MongoRepositoryBase, IJobFunctionRepository
+    public class JobFunctionRepository : MongoRepositoryBase<JobFunction>, IJobFunctionRepository
     {
         IMongoCollection<JobFunction> collection;
         FilterDefinition<JobFunction> filter = FilterDefinition<JobFunction>.Empty;

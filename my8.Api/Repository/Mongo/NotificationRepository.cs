@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class NotificationRepository : MongoRepositoryBase,INotificationRepository
+    public class NotificationRepository : MongoRepositoryBase<Notification>,INotificationRepository
     {
 		IMongoCollection<Notification> collection;
 		FilterDefinition<Notification> filter = FilterDefinition<Notification>.Empty;

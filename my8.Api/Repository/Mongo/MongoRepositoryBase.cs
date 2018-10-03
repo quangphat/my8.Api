@@ -1,14 +1,23 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using my8.Api.Infrastructures;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public abstract class MongoRepositoryBase
+    public abstract class MongoRepositoryBase<TEntity> where TEntity:class
     {
         protected MongoClient _client;
         protected IMongoDatabase _db { get; set; }
         MongoConnection mongoConnection;
+        internal readonly IBsonSerializerRegistry _serializerRegistry;
+        internal readonly IBsonSerializer<TEntity> _documentSerializer;
         public MongoRepositoryBase(IOptions<MongoConnection> setting)
         {
             mongoConnection = setting.Value;
@@ -20,5 +29,64 @@ namespace my8.Api.Repository.Mongo
             if (_db == null)
                 _db= _client.GetDatabase(mongoConnection.Database);
         }
+        protected async Task<MGPagination<TEntity>> GetPaginationAsync(IMongoCollection<TEntity> collection,
+            int page, int pageSize,
+            string filter,
+            string sort,
+            Expression<Func<TEntity, TEntity>> projection = null)
+        {
+            var pipeline = new List<BsonDocument>();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+                pipeline.Add(new BsonDocument { { "$match", filter } });
+            if (!string.IsNullOrWhiteSpace(sort))
+                pipeline.Add(new BsonDocument { { "$sort", sort } });
+            if (projection != null)
+            {
+                var projectionBuilder = Builders<TEntity>.Projection.Expression(projection);
+
+                pipeline.Add(new BsonDocument { { "$project", projectionBuilder.Render(_documentSerializer, _serializerRegistry).Document } });
+            }
+
+            pipeline.Add(new BsonDocument
+            {
+                {
+                    "$group", new BsonDocument
+                    {
+                        { "_id", 0 },
+                        { "total", new BsonDocument { { "$sum", 1 } } },
+                        { "datas", new BsonDocument { { "$push", "$$ROOT" } } }
+                    }
+                }
+            });
+
+            pipeline.Add(new BsonDocument
+            {
+                {
+                    "$project", new BsonDocument
+                    {
+                        { "_id", 0 },
+                        { "total", 1 },
+                        { "datas", new BsonDocument { { "$slice", new BsonArray(new object[] { "$datas", page * pageSize, pageSize }) } } }
+                    }
+                }
+            });
+
+            var aggregate = collection.Aggregate<BsonDocument>(pipeline);
+
+            var data = await aggregate.FirstOrDefaultAsync();
+
+            var result = data == null
+                ? new MGPagination<TEntity>() { datas = new TEntity[0], total = 0 }
+                : BsonSerializer.Deserialize<MGPagination<TEntity>>(data);
+
+            return result;
+        }
+    }
+    [BsonIgnoreExtraElements]
+    public class MGPagination<TEntity>
+    {
+        public int total { get; set; }
+        public IEnumerable<TEntity> datas { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class PostBroadcastPersonRepository:MongoRepositoryBase,IPostBroadcastPersonRepository
+    public class PostBroadcastPersonRepository:MongoRepositoryBase<PostBroadcastPerson>,IPostBroadcastPersonRepository
     {
 		IMongoCollection<PostBroadcastPerson> collection;
 		FilterDefinition<PostBroadcastPerson> filter = FilterDefinition<PostBroadcastPerson>.Empty;

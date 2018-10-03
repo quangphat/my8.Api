@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class DistrictRepository:MongoRepositoryBase,IDistrictRepository
+    public class DistrictRepository:MongoRepositoryBase<District>,IDistrictRepository
     {
 		IMongoCollection<District> collection;
 		FilterDefinition<District> filter = FilterDefinition<District>.Empty;

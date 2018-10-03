@@ -64,6 +64,10 @@ namespace my8.Api.Infrastructures
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         }
+        public static long GetUnixTime(DateTime inputDate)
+        {
+            return ((DateTimeOffset)inputDate).ToUnixTimeSeconds();
+        }
         public static string GenerateNotifyCodeCount(string feedId,int feedType,int notifyType,int actionAuthorType)
         {
             return $"{feedId}_{feedType}_{notifyType}_{actionAuthorType}";

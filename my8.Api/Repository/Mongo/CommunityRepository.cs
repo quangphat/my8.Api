@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class CommunityRepository:MongoRepositoryBase,ICommunityRepository
+    public class CommunityRepository:MongoRepositoryBase<Community>,ICommunityRepository
     {
 		IMongoCollection<Community> collection;
 		FilterDefinition<Community> filter = FilterDefinition<Community>.Empty;

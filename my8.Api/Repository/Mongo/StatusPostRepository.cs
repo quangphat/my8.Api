@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class StatusPostRepository : MongoRepositoryBase, IStatusPostRepository
+    public class StatusPostRepository : MongoRepositoryBase<StatusPost>, IStatusPostRepository
     {
         IMongoCollection<StatusPost> collection;
 

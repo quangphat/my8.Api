@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class SkillRepository:MongoRepositoryBase,ISkillRepository
+    public class SkillRepository:MongoRepositoryBase<Skill>,ISkillRepository
     {
 		IMongoCollection<Skill> collection;
 		FilterDefinition<Skill> filter = FilterDefinition<Skill>.Empty;

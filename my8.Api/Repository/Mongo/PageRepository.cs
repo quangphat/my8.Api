@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class PageRepository:MongoRepositoryBase,IPageRepository
+    public class PageRepository:MongoRepositoryBase<Page>,IPageRepository
     {
 		IMongoCollection<Page> collection;
 		FilterDefinition<Page> filter = FilterDefinition<Page>.Empty;

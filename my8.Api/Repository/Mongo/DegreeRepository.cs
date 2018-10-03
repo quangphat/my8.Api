@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace my8.Api.Repository.Mongo
 {
-    public class DegreeRepository:MongoRepositoryBase,IDegreeRepository
+    public class DegreeRepository:MongoRepositoryBase<Degree>,IDegreeRepository
     {
 		IMongoCollection<Degree> collection;
 		FilterDefinition<Degree> filter = FilterDefinition<Degree>.Empty;
