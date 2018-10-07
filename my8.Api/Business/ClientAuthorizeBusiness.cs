@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using my8.Api.Models;
 using AutoMapper;
 using my8.Api.Interfaces.Sql;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class ClientAuthorizeBusiness : IClientAuthorizeBusiness
+    public class ClientAuthorizeBusiness :BaseBusiness, IClientAuthorizeBusiness
     {
         IClientAuthorizeRepository m_ClientAuthorizeRepositoryM;
-        public ClientAuthorizeBusiness(IClientAuthorizeRepository clientauthorizeRepoM)
+        public ClientAuthorizeBusiness(IClientAuthorizeRepository clientauthorizeRepoM, CurrentProcess process) :base(process)
         {
             m_ClientAuthorizeRepositoryM = clientauthorizeRepoM;
         }
+
+        
+
         //public async Task<ClientAuthorize> Create(ClientAuthorize clientauthorize)
         //{
         //    string id = await m_ClientAuthorizeRepositoryM.Create(clientauthorize);

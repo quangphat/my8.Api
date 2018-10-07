@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class DegreeBusiness : IDegreeBusiness
+    public class DegreeBusiness :BaseBusiness, IDegreeBusiness
     {
         MongoI.IDegreeRepository m_DegreeRepositoryM;
-        public DegreeBusiness(MongoI.IDegreeRepository degreeRepoM)
+        public DegreeBusiness(MongoI.IDegreeRepository degreeRepoM,CurrentProcess process):base(process)
         {
             m_DegreeRepositoryM = degreeRepoM;
         }

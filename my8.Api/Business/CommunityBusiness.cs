@@ -7,13 +7,15 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class CommunityBusiness : ICommunityBusiness
+    public class CommunityBusiness :BaseBusiness, ICommunityBusiness
     {
         MongoI.ICommunityRepository m_CommunityRepositoryM;
         NeoI.ICommunityRepository m_CommunityRepositoryN;
-        public CommunityBusiness(MongoI.ICommunityRepository CommunityRepoM, NeoI.ICommunityRepository CommunityRepoN)
+        public CommunityBusiness(MongoI.ICommunityRepository CommunityRepoM, NeoI.ICommunityRepository CommunityRepoN,CurrentProcess process):base(process)
         {
             m_CommunityRepositoryM = CommunityRepoM;
             m_CommunityRepositoryN = CommunityRepoN;

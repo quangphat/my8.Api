@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using MongoI = my8.Api.Interfaces.Mongo;
 using my8.Api.Models;
 using my8.Api.my8Enum;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class StatusPostBusiness : IStatusPostBusiness
+    public class StatusPostBusiness :BaseBusiness, IStatusPostBusiness
     {
         MongoI.IStatusPostRepository m_StatuspostRepositoryM;
-        public StatusPostBusiness(MongoI.IStatusPostRepository statuspostRepoM)
+        public StatusPostBusiness(MongoI.IStatusPostRepository statuspostRepoM,CurrentProcess process) :base(process)
         {
             m_StatuspostRepositoryM = statuspostRepoM;
         }

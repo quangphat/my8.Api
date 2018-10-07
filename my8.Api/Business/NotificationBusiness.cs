@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class NotificationBusiness : INotificationBusiness
+    public class NotificationBusiness :BaseBusiness ,INotificationBusiness
     {
         MongoI.INotificationRepository m_CommentNotifyRepositoryM;
-        public NotificationBusiness(MongoI.INotificationRepository commentnotifyRepoM)
+        public NotificationBusiness(MongoI.INotificationRepository commentnotifyRepoM, CurrentProcess process):base(process)
         {
             m_CommentNotifyRepositoryM = commentnotifyRepoM;
         }

@@ -58,7 +58,7 @@ namespace my8.Api.Controllers
                 model.error = new ErrorJsonModel()
                 {
                     code = errorMessage.Message,
-                    message = Errors.Get(errorMessage.Message),
+                    message = "error",
                     trace_keys = errorMessage.TraceKeys
                 };
             }

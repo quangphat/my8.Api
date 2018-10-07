@@ -9,10 +9,10 @@ using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class ExperienceBusiness : IExperienceBusiness
+    public class ExperienceBusiness :BaseBusiness, IExperienceBusiness
     {
         MongoI.IExperienceRepository m_ExperienceRepositoryM;
-        public ExperienceBusiness(MongoI.IExperienceRepository experienceRepoM)
+        public ExperienceBusiness(MongoI.IExperienceRepository experienceRepoM, CurrentProcess process):base(process)
         {
             m_ExperienceRepositoryM = experienceRepoM;
         }
@@ -41,10 +41,16 @@ namespace my8.Api.Business
         }
         public async Task<Pagination<Experience>> GetByPersonId(string personId, int page, int limit = 10)
         {
+            if (CheckIsNotLogin())
+            {
+                return null;
+            }
+                
             return await m_ExperienceRepositoryM.GetByPersonId(personId,page,limit);
         }
         public async Task<bool> Update(Experience experience)
         {
+
             return await m_ExperienceRepositoryM.Update(experience);
         }
         public async Task<bool> Delete(string id)

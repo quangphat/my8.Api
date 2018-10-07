@@ -8,16 +8,20 @@ using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
 using my8.Api.my8Enum;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class PostBroadcastPersonBusiness : IPostBroadcastPersonBusiness
+    public class PostBroadcastPersonBusiness :BaseBusiness, IPostBroadcastPersonBusiness
     {
         MongoI.IPostBroadcastPersonRepository m_PostbroadcastPersonRepositoryM;
         NeoI.IPersonRepository  m_PersonRepository;
         NeoI.IPageRepository m_PageRepository;
         NeoI.ICommunityRepository m_CommunityRepository;
-        public PostBroadcastPersonBusiness(MongoI.IPostBroadcastPersonRepository postbroadcastpersonRepoM, NeoI.IPersonRepository personRepository,NeoI.IPageRepository pageRepository,NeoI.ICommunityRepository CommunityRepository)
+        public PostBroadcastPersonBusiness(MongoI.IPostBroadcastPersonRepository postbroadcastpersonRepoM, 
+            NeoI.IPersonRepository personRepository,
+            NeoI.IPageRepository pageRepository,
+            NeoI.ICommunityRepository CommunityRepository,CurrentProcess process):base(process)
         {
             m_PostbroadcastPersonRepositoryM = postbroadcastpersonRepoM;
             m_PersonRepository = personRepository;

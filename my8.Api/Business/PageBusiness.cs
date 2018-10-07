@@ -7,14 +7,15 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using AutoMapper;
 using my8.Api.Models;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class PageBusiness : IPageBusiness
+    public class PageBusiness : BaseBusiness,IPageBusiness
     {
         MongoI.IPageRepository m_pageRepositoryM;
         NeoI.IPageRepository m_pageRepositoryN;
-        public PageBusiness(MongoI.IPageRepository pageRepoM, NeoI.IPageRepository pageRepoN)
+        public PageBusiness(MongoI.IPageRepository pageRepoM, NeoI.IPageRepository pageRepoN,CurrentProcess process):base(process)
         {
             m_pageRepositoryM = pageRepoM;
             m_pageRepositoryN = pageRepoN;

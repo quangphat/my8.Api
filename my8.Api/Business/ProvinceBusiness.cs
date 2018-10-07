@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class ProvinceBusiness : IProvinceBusiness
+    public class ProvinceBusiness :BaseBusiness, IProvinceBusiness
     {
         MongoI.IProvinceRepository m_ProvinceRepositoryM;
-        public ProvinceBusiness(MongoI.IProvinceRepository provinceRepoM)
+        public ProvinceBusiness(MongoI.IProvinceRepository provinceRepoM,CurrentProcess process):base(process)
         {
             m_ProvinceRepositoryM = provinceRepoM;
         }

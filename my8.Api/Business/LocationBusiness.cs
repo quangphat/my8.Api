@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class LocationBusiness : ILocationBusiness
+    public class LocationBusiness :BaseBusiness, ILocationBusiness
     {
         MongoI.ILocationRepository m_LocationRepositoryM;
-        public LocationBusiness(MongoI.ILocationRepository locationRepoM)
+        public LocationBusiness(MongoI.ILocationRepository locationRepoM,CurrentProcess process):base(process)
         {
             m_LocationRepositoryM = locationRepoM;
         }

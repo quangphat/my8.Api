@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class DistrictBusiness : IDistrictBusiness
+    public class DistrictBusiness :BaseBusiness, IDistrictBusiness
     {
         MongoI.IDistrictRepository m_DistrictRepositoryM;
-        public DistrictBusiness(MongoI.IDistrictRepository districtRepoM)
+        public DistrictBusiness(MongoI.IDistrictRepository districtRepoM,CurrentProcess process):base(process)
         {
             m_DistrictRepositoryM = districtRepoM;
         }

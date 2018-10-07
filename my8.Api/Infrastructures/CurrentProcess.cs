@@ -12,7 +12,7 @@ namespace my8.Api.Infrastructures
             Errors = new List<ErrorMessage>();
             Items = new Dictionary<string, object>();
         }
-
+        public string PersonId { get; set; }
         public List<ErrorMessage> Errors { get; }
 
         public void AddError(string errorMessage, params object[] traceKeys)

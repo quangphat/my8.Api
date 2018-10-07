@@ -8,16 +8,19 @@ using NeoI = my8.Api.Interfaces.Neo4j;
 using SqlI = my8.Api.Interfaces.Sql;
 using AutoMapper;
 using my8.Api.Models;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class PersonBusiness : IPersonBusiness
+    public class PersonBusiness :BaseBusiness, IPersonBusiness
     {
         const int TOP = 10;
         MongoI.IPersonRepository m_personRepositoryM;
         NeoI.IPersonRepository m_personRepositoryN;
         SqlI.IPersonRepository m_personRepositoryS;
-        public PersonBusiness(MongoI.IPersonRepository personRepoM, NeoI.IPersonRepository personRepoN, SqlI.IPersonRepository personRepositoryS)
+        public PersonBusiness(MongoI.IPersonRepository personRepoM, 
+            NeoI.IPersonRepository personRepoN, 
+            SqlI.IPersonRepository personRepositoryS,CurrentProcess process):base(process)
         {
             m_personRepositoryM = personRepoM;
             m_personRepositoryN = personRepoN;

@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class SkillBusiness : ISkillBusiness
+    public class SkillBusiness :BaseBusiness, ISkillBusiness
     {
         MongoI.ISkillRepository m_SkillRepositoryM;
-        public SkillBusiness(MongoI.ISkillRepository skillRepoM)
+        public SkillBusiness(MongoI.ISkillRepository skillRepoM, CurrentProcess process):base(process)
         {
             m_SkillRepositoryM = skillRepoM;
         }

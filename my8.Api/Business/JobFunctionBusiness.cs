@@ -10,10 +10,10 @@ using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class JobFunctionBusiness : IJobFunctionBusiness
+    public class JobFunctionBusiness :BaseBusiness, IJobFunctionBusiness
     {
         MongoI.IJobFunctionRepository m_JobFunctionRepositoryM;
-        public JobFunctionBusiness(MongoI.IJobFunctionRepository JobFunctionRepoM)
+        public JobFunctionBusiness(MongoI.IJobFunctionRepository JobFunctionRepoM,CurrentProcess process):base(process)
         {
             m_JobFunctionRepositoryM = JobFunctionRepoM;
         }

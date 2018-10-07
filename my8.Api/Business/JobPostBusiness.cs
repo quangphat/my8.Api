@@ -8,13 +8,14 @@ using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
 using my8.Api.my8Enum;
+using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class JobPostBusiness : IJobPostBusiness
+    public class JobPostBusiness :BaseBusiness, IJobPostBusiness
     {
         MongoI.IJobPostRepository _jobPostRepository;
-        public JobPostBusiness(MongoI.IJobPostRepository jobpostRepoM)
+        public JobPostBusiness(MongoI.IJobPostRepository jobpostRepoM,CurrentProcess process):base(process)
         {
             _jobPostRepository = jobpostRepoM;
         }

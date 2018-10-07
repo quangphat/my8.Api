@@ -12,14 +12,14 @@ using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class CommentBusiness : ICommentBusiness
+    public class CommentBusiness :BaseBusiness, ICommentBusiness
     {
         MongoI.ICommentRepository _commentRepositoryM;
         MongoI.IStatusPostRepository _statusPostRepository;
         MongoI.INotificationRepository _notifyRepository;
         MongoI.ICommentNotifyRepository _commentNotifyRepository;
         public CommentBusiness(MongoI.ICommentRepository commentRepoM, MongoI.IStatusPostRepository statusPostRepository, 
-            MongoI.INotificationRepository NotifyRepository, MongoI.ICommentNotifyRepository commentNotifyRepository)
+            MongoI.INotificationRepository NotifyRepository, MongoI.ICommentNotifyRepository commentNotifyRepository, CurrentProcess process) : base(process)
         {
             _commentRepositoryM = commentRepoM;
             _statusPostRepository = statusPostRepository;

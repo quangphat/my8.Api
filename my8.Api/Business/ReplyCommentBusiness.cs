@@ -11,10 +11,10 @@ using my8.Api.Infrastructures;
 
 namespace my8.Api.Business
 {
-    public class ReplyCommentBusiness : IReplyCommentBusiness
+    public class ReplyCommentBusiness :BaseBusiness, IReplyCommentBusiness
     {
         MongoI.IReplyCommentRepository m_ReplyCommentRepositoryM;
-        public ReplyCommentBusiness(MongoI.IReplyCommentRepository replycommentRepoM)
+        public ReplyCommentBusiness(MongoI.IReplyCommentRepository replycommentRepoM,CurrentProcess process):base(process)
         {
             m_ReplyCommentRepositoryM = replycommentRepoM;
         }

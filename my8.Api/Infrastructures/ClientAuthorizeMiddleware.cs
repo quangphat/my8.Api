@@ -26,7 +26,7 @@ namespace my8.Api.Infrastructures
             "/lib/",
             "/handshake"
         };
-        public async Task Invoke(HttpContext httpContext, IClientAuthorizeBusiness bizAuthorize)
+        public async Task Invoke(HttpContext httpContext, IClientAuthorizeBusiness bizAuthorize, CurrentProcess process)
         {
             var path = httpContext.Request.Path;
 
@@ -41,7 +41,8 @@ namespace my8.Api.Infrastructures
                 var headers = ClientAuthorizeModel.Create(
                     httpContext.Request.Headers["X-my8-Key"].FirstOrDefault(),
                     httpContext.Request.Headers["X-my8-Signature"].FirstOrDefault());
-                var x = httpContext.Request.Headers["X-my8-userId"].FirstOrDefault();
+                var personId = httpContext.Request.Headers["X-my8-PersonId"].FirstOrDefault();
+                process.PersonId = personId;
                 if (!headers.IsValid)
                 {
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -54,6 +55,7 @@ namespace my8.Api.Infrastructures
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     return;
                 }
+                
                 var originalData = _getOriginalDataToHash(httpContext);
 
                 var checksum = string.Empty;

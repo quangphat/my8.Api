@@ -7,12 +7,14 @@ using MongoI = my8.Api.Interfaces.Mongo;
 using NeoI = my8.Api.Interfaces.Neo4j;
 using my8.Api.Models;
 using AutoMapper;
+using my8.Api.Infrastructures;
+
 namespace my8.Api.Business
 {
-    public class LastPostBroadCastBusiness : ILastPostBroadCastBusiness
+    public class LastPostBroadCastBusiness :BaseBusiness, ILastPostBroadCastBusiness
     {
         MongoI.ILastPostBroadCastRepository m_LastPostBroadCastRepositoryM;
-        public LastPostBroadCastBusiness(MongoI.ILastPostBroadCastRepository lastpostbroadcastRepoM)
+        public LastPostBroadCastBusiness(MongoI.ILastPostBroadCastRepository lastpostbroadcastRepoM,CurrentProcess process):base(process)
         {
             m_LastPostBroadCastRepositoryM = lastpostbroadcastRepoM;
         }

@@ -12,7 +12,7 @@ using my8.Api.my8Enum;
 
 namespace my8.Api.Business
 {
-    public class FeedLikeBusiness : IFeedLikeBusiness
+    public class FeedLikeBusiness : BaseBusiness,IFeedLikeBusiness
     {
         MongoI.IFeedLikeRepository _feedLikeRepositoryM;
         MongoI.IPostBroadcastPersonRepository _postBroadcastPersonRepository;
@@ -22,7 +22,7 @@ namespace my8.Api.Business
         public FeedLikeBusiness(MongoI.IFeedLikeRepository feedlikeRepoM,
             MongoI.IPostBroadcastPersonRepository postBroadcastPersonRepository,
             MongoI.IStatusPostRepository statusPostRepository,
-            MongoI.IJobPostRepository jobPostRepository, MongoI.INotificationRepository NotifyRepository)
+            MongoI.IJobPostRepository jobPostRepository, MongoI.INotificationRepository NotifyRepository,CurrentProcess process):base(process)
         {
             _feedLikeRepositoryM = feedlikeRepoM;
             _postBroadcastPersonRepository = postBroadcastPersonRepository;
