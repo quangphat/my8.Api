@@ -24,17 +24,17 @@ namespace my8.Api.Controllers
             _postBroadcastPersonBusiness = postBroadcastPersonBusiness;
         }
         [HttpGet]
-        [Route("{personId}/{skip}")]
-        public async Task<IActionResult> Gets(string personId, int skip)
+        [Route("{skip}")]
+        public async Task<IActionResult> Gets(int skip)
         {
-            List<Feed> lstPost = await m_FeedSmart.GetPosts(personId, skip);
+            List<Feed> lstPost = await m_FeedSmart.GetPosts(skip);
             return ToResponse(lstPost);
         }
         [HttpPost]
-        [Route("{personId}/Init")]
-        public async Task<IActionResult> Init(string personId)
+        [Route("Init")]
+        public async Task<IActionResult> Init()
         {
-            bool result = await m_FeedSmart.InitBroadcast(personId);
+            bool result = await m_FeedSmart.InitBroadcast();
             return ToResponse(result);
         }
 

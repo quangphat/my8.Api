@@ -8,10 +8,10 @@ namespace my8.Api.ISmartCenter
 {
     public interface IFeedSmart
     {
-        Task<bool> InitBroadcast(string personId);
+        Task<bool> InitBroadcast();
         Task<bool> BroadcastToPerson(StatusPost post);
         Task<bool> BroadcastToPerson(JobPost post);
-        Task<List<Feed>> GetPosts(string personId, int skip);
+        Task<List<Feed>> GetPosts(int skip);
         Task<List<Feed>> InjectGrayMatter(List<PostBroadcastPerson> postBroadcasts, List<Feed> postAllTypes);
     }
 }

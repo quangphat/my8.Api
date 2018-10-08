@@ -13,7 +13,7 @@ using my8.Api.ISmartCenter;
 
 namespace my8.Api.SmartCenter
 {
-    public class FeedSmart : IFeedSmart
+    public class FeedSmart : BaseSmart,IFeedSmart
     {
 
         MongoI.IPostBroadcastPersonRepository _PostbroadcastPersonRepositoryM;
@@ -31,7 +31,7 @@ namespace my8.Api.SmartCenter
             , MongoI.IPersonRepository personRepositoryM
             , MongoI.IStatusPostRepository statusPostRepository
             , MongoI.IJobPostRepository jobPostRepository
-            , MongoI.ILastPostBroadCastRepository lastPostBroadCastRepository)
+            , MongoI.ILastPostBroadCastRepository lastPostBroadCastRepository, CurrentProcess process):base(process)
         {
             _PostbroadcastPersonRepositoryM = postBroadcastPersonRepository;
             _personRepositoryN = personRepositoryN;
@@ -51,8 +51,13 @@ namespace my8.Api.SmartCenter
         {
             return await CreatePostBroadcastAsync(post);
         }
-        public async Task<List<Feed>> GetPosts(string personId, int skip)
+        public async Task<List<Feed>> GetPosts(int skip)
         {
+            if(CheckIsNotLogin())
+            {
+                return null;
+            }
+            string personId = _process.PersonId;
             Task<List<JobPost>> jobPostsTask = GetJobPost(await _PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, Utils.LIMIT_FEED));
             Task<List<StatusPost>> statusPostsTask = GetStatusPost(await _PostbroadcastPersonRepositoryM.GetByPerson(personId, skip, Utils.LIMIT_FEED));
             await Task.WhenAll(jobPostsTask, statusPostsTask);
@@ -286,8 +291,13 @@ namespace my8.Api.SmartCenter
             throw new NotImplementedException();
         }
 
-        public async Task<bool> InitBroadcast(string personId)
+        public async Task<bool> InitBroadcast()
         {
+            if(CheckIsNotLogin())
+            {
+                return false;
+            }
+            string personId = _process.PersonId;
             List<Task> tasks = new List<Task>();
             Task<IEnumerable<Page>> getFollowingPagesTask = _personRepositoryN.GetFollowingPage(personId);
             Task<IEnumerable<Community>> getCommunityTask = _personRepositoryN.GetJoiningCommunitys(personId);
