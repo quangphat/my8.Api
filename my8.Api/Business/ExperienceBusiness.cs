@@ -39,14 +39,14 @@ namespace my8.Api.Business
         {
             return await m_ExperienceRepositoryM.Get(experienceId);
         }
-        public async Task<Pagination<Experience>> GetByPersonId(string personId, int page, int limit = 10)
+        public async Task<Pagination<Experience>> GetByPersonId(string profileId, int page, int limit = 10)
         {
             if (CheckIsNotLogin())
             {
                 return null;
             }
-                
-            return await m_ExperienceRepositoryM.GetByPersonId(personId,page,limit);
+            //miss check privacy here
+            return await m_ExperienceRepositoryM.GetByPersonId(profileId,page,limit);
         }
         public async Task<bool> Update(Experience experience)
         {

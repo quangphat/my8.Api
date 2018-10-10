@@ -80,7 +80,11 @@ namespace my8.Api.Repository.Mongo
 
         public async Task<Pagination<Experience>> GetByPersonId(string personId,int page,int limit)
         {
-            var response = await GetPaginationAsync(collection, page, limit, null, null);
+            var filterBuilder = Builders<Experience>.Filter;
+                filter = filterBuilder.Eq(p => p.PersonId, personId);
+            var sortBuilder = Builders<Experience>.Sort;
+            var sort = sortBuilder.Ascending(p => p.FromDateUnix);
+            var response = await GetPaginationAsync(collection, page, limit, filter,sort);
             Pagination<Experience> result = new Pagination<Experience> {
                 TotalRecord = response.total,
                 Datas = response.datas.ToList()

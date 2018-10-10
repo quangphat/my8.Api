@@ -11,7 +11,7 @@ namespace my8.Api.IBusiness
     {
         Task<Experience> Create(Experience experience);
         Task<Experience> Get(string experienceId);
-        Task<Pagination<Experience>> GetByPersonId(string personId, int page, int limit);
+        Task<Pagination<Experience>> GetByPersonId(string profileId, int page, int limit);
         Task<bool> Update(Experience experience);
         Task<bool> Delete(string id);
         Task<List<Experience>> Search(string searchStr);

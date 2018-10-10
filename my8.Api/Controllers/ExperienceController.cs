@@ -34,10 +34,10 @@ namespace my8.Api.Controllers
             return ToResponse(experience);
         }
         [HttpGet]
-        [Route("{page}/{limit}/person/{personId}")]
-        public async Task<IActionResult> GetExperiencesByPerson(int page,int limit, string personId)
+        [Route("{profileId}/{page}/{limit}")]
+        public async Task<IActionResult> GetExperiencesByPerson(string profileId, int page,int limit)
         {
-            Pagination<Experience> experiences = await m_ExperienceBusiness.GetByPersonId(personId,page,limit);
+            Pagination<Experience> experiences = await m_ExperienceBusiness.GetByPersonId(profileId,page,limit);
             return ToResponse(experiences);
         }
         [HttpPut]

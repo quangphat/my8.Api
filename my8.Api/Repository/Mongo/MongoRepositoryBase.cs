@@ -22,6 +22,8 @@ namespace my8.Api.Repository.Mongo
         {
             mongoConnection = setting.Value;
             Connect(mongoConnection);
+            _serializerRegistry = BsonSerializer.SerializerRegistry;
+            _documentSerializer = _serializerRegistry.GetSerializer<TEntity>();
         }
         private void Connect(MongoConnection mongoConnection)
         {
@@ -31,16 +33,16 @@ namespace my8.Api.Repository.Mongo
         }
         protected async Task<MGPagination<TEntity>> GetPaginationAsync(IMongoCollection<TEntity> collection,
             int page, int pageSize,
-            string filter,
-            string sort,
+            FilterDefinition<TEntity> filter = null,
+            SortDefinition<TEntity> sort = null,
             Expression<Func<TEntity, TEntity>> projection = null)
         {
             var pipeline = new List<BsonDocument>();
-
-            if (!string.IsNullOrWhiteSpace(filter))
-                pipeline.Add(new BsonDocument { { "$match", filter } });
-            if (!string.IsNullOrWhiteSpace(sort))
-                pipeline.Add(new BsonDocument { { "$sort", sort } });
+            //{{ "$match" : { "PersonId" : "5acedf96c86324070424f263", "isCurrentlyWorkHere" : true } }}
+            if (filter!=null)
+                pipeline.Add(new BsonDocument { { "$match", filter.Render(_documentSerializer, _serializerRegistry) } });
+            if (sort!=null)
+                pipeline.Add(new BsonDocument { { "$sort", sort.Render(_documentSerializer, _serializerRegistry) } });
             if (projection != null)
             {
                 var projectionBuilder = Builders<TEntity>.Projection.Expression(projection);
