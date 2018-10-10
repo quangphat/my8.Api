@@ -33,6 +33,7 @@ namespace my8.Api.Business
 
         public async Task<Notification> Like(FeedLike feedlike)
         {
+            if (CheckIsNotLogin()) return null;
             if (feedlike == null || feedlike.Feed == null) return null;
             feedlike.LikedTimeUnix = Utils.GetUnixTime();
             string[] receiversId = null;

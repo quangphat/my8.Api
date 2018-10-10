@@ -11,7 +11,7 @@ namespace my8.Api.IBusiness
     {
         Task<Person> Create(Person person);
         Task<Person> Get(string id);
-        Task<Person> GetByUrl(string url);
+        Task<Person> GetByProfileName(string url);
         Task<Person> GetSql(string id);
         Task<bool> Update(Person person);
         Task<List<PersonAllin>> Search(string currentPersonId, string searchStr, int skip, int limit);
@@ -20,11 +20,11 @@ namespace my8.Api.IBusiness
         Task<bool> AddFriend(string sendBy, string sendTo);
         Task<bool> UnFriend(string sendBy, string sendTo);
         Task<List<PersonAllin>> GetAllFriend(string personId);
-        Task<List<PersonAllin>> GetTopFriendInteractive(string personId);
+        Task<List<PersonAllin>> GetTopFriendInteractive();
         Task<bool> FollowPage(string currentPersonId, string pageId);
         Task<bool> UnFollowPage(string currentPersonId, string pageId);
         Task<bool> InteractToPage(string currentPersonId, string pageId);
-        Task<List<Page>> GetFollowingPage(string userId);
+        Task<List<Page>> GetFollowingPage();
         Task<List<Page>> GetRecommendPage(string personId, int limit);
 
         Task<List<Community>> GetJoiningCommunitys(string personId);

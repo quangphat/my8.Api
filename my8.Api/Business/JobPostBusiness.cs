@@ -35,6 +35,8 @@ namespace my8.Api.Business
         }
         public async Task<List<JobPost>> GetByAuthorPerson(string personId, int type, int page, int limit, long lastPostTimeUnix = 0)
         {
+            if (CheckIsNotLogin())
+                return null;
             if (type == (int)AuthorType.Person)
             {
                 return await _jobPostRepository.GetByAuthorPerson(personId, page, limit);
@@ -53,6 +55,8 @@ namespace my8.Api.Business
 
         public async Task<JobPost> Post(JobPost post)
         {
+            if (CheckIsNotLogin())
+                return null;
             post.PostTime = DateTime.UtcNow;
             post.PostTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             post.Active = true;

@@ -9,7 +9,7 @@ namespace my8.Api.Models
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }
-        public string Url { get; set; }
+        public string ProfileName { get; set; }
         public string Avatar { get; set; }
         public string WorkAs { get; set; }
         public string Company { get; set; }

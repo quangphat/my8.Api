@@ -21,7 +21,8 @@ namespace my8.Api.Repository.Neo4j
             try
             {
                 await client.Cypher.Create("(e:Person {Id:{Id},DisplayName:{DisplayName},WorkAs:{WorkAs},Company:{Company},Rate:{Rate},Avatar:{Avatar}})")
-                    .WithParams(new { Id = user.PersonId, DisplayName = user.DisplayName, WorkAs = user.WorkAs, Company = user.Company, Rate = user.Rate, Avatar = user.Avatar })
+                    .WithParams(new { Id = user.PersonId, DisplayName = user.DisplayName,
+                        WorkAs = user.WorkAs, Company = user.Company, Rate = user.Rate, Avatar = user.Avatar })
                     .ExecuteWithoutResultsAsync();
                 return true;
             }

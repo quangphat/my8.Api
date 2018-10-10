@@ -49,10 +49,10 @@ namespace my8.Api.Controllers
             return Json(person);
         }
         [HttpGet]
-        [Route("GetbyUrl/{url}")]
-        public async Task<IActionResult> GetByUrl(string url)
+        [Route("GetbyProfileName/{profileName}")]
+        public async Task<IActionResult> GetByUrl(string profileName)
         {
-            Person person = await m_PersonBusiness.GetByUrl(url);
+            Person person = await m_PersonBusiness.GetByProfileName(profileName);
             return ToResponse(person);
         }
         [HttpGet]
@@ -77,10 +77,10 @@ namespace my8.Api.Controllers
             return Json(lstPerson);
         }
         [HttpGet]
-        [Route("{personId}/FollowingPages")]
-        public async Task<IActionResult> GetFollowingPage(string personId)
+        [Route("FollowingPages")]
+        public async Task<IActionResult> GetFollowingPage()
         {
-            List<Page> lstPage = await m_PersonBusiness.GetFollowingPage(personId);
+            List<Page> lstPage = await m_PersonBusiness.GetFollowingPage();
             return ToResponse(lstPage);
         }
         [HttpPost]
@@ -149,10 +149,10 @@ namespace my8.Api.Controllers
             return Json(pages);
         }
         [HttpGet]
-        [Route("{personId}/TopInteractiveFriends")]
-        public async Task<IActionResult> GetTopInteractiveFriends(string personId)
+        [Route("TopInteractiveFriends")]
+        public async Task<IActionResult> GetTopInteractiveFriends()
         {
-            List<PersonAllin> shortPeople = await m_PersonBusiness.GetTopFriendInteractive(personId);
+            List<PersonAllin> shortPeople = await m_PersonBusiness.GetTopFriendInteractive();
             return ToResponse(shortPeople);
         }
     }

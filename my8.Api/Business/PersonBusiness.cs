@@ -90,14 +90,18 @@ namespace my8.Api.Business
             IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetFriends(personId);
             return friends.ToList();
         }
-        public async Task<List<PersonAllin>> GetTopFriendInteractive(string personId)
+        public async Task<List<PersonAllin>> GetTopFriendInteractive()
         {
-            IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetTopFriendInteractive(personId, TOP);
+            if (CheckIsNotLogin())
+                return null;
+            IEnumerable<PersonAllin> friends = await m_personRepositoryN.GetTopFriendInteractive(_process.PersonId, TOP);
             return friends.ToList();
         }
-        public async Task<List<Page>> GetFollowingPage(string personId)
+        public async Task<List<Page>> GetFollowingPage()
         {
-            IEnumerable<Page> pages = await m_personRepositoryN.GetFollowingPage(personId);
+            if (CheckIsNotLogin())
+                return null;
+            IEnumerable<Page> pages = await m_personRepositoryN.GetFollowingPage(_process.PersonId);
             return pages.ToList();
         }
         public async Task<bool> FollowPage(string currentPersonId, string pageId)
@@ -144,11 +148,11 @@ namespace my8.Api.Business
             return pages.ToList();
         }
 
-        public async Task<Person> GetByUrl(string url)
+        public async Task<Person> GetByProfileName(string profileName)
         {
-            if (string.IsNullOrWhiteSpace(url)) return null;
-            url = url.Trim().ToLower();
-            return await m_personRepositoryM.GetByUrl(url);
+            if (string.IsNullOrWhiteSpace(profileName)) return null;
+            profileName = profileName.Trim().ToLower();
+            return await m_personRepositoryM.GetByProfileName(profileName);
         }
     }
 }

@@ -39,9 +39,9 @@ namespace my8.Api.Repository.Mongo
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<Person> GetByUrl(string url)
+        public async Task<Person> GetByProfileName(string profileName)
         {
-            filter = Builders<Person>.Filter.Eq(p => p.Url, url);
+            filter = Builders<Person>.Filter.Eq(p => p.ProfileName, profileName);
             return await collection.Find(filter).FirstOrDefaultAsync();
         }
 

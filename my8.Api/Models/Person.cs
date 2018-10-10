@@ -17,7 +17,7 @@ namespace my8.Api.Models
         [JsonProperty(PropertyName = "Id")]
         public string PersonId { get; set; }
         public string DisplayName { get; set; }
-        public string Url { get; set; }
+        public string ProfileName { get; set; }
         public string Avatar { get; set; }
         public string WorkAs { get; set; }
         public string Company { get; set; }
