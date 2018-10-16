@@ -21,7 +21,14 @@ namespace my8.Api.Repository.Sql
         private void Connect(SqlServerConnection sqlConnection)
         {
             if (connection == null)
-                connection = new SqlConnection($"server={sqlConnection.ServerURl};database={sqlConnection.Database};User={sqlConnection.UserName};password={sqlConnection.Password};");
+            {
+                connection = new SqlConnection($"server={sqlConnection.ServerURl};" +
+                    $"database={sqlConnection.Database};" +
+                    $"User={sqlConnection.UserName};password={sqlConnection.Password};MultipleActiveResultSets=True;");
+                connection.Open();
+            }
+                
+                //
         }
     }
 }
