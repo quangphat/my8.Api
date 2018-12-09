@@ -78,14 +78,15 @@ namespace my8.Api.Repository.Mongo
             return null;
         }
 
-        public async Task<Pagination<Experience>> GetByPersonId(string personId,int page,int limit)
+        public async Task<Pagination<Experience>> GetByPersonId(string personId, int page, int limit)
         {
             var filterBuilder = Builders<Experience>.Filter;
-                filter = filterBuilder.Eq(p => p.PersonId, personId);
+            filter = filterBuilder.Eq(p => p.PersonId, personId);
             var sortBuilder = Builders<Experience>.Sort;
             var sort = sortBuilder.Descending(p => p.FromDateUnix);
-            var response = await GetPaginationAsync(collection, page, limit, filter,sort);
-            Pagination<Experience> result = new Pagination<Experience> {
+            var response = await GetPaginationAsync(collection, page, limit, filter, sort);
+            Pagination<Experience> result = new Pagination<Experience>
+            {
                 TotalRecord = response.total,
                 Datas = response.datas.ToList()
             };
