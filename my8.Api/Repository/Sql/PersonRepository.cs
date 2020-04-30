@@ -10,20 +10,20 @@ using my8.Api.Models;
 
 namespace my8.Api.Repository.Sql
 {
-    public class PersonRepository:SqlRepositoryBase,IPersonRepository
+    public class PersonRepository : SqlRepositoryBase, IPersonRepository
     {
         public PersonRepository(IOptions<SqlServerConnection> setting) : base(setting) { }
 
         public async Task<bool> Create(Person person)
         {
-			string insert = string.Format(@"insert into Person (PersonId,Firstname,Lastname,Avatar,Email,EmailPrivacy,Password,Birthday,BirthdayPrivacy,WorkAs,WorkAsPrivacy,BornIn,BornInWorkAsPrivacy,Hometown,HometownWorkAsPrivacy,LiveAt,LiveAtWorkAsPrivacy,University,UniversityWorkAsPrivacy,PhoneNumber,PhoneWorkAsPrivacy,Gender,GenderWorkAsPrivacy,WorkEmail,WorkEmailWorkAsPrivacy,About,CreatedTime,ModifiedTime) values (@PersonId,@Firstname,@Lastname,@Avatar,@Email,@EmailPrivacy,@Password,@Birthday,@BirthdayPrivacy,@WorkAs,@WorkAsPrivacy,@BornIn,@BornInWorkAsPrivacy,@Hometown,@HometownWorkAsPrivacy,@LiveAt,@LiveAtWorkAsPrivacy,@University,@UniversityWorkAsPrivacy,@PhoneNumber,@PhoneWorkAsPrivacy,@Gender,@GenderWorkAsPrivacy,@WorkEmail,@WorkEmailWorkAsPrivacy,@About,@CreatedTime,@ModifiedTime)");
+            string insert = string.Format(@"insert into Person (PersonId,Firstname,Lastname,Avatar,Email,EmailPrivacy,Password,Birthday,BirthdayPrivacy,WorkAs,WorkAsPrivacy,BornIn,BornInWorkAsPrivacy,Hometown,HometownWorkAsPrivacy,LiveAt,LiveAtWorkAsPrivacy,University,UniversityWorkAsPrivacy,PhoneNumber,PhoneWorkAsPrivacy,Gender,GenderWorkAsPrivacy,WorkEmail,WorkEmailWorkAsPrivacy,About,CreatedTime,ModifiedTime) values (@PersonId,@Firstname,@Lastname,@Avatar,@Email,@EmailPrivacy,@Password,@Birthday,@BirthdayPrivacy,@WorkAs,@WorkAsPrivacy,@BornIn,@BornInWorkAsPrivacy,@Hometown,@HometownWorkAsPrivacy,@LiveAt,@LiveAtWorkAsPrivacy,@University,@UniversityWorkAsPrivacy,@PhoneNumber,@PhoneWorkAsPrivacy,@Gender,@GenderWorkAsPrivacy,@WorkEmail,@WorkEmailWorkAsPrivacy,@About,@CreatedTime,@ModifiedTime)");
 
             try
             {
                 await connection.ExecuteAsync(insert, person);
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return false;
             }
@@ -42,7 +42,7 @@ namespace my8.Api.Repository.Sql
             return persons.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Person>> Search(string searchStr,int skip, int limit)
+        public async Task<IEnumerable<Person>> Search(string searchStr, int skip, int limit)
         {
             IEnumerable<Person> persons = await connection.QueryAsync<Person>("LookForPerson", new { @searchStr = searchStr, @skip = skip, @limit = limit }, commandType: System.Data.CommandType.StoredProcedure);
             return persons;
